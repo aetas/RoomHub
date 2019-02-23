@@ -8,6 +8,9 @@ steps:
 - script: g++ -v
   displayName: 'Display g++ version'
 
+- script: pwd
+- script: ls -la 
+
 - script: |
     g++ -g -std=gnu++11 test/main/test-main.o -o test/allTests -I ./include ./src/config/*.cpp ./src/device/*.cpp ./test/unit/mocks/**/*.cpp ./test/unit/*.cpp
   displayName: 'Compile tests'
