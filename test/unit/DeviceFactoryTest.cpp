@@ -1,5 +1,6 @@
 #include "../main/catch.hpp"
 #include "device/DeviceFactory.hpp"
+#include "mocks/FakePinProvider.hpp"
 
 #include <typeinfo>
 #include <iostream>
@@ -9,7 +10,7 @@ using namespace std;
 
 TEST_CASE("DeviceFactory creates Device from DeviceConfiguration")
 {
-   PinProvider& pinProvider = PinProvider::getInstance();
+   PinProvider& pinProvider = FakePinProvider::getInstance();
    DeviceFactory& deviceFactory = DeviceFactory::getInstance(pinProvider);
 
    SECTION("should create DigitalInputDevice when DIGITAL_INPUT DeviceConfig given") {

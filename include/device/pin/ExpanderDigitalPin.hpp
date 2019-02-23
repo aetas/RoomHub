@@ -8,6 +8,8 @@ class ExpanderDigitalPin: public DigitalPin {
 public:    
     ExpanderDigitalPin(Adafruit_MCP23017* _expander, const uint8_t _pinNumber);
     ~ExpanderDigitalPin();
+    uint8_t ExpanderDigitalPin::digitalRead();
+    void ExpanderDigitalPin::digitalWrite(uint8_t val);
 private:
     Adafruit_MCP23017* expander;
     const uint8_t pinNumber;
