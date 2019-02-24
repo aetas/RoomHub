@@ -1,18 +1,43 @@
 #include <Arduino.h>
 #include "config/FixedDeviceConfig.hpp"
+#include "config/FixedComponentsConfig.hpp"
+#include "device/DeviceFactory.hpp"
+#include "device/pin/ExpanderPinProvider.hpp"
 
+#include "device/DigitalOutputDevice.hpp"
+#include "device/DigitalInputDevice.hpp"
+
+DigitalInputDevice* switchButton;
+DigitalOutputDevice* relay;
+
+uint16_t lastChangeTime = 0;
+uint8_t relayLastState = LOW;
 
 void setup() {
   Serial.begin(115200);
   
-  for(int i = 0; i < 4; i++)
-  {
-    Serial.println(static_cast<int>(devicesConfig[i].getDeviceType()));
+  ExpanderPinProvider& pinProvider = ExpanderPinProvider::getInstance(expanders[0], mux);
+  DeviceFactory& deviceFactory = DeviceFactory::getInstance(pinProvider);
+
+  Device* devices[4];
+  
+  for(int i = 0; i < 4; i++) {
+    devices[i] = deviceFactory.create(devicesConfig[i]);
   }
 
-  digitalWrite(13, HIGH);
+  switchButton = ((DigitalInputDevice*) devices[0]);
+  relay = ((DigitalOutputDevice*) devices[3]);
+  
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  uint32_t now = millis();
+  if (lastChangeTime + 3000 < now) {
+    if (relayLastState == HIGH) {
+      relay->setState(LOW);
+    } else {
+      relay->setState(HIGH);
+    }
+    lastChangeTime = now;
+  }
 }

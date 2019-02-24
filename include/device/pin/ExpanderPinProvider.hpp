@@ -1,22 +1,26 @@
 #pragma once
 
+#include "device/pin/PinProvider.hpp"
 #include "device/pin/DigitalPin.hpp"
 #include "device/pin/AnalogPin.hpp"
 #include "config/DeviceConfig.hpp"
+#include <Adafruit_MCP23017.h>
+#include <CD74HC4067.h>
 
-class ExpanderPinProvider {
+class ExpanderPinProvider: public PinProvider {
 
 public:
-    static ExpanderPinProvider& getInstance();
+    static ExpanderPinProvider& getInstance(Adafruit_MCP23017* expanders, CD74HC4067* mux);
     
     ExpanderPinProvider(ExpanderPinProvider const&) = delete;
     void operator=(ExpanderPinProvider const&) = delete;
 
-    // TODO it needs proper implementation
     DigitalPin* digitalPin(const uint8_t portNumber, const WireColor& wireColor);
-    // TODO it needs proper implementation
     AnalogPin* analogPin(const uint8_t portNumber);
 
 private:
-    ExpanderPinProvider();
+    ExpanderPinProvider(Adafruit_MCP23017* expanders, CD74HC4067* mux);
+    Adafruit_MCP23017* expanders;
+    CD74HC4067* mux;
+    uint8_t muxCommonPin;
 };
