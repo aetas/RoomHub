@@ -10,14 +10,21 @@
 DigitalInputDevice* switchButton;
 DigitalOutputDevice* relay;
 
-uint16_t lastChangeTime = 0;
+uint32_t lastChangeTime = 0;
 uint8_t relayLastState = LOW;
 
 void setup() {
   Serial.begin(115200);
+
+  // TODO Prepare logging and get rid of Serial.print
+  setupComponents();
+  Serial.println("Components set up");
   
-  ExpanderPinProvider& pinProvider = ExpanderPinProvider::getInstance(expanders[0], mux);
+  ExpanderPinProvider& pinProvider = ExpanderPinProvider::getInstance(expanders, &mux);
+  Serial.println("PinProvider prepared");
   DeviceFactory& deviceFactory = DeviceFactory::getInstance(pinProvider);
+  Serial.println("DeviceFactory prepared");
+
 
   Device* devices[4];
   
@@ -35,8 +42,12 @@ void loop() {
   if (lastChangeTime + 3000 < now) {
     if (relayLastState == HIGH) {
       relay->setState(LOW);
+      relayLastState = LOW;
+      Serial.println("LOW");
     } else {
       relay->setState(HIGH);
+      relayLastState = HIGH;
+      Serial.println("HIGH");
     }
     lastChangeTime = now;
   }

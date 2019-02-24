@@ -6,8 +6,9 @@
 class DigitalOutputDevice: public Device {
 
 public:
-    DigitalOutputDevice(const uint16_t _id, DigitalPin* _digitalPin): 
-        Device(_id, DeviceType::DIGITAL_OUTPUT), digitalPin(_digitalPin) {};
+    DigitalOutputDevice(const uint16_t _id, DigitalPin* _digitalPin): Device(_id, DeviceType::DIGITAL_OUTPUT), digitalPin(_digitalPin) {
+        digitalPin->pinMode(OUTPUT);
+    };
 
     ~DigitalOutputDevice();
     void setState(const uint8_t newState);

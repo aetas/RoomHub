@@ -17,3 +17,7 @@ uint8_t ExpanderDigitalPin::digitalRead() {
 void ExpanderDigitalPin::digitalWrite(uint8_t val) {
     expander->digitalWrite(pinNumber, val);
 }
+
+void ExpanderDigitalPin::pinMode(uint8_t mode) {
+    expander->pinMode(pinNumber, mode);
+}
