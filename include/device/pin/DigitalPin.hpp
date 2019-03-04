@@ -14,4 +14,5 @@ public:
     virtual uint8_t digitalRead() = 0;
     virtual void digitalWrite(uint8_t val) = 0;
     virtual void pinMode(uint8_t mode) = 0;
+    virtual void pullUp() = 0;
 };

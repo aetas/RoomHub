@@ -21,3 +21,7 @@ void ExpanderDigitalPin::digitalWrite(uint8_t val) {
 void ExpanderDigitalPin::pinMode(uint8_t mode) {
     expander->pinMode(pinNumber, mode);
 }
+
+void ExpanderDigitalPin::pullUp() {
+    expander->pullUp(pinNumber, HIGH);
+}

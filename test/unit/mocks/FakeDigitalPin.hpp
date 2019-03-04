@@ -26,6 +26,10 @@ public:
         }
         cout << "Fake digital pin mode set to " << modeString << endl;
     }
+    void pullUp() {
+        cout << "Fake digital pin pulled UP" << endl;
+        state = HIGH;
+    }
 
 
 private:

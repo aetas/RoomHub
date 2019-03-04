@@ -11,6 +11,7 @@ public:
     uint8_t digitalRead();
     void digitalWrite(uint8_t val);
     void pinMode(uint8_t mode);
+    void pullUp();
 private:
     Adafruit_MCP23017* expander;
     const uint8_t pinNumber;

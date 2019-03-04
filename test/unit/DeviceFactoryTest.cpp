@@ -15,7 +15,7 @@ TEST_CASE("DeviceFactory creates Device from DeviceConfiguration")
 
    SECTION("should create DigitalInputDevice when DIGITAL_INPUT DeviceConfig given") {
       // given
-      DeviceConfig digitalInputDeviceConfig(24, DeviceType::DIGITAL_INPUT, 3, WireColor::BLUE);
+      DeviceConfig digitalInputDeviceConfig(24, DeviceType::DIGITAL_INPUT, 3, WireColor::BLUE, 250);
       
       // when
       Device* device = deviceFactory.create(digitalInputDeviceConfig);
@@ -27,7 +27,7 @@ TEST_CASE("DeviceFactory creates Device from DeviceConfiguration")
 
    SECTION("should create DigitalOutputDevice when DIGITAL_OUTPUT DeviceConfig given") {
       // given
-      DeviceConfig digitalOutputDeviceConfig(36, DeviceType::DIGITAL_OUTPUT, 16, WireColor::BLUE_WHITE);
+      DeviceConfig digitalOutputDeviceConfig(36, DeviceType::DIGITAL_OUTPUT, 16, WireColor::BLUE_WHITE, 0);
 
       // when
       Device* device = deviceFactory.create(digitalOutputDeviceConfig);
@@ -39,10 +39,10 @@ TEST_CASE("DeviceFactory creates Device from DeviceConfiguration")
 
    SECTION("should create AnalogInputDevice when ANALOG_INPUT DeviceConfig given") {
       // given
-      DeviceConfig digitalOutputDeviceConfig(11, DeviceType::ANALOG_INPUT, 16, WireColor::BROWN);
+      DeviceConfig analogInputDeviceConfig(11, DeviceType::ANALOG_INPUT, 16, WireColor::BROWN, 0);
 
       // when
-      Device* device = deviceFactory.create(digitalOutputDeviceConfig);
+      Device* device = deviceFactory.create(analogInputDeviceConfig);
 
       // then
       REQUIRE(device->getId() == 11);
@@ -51,7 +51,7 @@ TEST_CASE("DeviceFactory creates Device from DeviceConfiguration")
 
    SECTION("should create Dht22Device when DHT22 DeviceConfig given") {
       // given
-      DeviceConfig dht22DeviceConfig(45, DeviceType::DHT22, 1, WireColor::GREEN);
+      DeviceConfig dht22DeviceConfig(45, DeviceType::DHT22, 1, WireColor::GREEN, 0);
 
       // when
       Device* device = deviceFactory.create(dht22DeviceConfig);

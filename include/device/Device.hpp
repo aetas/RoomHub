@@ -14,7 +14,7 @@ public:
     void setUpdateListener(UpdateListener* _listener) { updateListener = _listener; };
 
 protected:
-    UpdateListener* updateListener;
+    UpdateListener* updateListener = nullptr;
 
 private:
     const uint16_t id;

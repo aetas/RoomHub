@@ -25,17 +25,19 @@ enum class WireColor {
 class DeviceConfig {
 
 public:
-    DeviceConfig(uint16_t _id, DeviceType _type, uint8_t _portNumber, WireColor _wire);
+    DeviceConfig(uint16_t _id, DeviceType _type, uint8_t _portNumber, WireColor _wire, uint16_t _debounceMs);
     ~DeviceConfig();
 
     const uint8_t getId();
     const DeviceType getDeviceType();    
     const uint8_t getPortNumber();
     const WireColor getWireColor();
+    const uint16_t getDebounceMs();
 
 private:
     const uint16_t id;
     const DeviceType type;
     const uint8_t portNumber;
     const WireColor wire;
+    const uint16_t debounceMs;
 };

@@ -15,7 +15,7 @@ Device* DeviceFactory::create(DeviceConfig& deviceConfig) {
         case DeviceType::DIGITAL_INPUT: 
         {
             DigitalPin* digitalPin = pinProvider.digitalPin(deviceConfig.getPortNumber(), deviceConfig.getWireColor());
-            return new DigitalInputDevice(deviceConfig.getId(), digitalPin);   
+            return new DigitalInputDevice(deviceConfig.getId(), digitalPin, deviceConfig.getDebounceMs());   
         }
         case DeviceType::DIGITAL_OUTPUT:
         {

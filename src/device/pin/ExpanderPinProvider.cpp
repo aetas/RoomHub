@@ -14,8 +14,13 @@ ExpanderPinProvider& ExpanderPinProvider::getInstance(Adafruit_MCP23017* expande
 
 DigitalPin* ExpanderPinProvider::digitalPin(const uint8_t portNumber, const WireColor& wireColor) {
     uint8_t wireColorAsNumber = static_cast<uint8_t>(wireColor);
-    uint8_t expanderAddress = (portNumber/4) - 1;
+    uint8_t expanderAddress = (portNumber-1) / 4;
     uint8_t expanderPinNumber = ((portNumber-1) % 4) * 4 + (wireColorAsNumber-3);
+    // TODO trace log
+    Serial.print("expander address: ");
+    Serial.println(expanderAddress);
+    Serial.print("expander pin number: ");
+    Serial.println(expanderPinNumber);
     
     return new ExpanderDigitalPin(&expanders[expanderAddress], expanderPinNumber);
 }
