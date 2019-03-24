@@ -7,17 +7,23 @@
 #include "device/DigitalOutputDevice.hpp"
 #include "device/DigitalInputDevice.hpp"
 
+#include "mqtt/MqttEventPublisher.hpp"
+
 DigitalInputDevice* switchButton;
 DigitalOutputDevice* relay;
+DigitalInputDevice* motionSensor;
 
 uint32_t lastChangeTime = 0;
 uint8_t relayLastState = LOW;
 
-// TODO test input device (switchbutton)
-// TODO test input device (movement sensor)
+UpdateListener& mqttEventPublisher = MqttEventPublisher::getInstance();
+
+// DONE test output device (relay)
+// DONE test input device (switchbutton)
+// DONE test input device (movement sensor)
 // TODO Prepare logging and get rid of Serial.print
 // TODO Implement DeviceRegistry
-// TODO Implement MqttEventPublisher
+// TODO Implement MqttEventPublisher (real implementation)
 
 void setup() {
   Serial.begin(115200);
@@ -30,14 +36,18 @@ void setup() {
   Serial.println("DeviceFactory prepared");
 
 
-  Device* devices[4];
+  Device* devices[5];
   
-  for(int i = 0; i < 4; i++) {
+  for(int i = 0; i < 5; i++) {
     devices[i] = deviceFactory.create(devicesConfig[i]);
   }
 
   switchButton = ((DigitalInputDevice*) devices[0]);
   relay = ((DigitalOutputDevice*) devices[3]);  
+  motionSensor = ((DigitalInputDevice*) devices[4]);
+
+  switchButton->setUpdateListener(&mqttEventPublisher);
+  motionSensor->setUpdateListener(&mqttEventPublisher);
 }
 
 void loop() {
@@ -45,27 +55,5 @@ void loop() {
   uint32_t now = millis();
   
   switchButton->loop(now);
-
-  if (lastChangeTime + 3000 < now) {
-
-
-    uint8_t value = expanders[3].digitalRead(1);
-    if (value == HIGH) {
-      Serial.println("HIGH");
-    } else {
-      Serial.println("LOW");
-    }
-
-
-    // if (relayLastState == HIGH) {
-    //   relay->setState(LOW);
-    //   relayLastState = LOW;
-    //   Serial.println("LOW");
-    // } else {
-    //   relay->setState(HIGH);
-    //   relayLastState = HIGH;
-    //   Serial.println("HIGH");
-    // }
-    lastChangeTime = now;
-  }
+  motionSensor->loop(now);
 }
