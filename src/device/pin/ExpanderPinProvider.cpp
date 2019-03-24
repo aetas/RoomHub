@@ -1,6 +1,7 @@
 #include "device/pin/ExpanderPinProvider.hpp"
 #include "device/pin/ExpanderDigitalPin.hpp"
 #include "device/pin/MuxAnalogPin.hpp"
+#include "ArduinoLog.h"
 
 ExpanderPinProvider::ExpanderPinProvider(Adafruit_MCP23017* _expanders, CD74HC4067* _mux) {
     expanders = _expanders;
@@ -16,11 +17,8 @@ DigitalPin* ExpanderPinProvider::digitalPin(const uint8_t portNumber, const Wire
     uint8_t wireColorAsNumber = static_cast<uint8_t>(wireColor);
     uint8_t expanderAddress = (portNumber-1) / 4;
     uint8_t expanderPinNumber = ((portNumber-1) % 4) * 4 + (wireColorAsNumber-3);
-    // TODO trace log
-    Serial.print("expander address: ");
-    Serial.println(expanderAddress);
-    Serial.print("expander pin number: ");
-    Serial.println(expanderPinNumber);
+    
+    Log.trace(F("expander address: %d, expander pin number: %d" CR), expanderAddress, expanderPinNumber);
     
     return new ExpanderDigitalPin(&expanders[expanderAddress], expanderPinNumber);
 }

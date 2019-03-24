@@ -1,6 +1,14 @@
 #include <Arduino.h>
 #include "config/FixedDeviceConfig.hpp"
 #include "config/FixedComponentsConfig.hpp"
+#include "config/UserConfig.hpp"
+
+
+// Logging
+#include "ArduinoLog.h"
+#include "log/MultiLogger.hpp"
+#include "log/BufferedLogger.hpp"
+
 #include "device/DeviceFactory.hpp"
 #include "device/pin/ExpanderPinProvider.hpp"
 
@@ -21,19 +29,34 @@ UpdateListener& mqttEventPublisher = MqttEventPublisher::getInstance();
 // DONE test output device (relay)
 // DONE test input device (switchbutton)
 // DONE test input device (movement sensor)
-// TODO Prepare logging and get rid of Serial.print
+// DONE Prepare logging and get rid of Serial.print
 // TODO Implement DeviceRegistry
 // TODO Implement MqttEventPublisher (real implementation)
+// TODO prepare logs on web page
+
+// Logging
+#ifdef LOG_ENABLE_WEB
+  BufferedLogger bufferedLogger(LOG_BUFFERED_LOGGER_BUFFER_SIZE);
+  Print* logTargets[2] = {&bufferedLogger, &Serial};
+  MultiLogger multiLogger(logTargets, 2);
+#endif
 
 void setup() {
   Serial.begin(115200);
+
+ #ifdef LOG_ENABLE_WEB
+    Log.begin(LOG_LEVEL, &multiLogger, false);
+  #else
+    Log.begin(LOG_LEVEL, &Serial, false);
+  #endif
+
   setupComponents();
-  Serial.println("Components set up");
+  Log.notice(F("Components set up" CR));
   
   ExpanderPinProvider& pinProvider = ExpanderPinProvider::getInstance(expanders, &mux);
-  Serial.println("PinProvider prepared");
+  Log.notice(F("PinProvider prepared" CR));
   DeviceFactory& deviceFactory = DeviceFactory::getInstance(pinProvider);
-  Serial.println("DeviceFactory prepared");
+  Log.notice(F("DeviceFactory prepared" CR));
 
 
   Device* devices[5];
