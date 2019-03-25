@@ -11,6 +11,7 @@
 
 #include "device/DeviceFactory.hpp"
 #include "device/pin/ExpanderPinProvider.hpp"
+#include "device/DevicesRegistry.hpp"
 
 #include "device/DigitalOutputDevice.hpp"
 #include "device/DigitalInputDevice.hpp"
@@ -25,6 +26,7 @@ uint32_t lastChangeTime = 0;
 uint8_t relayLastState = LOW;
 
 UpdateListener& mqttEventPublisher = MqttEventPublisher::getInstance();
+DevicesRegistry devicesRegistry(NUMBER_OF_DEVICES);
 
 // DONE test output device (relay)
 // DONE test input device (switchbutton)
@@ -58,25 +60,14 @@ void setup() {
   DeviceFactory& deviceFactory = DeviceFactory::getInstance(pinProvider);
   Log.notice(F("DeviceFactory prepared" CR));
 
-
-  Device* devices[5];
   
-  for(int i = 0; i < 5; i++) {
-    devices[i] = deviceFactory.create(devicesConfig[i]);
+  for(int i = 0; i < NUMBER_OF_DEVICES; i++) {
+    devicesRegistry.add(deviceFactory.create(devicesConfig[i]));
   }
-
-  switchButton = ((DigitalInputDevice*) devices[0]);
-  relay = ((DigitalOutputDevice*) devices[3]);  
-  motionSensor = ((DigitalInputDevice*) devices[4]);
-
-  switchButton->setUpdateListener(&mqttEventPublisher);
-  motionSensor->setUpdateListener(&mqttEventPublisher);
+  devicesRegistry.setUpdateListener(&mqttEventPublisher);
 }
 
 void loop() {
-
   uint32_t now = millis();
-  
-  switchButton->loop(now);
-  motionSensor->loop(now);
+  devicesRegistry.loop(now);
 }
