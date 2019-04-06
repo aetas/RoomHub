@@ -1,7 +1,9 @@
 #pragma once
 
 #include <iostream>
+#include <map>
 #include "device/Device.hpp"
+#include "WString.h"
 
 using namespace std;
 
@@ -12,6 +14,18 @@ public:
         if (this->updateListener == nullptr) {
             return;
         }
-        this->updateListener->valueUpdated(this->getId(), newValue); 
+        this->updateListener->valueUpdated(this->getId(), "fakeValue", newValue); 
     };
+
+    void setProperty(const char* propertyName, const char* newValue) {
+        cout << "FAKE device: " << "Setting property " << propertyName << " = " << newValue << endl;
+        properties[propertyName] = newValue;
+    };
+
+    const String currentPropertyValue(const char* propertyName) {
+        return properties[propertyName];
+    }
+
+private:
+    map<String, String> properties;
 };

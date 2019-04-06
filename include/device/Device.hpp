@@ -12,6 +12,7 @@ public:
     const uint16_t getId() { return id; };
     DeviceType getType() { return type; };
     void setUpdateListener(UpdateListener* _listener) { updateListener = _listener; };
+    virtual void setProperty(const char* propertyName, const char* newValue) {};
 
 protected:
     UpdateListener* updateListener = nullptr;

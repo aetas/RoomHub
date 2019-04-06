@@ -5,7 +5,7 @@
 class UpdateListener {
 
 public:
-    virtual void valueUpdated(const uint8_t deviceId, const uint8_t newValue) = 0;
-    virtual void valueUpdated(const uint8_t deviceId, const uint16_t newValue) = 0;
-    virtual void valueUpdated(const uint8_t deviceId, const char* newValue, const uint8_t length) = 0;
+    virtual void valueUpdated(const uint8_t deviceId, const char* propertyName, const uint8_t newValue) = 0;
+    virtual void valueUpdated(const uint8_t deviceId, const char* propertyName, const uint16_t newValue) = 0;
+    virtual void valueUpdated(const uint8_t deviceId, const char* propertyName, const char* newValue) = 0;
 };

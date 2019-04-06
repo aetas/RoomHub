@@ -11,7 +11,7 @@ public:
     };
 
     ~DigitalOutputDevice();
-    void setState(const uint8_t newState);
+    void setProperty(const char* propertyName, const char* newValue);
 
 private:
     DigitalPin* digitalPin;
