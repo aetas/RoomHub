@@ -7,7 +7,7 @@ void DigitalInputDevice::loop(const uint32_t& currentTimeMs) {
 
     if ((inIntermediateState && currentTimeMs - intermediateStateStart > debounceMs) || debounceMs == 0)   {
           if (updateListener != nullptr) {
-            updateListener->valueUpdated(getId(), value);
+            updateListener->valueUpdated(getId(), "state", value);
         }
         endIntermediateState();
     }

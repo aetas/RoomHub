@@ -1,0 +1,2 @@
+
+void delay(unsigned long) {};

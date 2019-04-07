@@ -1,3 +1,5 @@
+#pragma once
+
 #include "device/pin/PinProvider.hpp"
 #include "FakeDigitalPin.hpp"
 #include "FakeAnalogPin.hpp"

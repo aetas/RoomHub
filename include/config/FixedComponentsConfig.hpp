@@ -1,3 +1,5 @@
+#pragma once
+
 #include <Adafruit_MCP23017.h>
 #include <CD74HC4067.h>
 

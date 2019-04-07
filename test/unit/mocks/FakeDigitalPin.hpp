@@ -14,7 +14,11 @@ public:
         return state;
     };
     void digitalWrite(uint8_t val) {
-        cout << "Fake digital write called" << endl;
+        if (val == HIGH) {
+            cout << "Fake digital write called with HIGH" << endl;
+        } else {
+            cout << "Fake digital write called with LOW" << endl;
+        }
         state = val;
     };
     void pinMode(uint8_t mode) {
