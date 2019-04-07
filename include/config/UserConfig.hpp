@@ -32,5 +32,5 @@
 #define WIFI_SUBNETMASK        IPAddress(255,255,255,0) // [WifiSubnetmask] If not using DHCP set Network mask
 #define WIFI_DNS               IPAddress(192,168,1,1)   // [WifiDns] If not using DHCP set DNS IP address (might be equal to WIFI_GATEWAY)
 
-#define WIFI_SSID              "LesnaStreet"           // [Ssid1] Wifi SSID - comment out to use built-in portal to set up wifi on [WIFI_IP_ADDRESS]/_ac
-#define WIFI_PASS              "InzynierskaWroclaw"    // [Password1] Wifi password
+#define WIFI_SSID              ""           // [Ssid1] Wifi SSID - comment out to use built-in portal to set up wifi on [WIFI_IP_ADDRESS]/_ac
+#define WIFI_PASS              ""    // [Password1] Wifi password
