@@ -6,6 +6,5 @@
 .vscode/launch.json
 
 test/allTests
-include/mqtt/MqttEventPublisher.hpp
 
 .vscode/ipch/**
