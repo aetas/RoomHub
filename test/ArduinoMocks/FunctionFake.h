@@ -1,4 +1,4 @@
 #pragma once
 
 
-void delay(unsigned long) {}
+void delay(unsigned long);

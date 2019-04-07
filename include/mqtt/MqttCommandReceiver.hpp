@@ -3,6 +3,7 @@
 #include "WString.h"
 #include "device/DevicesRegistry.hpp"
 #include "homie/HomieDevice.hpp"
+#include "Arduino.h"
 
 
 class MqttCommandReceiver {
@@ -13,9 +14,9 @@ public:
     MqttCommandReceiver(MqttCommandReceiver const&) = delete;
     void operator=(MqttCommandReceiver const&) = delete;
 
-    void informDevice(String& deviceId, String& propertyName, String& value);
+    void informDevice(String& deviceId, String& propertyName, const char* value);
 
-    static void messageReceived(String &topic, String &payload);
+    static void messageReceived(const char* topic, byte* payload, unsigned int length);
 
 private:
     MqttCommandReceiver(DevicesRegistry* _devicesRegistry, HomieDevice* _homieDevice);

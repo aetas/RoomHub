@@ -2,6 +2,8 @@
 #include <string.h>
 #include <WString.h>
 
+#include "ArduinoLog.h"
+
 
 
 HomieNode::HomieNode(const char* _deviceName, const char* _id, const char* _name, 
@@ -23,13 +25,13 @@ HomieNode::~HomieNode() {}
 void HomieNode::setup() {
     String nameTopic = topicStart;
     nameTopic += "/$name";
-    mqttClient.publish(nameTopic.c_str(), name);
+    mqttClient.publish(nameTopic.c_str(), name, true);
     String typeTopic = topicStart;
     typeTopic += "/$type";
-    mqttClient.publish(typeTopic.c_str(), type);
+    mqttClient.publish(typeTopic.c_str(), type, true);
     String propertiesTopic = topicStart;
     propertiesTopic += "/$properties";
-    mqttClient.publish(propertiesTopic.c_str(), getPropertiesString());
+    mqttClient.publish(propertiesTopic.c_str(), getPropertiesString(), true);
 
     setupProperties();
     
@@ -45,19 +47,19 @@ void HomieNode::setupProperties() {
         
         String settableTopic = propertyTopic;
         settableTopic += "/$settable";
-        mqttClient.publish(settableTopic.c_str(), property->isSettable() ? "true" : "false");
+        mqttClient.publish(settableTopic.c_str(), property->isSettable() ? "true" : "false", true);
         String retainedTopic = propertyTopic;
         retainedTopic += "/$retained";
-        mqttClient.publish(retainedTopic.c_str(), property->isRetained() ? "true" : "false");
+        mqttClient.publish(retainedTopic.c_str(), property->isRetained() ? "true" : "false", true);
         String unitTopic = propertyTopic;
         unitTopic += "/$unit";
-        mqttClient.publish(unitTopic.c_str(), property->getUnit());
+        mqttClient.publish(unitTopic.c_str(), property->getUnit(), true);
         String datatypeTopic = propertyTopic;
         datatypeTopic += "/$datatype";
-        mqttClient.publish(datatypeTopic.c_str(), property->getDataType());
+        mqttClient.publish(datatypeTopic.c_str(), property->getDataType(), true);
         String formatTopic = propertyTopic;
         formatTopic += "/$format";
-        mqttClient.publish(formatTopic.c_str(), property->getFormat());
+        mqttClient.publish(formatTopic.c_str(), property->getFormat(), true);
 
         if (property->isSettable()) {
             String propertySetTopic = propertyTopic;
@@ -94,8 +96,14 @@ const char* HomieNode::getPropertiesString() {
     return propsCharArray;
 }
 
-HomieNodeProperty** HomieNode::getProperties() {
-    return properties;
+HomieNodeProperty* HomieNode::getProperty(const char* name) {
+    for(uint8_t i = 0; i < propertiesNumber; i++) {
+        if (strcmp(properties[i]->getName(), name) == 0) {
+            return properties[i];
+        }
+    }
+    Log.error(F("Property '%s' not found" CR), name);
+    return nullptr;
 }
 
 const uint8_t HomieNode::getPropertiesNumber() {
@@ -103,8 +111,11 @@ const uint8_t HomieNode::getPropertiesNumber() {
 }
 
 void HomieNode::propertyValueUpdated(const char* propertyName, const char* newValue) {
+    HomieNodeProperty* property = getProperty(propertyName);
+    if (property == nullptr) return;
+
     String propertyTopic = topicStart;
     propertyTopic += "/";
     propertyTopic += propertyName;
-    mqttClient.publish(propertyTopic.c_str(), newValue);
+    mqttClient.publish(propertyTopic.c_str(), newValue, property->isRetained());
 }

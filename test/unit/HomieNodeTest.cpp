@@ -26,22 +26,22 @@ TEST_CASE("HomieNode") {
         homieNode.setup();
 
         // then
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/$name") == "node1");
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/$type") == "someType");
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/$properties") == "testProp1,testProp2");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/$name", true) == "node1");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/$type", true) == "someType");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/$properties", true) == "testProp1,testProp2");
         
         // and properties
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1/$settable") == "false");
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1/$retained") == "false");
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1/$unit") == "#");
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1/$datatype") == "integer");
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1/$format") == "");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1/$settable", true) == "false");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1/$retained", true) == "false");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1/$unit", true) == "#");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1/$datatype", true) == "integer");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1/$format", true) == "");
 
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp2/$settable") == "true");
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp2/$retained") == "true");
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp2/$unit") == "m");
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp2/$datatype") == "enum");
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp2/$format") == "ON,OFF");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp2/$settable", true) == "true");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp2/$retained", true) == "true");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp2/$unit", true) == "m");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp2/$datatype", true) == "enum");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp2/$format", true) == "ON,OFF");
     }
 
      SECTION("should send property update to MQTT on property update") {
@@ -55,9 +55,11 @@ TEST_CASE("HomieNode") {
         // when
         
         homieNode.propertyValueUpdated("testProp1", "475");
+        homieNode.propertyValueUpdated("testProp2", "789");
 
         // then
         REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1") == "475");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp2", true) == "789");
     }
 
 

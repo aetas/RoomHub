@@ -11,18 +11,25 @@ MqttCommandReceiver& MqttCommandReceiver::getInstance(DevicesRegistry* _devicesR
     return instance;
 }
 
-void MqttCommandReceiver::informDevice(String& deviceId, String& propertyName, String& value) {
-    Log.notice(F("Device state change: %s(%s) <- %s" CR), deviceId.c_str(), propertyName.c_str(), value.c_str());
+void MqttCommandReceiver::informDevice(String& deviceId, String& propertyName, const char* value) {
+    Log.notice(F("Device state change: %s(%s) <- %s" CR), deviceId.c_str(), propertyName.c_str(), value);
     uint8_t deviceIdInt = deviceId.toInt();
-    devicesRegistry->getDevice(deviceIdInt)->setProperty(propertyName.c_str(), value.c_str());
-    homieDevice->getNode(deviceIdInt)->propertyValueUpdated(propertyName.c_str(), value.c_str());
+    devicesRegistry->getDevice(deviceIdInt)->setProperty(propertyName.c_str(), value);
+    homieDevice->getNode(deviceIdInt)->propertyValueUpdated(propertyName.c_str(), value);
 }
 
-void MqttCommandReceiver::messageReceived(String &topic, String &payload) {
-    Log.notice(F("MQTT received: %s <- %s" CR), topic.c_str(), payload.c_str());
-    String nodeId = getHomieNodeId(topic);
-    String propertyName = getHomiePropertyName(topic);
-    MqttCommandReceiver::getInstance(nullptr, nullptr).informDevice(nodeId, propertyName, payload);
+void MqttCommandReceiver::messageReceived(const char* topic, byte* payload, unsigned int length) {
+    char* payloadString = new char[length];
+    for(uint8_t i = 0; i < length; i++) {
+        payloadString[i] = (char)payload[i];
+    }
+    payloadString[length] = '\0';
+    
+    Log.notice(F("MQTT received: %s <- %s" CR), topic, payloadString);
+    String topicString = String(topic);
+    String nodeId = getHomieNodeId(topicString);
+    String propertyName = getHomiePropertyName(topicString);
+    MqttCommandReceiver::getInstance(nullptr, nullptr).informDevice(nodeId, propertyName, payloadString);
 }
 
 bool MqttCommandReceiver::isHomieNodePropertyValue(String& topic) {

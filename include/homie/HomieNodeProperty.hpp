@@ -1,7 +1,7 @@
 #pragma once
 
 enum class PropertyUnit {
-    CELSIUS, FAHRENHEIT, DEGREE, LITER, GALON, VOLTS, WATT, AMPERE, PERCENT, METER, FEET, PASCAL, PSI, COUNT
+    CELSIUS, FAHRENHEIT, DEGREE, LITER, GALON, VOLTS, WATT, AMPERE, PERCENT, METER, FEET, PASCAL, PSI, COUNT, NONE
 };
 
 enum class PropertyDataType {
@@ -14,7 +14,9 @@ public:
     HomieNodeProperty(const char* name, const bool _settable, const bool _retained, 
                       const PropertyUnit _unit, const PropertyDataType _dataType, const char* _format);
     ~HomieNodeProperty();
-    
+     
+
+     
     const char* getName();
     const bool isSettable();
     const bool isRetained();

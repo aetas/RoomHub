@@ -6,6 +6,7 @@
 #include "mocks/FakeDevice.hpp"
 #include "mqtt/MqttCommandReceiver.hpp"
 
+
 TEST_CASE("MqttCommandReceiver") {
 
     DevicesRegistry registry(5);
@@ -16,7 +17,7 @@ TEST_CASE("MqttCommandReceiver") {
     HomieNodeProperty* props1[1] = { &node1prop1 };
     HomieNode homieNode1(deviceName, "1", "name1", "someType", props1, 1, mqttClient);
     HomieNode* nodes[1] = {&homieNode1};
-    HomieDevice homieDevice(deviceName, "8.1.7", 10, "firmware name value", "7.8.9", "192.154.1.25", "00:0a:95:9d:68:16", nodes, 1, mqttClient);
+    HomieDevice homieDevice(deviceName, 10, "firmware name value", "7.8.9", "192.154.1.25", "00:0a:95:9d:68:16", nodes, 1, mqttClient);
 
     MqttCommandReceiver& commandReceiver = MqttCommandReceiver::getInstance(&registry, &homieDevice);
     
@@ -30,13 +31,13 @@ TEST_CASE("MqttCommandReceiver") {
 
         // when
         String id = "1";
-        String propertyName = "state";
-        String value = "newState123";
-        String topic = "homie/devName/1/state/set";
-        MqttCommandReceiver::messageReceived(topic, value);
+        String propertyName = "testProp1";
+        byte* value = (unsigned char*)("newState123");
+        const char* topic = "homie/devName/1/testProp1/set";
+        MqttCommandReceiver::messageReceived(topic, value, 12);
 
         // then
-        REQUIRE(fakeDevice1.currentPropertyValue("state") == "newState123");
+        REQUIRE(fakeDevice1.currentPropertyValue("testProp1") == "newState123");
     }
 
       SECTION("should send MQTT message when new value is set") {
@@ -45,13 +46,11 @@ TEST_CASE("MqttCommandReceiver") {
         registry.add(&fakeDevice1);
 
         // when
-        String id = "1";
-        String propertyName = "state";
-        String value = "newState456";
-        String topic = "homie/devName/1/state/set";
-        MqttCommandReceiver::messageReceived(topic, value);
+        byte* value = (unsigned char*)"newState456";
+        const char* topic = "homie/devName/1/testProp1/set";
+        MqttCommandReceiver::messageReceived(topic, value, 12);
 
         // then
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/state") == "newState456");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1") == "newState456");
     }
 }

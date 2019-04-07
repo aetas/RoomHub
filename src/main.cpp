@@ -20,7 +20,13 @@
 #include "mqtt/MqttEventPublisher.hpp"
 #include "mqtt/MqttCommandReceiver.hpp"
 
+#include "homie/HomieDeviceFactory.hpp"
+
 #include <WiFi.h>
+
+#ifdef USE_WIFI
+WiFiClient net;
+#endif
 
 DigitalInputDevice* switchButton;
 DigitalOutputDevice* relay;
@@ -30,15 +36,17 @@ uint32_t lastChangeTime = 0;
 uint8_t relayLastState = LOW;
 
 DevicesRegistry devicesRegistry(NUMBER_OF_DEVICES);
+HomieDevice* homieDevice;
 
 MqttClient mqttClient;
+
 
 // DONE test output device (relay)
 // DONE test input device (switchbutton)
 // DONE test input device (movement sensor)
 // DONE Prepare logging and get rid of Serial.print
 // DONE Implement DeviceRegistry
-// TODO Implement MqttEventPublisher (real implementation)
+// DONE Implement MqttEventPublisher (real implementation)
 // TODO prepare logs on web page
 
 // Logging
@@ -56,9 +64,14 @@ void wifiSetup() {
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
   }
-  Log.notice(F("Connected to WiFi on IP %s" CR), WiFi.localIP());
+  Log.notice(F("Connected to WiFi on IP %s" CR), WiFi.localIP().toString().c_str());
 }
 #endif
+
+
+void messageReceivedTest(String &topic, String &payload) {
+  Log.notice("MQTT message received: %s <- %s" CR, topic, payload);
+}
 
 void setup() {
   Serial.begin(115200);
@@ -83,25 +96,32 @@ void setup() {
 
   #ifdef USE_WIFI
   wifiSetup();
-  WiFiClient net;
   #endif
   
-  // TODO maj: prepare MQTTClient with my MqttClient
   mqttClient.begin(MQTT_HOST, MQTT_PORT, net);
 
-  // TODO maj: HomieDevice and/or HomieNodesFactory
-  // TODO maj: initialize MqttCommandReceiver and pass "messageReceived" to MQTTClient
-  UpdateListener& mqttEventPublisher = MqttEventPublisher::getInstance();
+  char* ipValue = new char[16];
+  WiFi.localIP().toString().toCharArray(ipValue, 16);
+  char* macValue = new char[18];
+  WiFi.macAddress().toCharArray(macValue, 18);
+  WiFi.RSSI();
+  homieDevice = HomieDeviceFactory::create(ipValue, macValue, devicesConfig, NUMBER_OF_DEVICES, mqttClient);
+  
+  homieDevice->setup();
+
+  UpdateListener& mqttEventPublisher = MqttEventPublisher::getInstance(homieDevice);
   devicesRegistry.setUpdateListener(&mqttEventPublisher);
-  MqttCommandReceiver& mqttCommandReceiver = MqttCommandReceiver::getInstance(&devicesRegistry, );
+  MqttCommandReceiver::getInstance(&devicesRegistry, homieDevice);
+  mqttClient.onMessage(MqttCommandReceiver::messageReceived);
 }
 
 void loop() {
   uint32_t now = millis();
   devicesRegistry.loop(now);
-}
+  homieDevice->loop(now);
 
-
-HomieDevice* createHomieDevice() {
-  HomieDevice* homieDevice = new HomieDevice(DEVICE_NAME, )
+  // TODO maj: hanging on WiFi Connection ?!?!?!?
+  // TODO maj: reconnect to wifi if disconnected
+  // TODO maj: reconnect to MQTT if disconnected (in HomieDevice.loop?)
+  // TODO maj: send stats with memory used and program space used
 }

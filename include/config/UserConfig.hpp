@@ -1,17 +1,17 @@
 #pragma once
 
+#include "MasterConfig.hpp"
+
 // -- Basic ---------------------------------------
 
-#define DEVICE_NAME         "AetasRoomHub" // TODO maj: move to external configuration
-#define FIRMWARE_NAME       "Aetas RoomHub"
-#define FIRMWARE_VERSION    "3.0.0"
+#define DEVICE_NAME         "garage"  // TODO maj: move to external configuration
 
 
 // -- Homie  (MQTT) -------------------------------
-#define HOMIE_STATS_INTERVAL_SEC    30
+#define HOMIE_STATS_INTERVAL_SEC    20
 #define MQTT_HOST                   "192.168.1.170"   // [MqttHost]
 #define MQTT_PORT                   1883              // [MqttPort] MQTT port
-#define MQTT_USER                   "garage"          // [MqttUser] MQTT user
+#define MQTT_USER                   ""                // [MqttUser] MQTT user
 #define MQTT_PASS                   ""                // [MqttPassword] MQTT password
 
 

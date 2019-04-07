@@ -27,22 +27,21 @@ public:
     const char* getName();
     const char* getType();
     const char* getPropertiesString();
-
-    HomieNodeProperty** getProperties();
     const uint8_t getPropertiesNumber();
 
     void propertyValueUpdated(const char* propertyName, const char* newValue);
 
 private:
-    MqttClient& mqttClient;
-
     char* topicStart;
-    const char* id;
     const char* name;
+    const char* id;
     const char* type;
 
     HomieNodeProperty** properties;
     const uint8_t propertiesNumber;
 
+    MqttClient& mqttClient;
+
     void setupProperties();
+    HomieNodeProperty* getProperty(const char* name);
 };

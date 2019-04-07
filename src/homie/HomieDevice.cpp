@@ -9,8 +9,7 @@
 HomieDevice::HomieDevice(const char* _name, const uint8_t _statsIntervalSec,
                          const char*_firmwareName, const char*_firmwareVersion, const char* _ip, const char* _mac,
                          HomieNode** _nodes, const uint8_t _nodesNumber, MqttClient& _mqttClient): 
-        name(_name), 
-        homieVersion(HOMIE_VERSION),
+        name(_name),
         statsIntervalSec(_statsIntervalSec),
         firmwareName(_firmwareName),
         firmwareVersion(_firmwareVersion),
@@ -25,10 +24,6 @@ HomieDevice::HomieDevice(const char* _name, const uint8_t _statsIntervalSec,
 
     topicStart = new char[topicStartString.length()]();
     strcpy(topicStart, topicStartString.c_str());
-
-    String stateTopic = topicStart;
-    stateTopic += "/$state";
-    mqttClient.setWill(stateTopic.c_str(), "lost");
 }
 
 HomieDevice::~HomieDevice() {
@@ -36,46 +31,48 @@ HomieDevice::~HomieDevice() {
 }
 
 void HomieDevice::setup() {
+    String stateTopic = topicStart;
+    stateTopic += "/$state";
+    mqttClient.connect(name, stateTopic.c_str(), 1, 1, "lost");
+
     String homieVersionTopic = topicStart;
     homieVersionTopic += "/$homie";
-    mqttClient.publish(homieVersionTopic.c_str(), homieVersion);
+    mqttClient.publish(homieVersionTopic.c_str(), HOMIE_VERSION, true);
     String nameTopic = topicStart;
     nameTopic += "/$name";
-    mqttClient.publish(nameTopic.c_str(), name);
+    mqttClient.publish(nameTopic.c_str(), name, true);
     String nodesListTopic = topicStart;
     nodesListTopic += "/$nodes";
     const char* nodesString = getNodesString();
-    mqttClient.publish(nodesListTopic.c_str(), getNodesString());
-    delete[] nodesString;
+    mqttClient.publish(nodesListTopic.c_str(), nodesString, true);
     String implementationTopic = topicStart;
     implementationTopic += "/$implementation";
-    mqttClient.publish(implementationTopic.c_str(), HOMIE_IMPLEMENTATION);
+    mqttClient.publish(implementationTopic.c_str(), HOMIE_IMPLEMENTATION, true);
     String firmwareNameTopic = topicStart;
     firmwareNameTopic += "/$fw/name";
-    mqttClient.publish(firmwareNameTopic.c_str(), firmwareName);
+    mqttClient.publish(firmwareNameTopic.c_str(), firmwareName, true);
     String firmwareVersionTopic = topicStart;
     firmwareVersionTopic += "/$fw/version";
-    mqttClient.publish(firmwareVersionTopic.c_str(), firmwareVersion);
+    mqttClient.publish(firmwareVersionTopic.c_str(), firmwareVersion, true);
     String ipTopic = topicStart;
     ipTopic += "/$localip";
-    mqttClient.publish(ipTopic.c_str(), ip);
+    mqttClient.publish(ipTopic.c_str(), ip, true);
     String macTopic = topicStart;
     macTopic += "/$mac";
-    mqttClient.publish(macTopic.c_str(), mac);
+    mqttClient.publish(macTopic.c_str(), mac, true);
     String statsListTopic = topicStart;
     statsListTopic += "/$stats";
-    mqttClient.publish(statsListTopic.c_str(), "uptime,signal");
+    mqttClient.publish(statsListTopic.c_str(), "uptime,signal", true);
     String statsIntervalTopic = topicStart;
     statsIntervalTopic += "/$stats/interval";
     char statsIntervalSecString[4];
     sprintf(statsIntervalSecString, "%d", statsIntervalSec);
-    mqttClient.publish(statsIntervalTopic.c_str(), statsIntervalSecString);
+    mqttClient.publish(statsIntervalTopic.c_str(), statsIntervalSecString, true);
     String uptimeTopic = topicStart;
     uptimeTopic += "/$stats/uptime";
-    mqttClient.publish(uptimeTopic.c_str(), "0");
-    String stateTopic = topicStart;
-    stateTopic += "/$state";
-    mqttClient.publish(stateTopic.c_str(), "ready");
+    mqttClient.publish(uptimeTopic.c_str(), "0", true);
+    
+    mqttClient.publish(stateTopic.c_str(), "ready", true);
 
     for(uint8_t i = 0; i < nodesNumber; i++) {
         nodes[i]->setup();
@@ -83,6 +80,7 @@ void HomieDevice::setup() {
 }
 
 void HomieDevice::loop(const uint32_t& currentTimeMs) {
+    mqttClient.loop();
     updateStats(currentTimeMs);
 }
 
@@ -116,12 +114,12 @@ const void HomieDevice::refreshUptime(const uint32_t& currentTimeMs) {
     sprintf(uptimeSecString, "%d", uptime.uptimeSec(currentTimeMs));
     String uptimeTopic = topicStart;
     uptimeTopic += "/$stats/uptime";
-    mqttClient.publish(uptimeTopic.c_str(), uptimeSecString);
+    mqttClient.publish(uptimeTopic.c_str(), uptimeSecString, true);
 }
 const void HomieDevice::refreshSignalStrength() {
     String signalStrengthTopic = topicStart;
     signalStrengthTopic += "/$stats/signal";
-    mqttClient.publish(signalStrengthTopic.c_str(), "0"); // TODO maj: real signal strength needed
+    mqttClient.publish(signalStrengthTopic.c_str(), "0", true); // TODO maj: real signal strength needed
 }
 
 

@@ -1,7 +1,8 @@
 #include "config/DeviceConfig.hpp"
 
-DeviceConfig::DeviceConfig(uint16_t _id, DeviceType _type, uint8_t _portNumber, WireColor _wire, uint16_t _debounceMs):
+DeviceConfig::DeviceConfig(uint16_t _id, const char* _name, DeviceType _type, uint8_t _portNumber, WireColor _wire, uint16_t _debounceMs):
     id(_id), 
+    name(_name),
     type(_type),
     portNumber(_portNumber),
     wire(_wire),
@@ -13,6 +14,10 @@ DeviceConfig::~DeviceConfig() {
 
 const uint8_t DeviceConfig::getId() {
     return id;
+}
+
+const char* DeviceConfig::getName() {
+    return name;
 }
     
 const DeviceType DeviceConfig::getDeviceType() {
@@ -29,4 +34,15 @@ const WireColor DeviceConfig::getWireColor() {
 
 const uint16_t DeviceConfig::getDebounceMs() {
     return debounceMs;
+}
+
+const char* DeviceConfig::deviceTypeToString(DeviceType deviceType) {
+    switch(deviceType) {
+        case DeviceType::ANALOG_INPUT:      return "AnalogInput";
+        case DeviceType::BME280 :           return "BME280";
+        case DeviceType::DHT22 :            return "DHT22";
+        case DeviceType::DIGITAL_INPUT :    return "DigitalInput";
+        case DeviceType::DIGITAL_OUTPUT :   return "DigitalOutput";
+        default: return "UNKNOWN";
+    }
 }

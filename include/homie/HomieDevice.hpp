@@ -43,19 +43,18 @@ public:
 private:
     char* topicStart;
     const char* name;
-    const char* homieVersion;
 
     uint32_t lastStatsUpdateMs = 0;
     const uint8_t statsIntervalSec;
 
-    HomieNode** nodes;
-    const uint8_t nodesNumber;
-    
-    const char* mac;
-    const char* ip;
-
     const char* firmwareName;
     const char* firmwareVersion;
+
+    const char* ip;
+    const char* mac;
+
+    HomieNode** nodes;
+    const uint8_t nodesNumber;
 
     HomieDeviceState state = HomieDeviceState::INIT;
     MqttClient& mqttClient;

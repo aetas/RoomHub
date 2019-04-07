@@ -13,11 +13,18 @@ class FakeMqttClient: public MqttClient {
 public:
 
     void begin(const char* hostname, uint16_t port, Client& connectionClient) {};
-    void connect(const char* deviceName) {};
+    void connect(const char* deviceName, const char* willTopic, uint8_t willQoS, bool willRetain, const char* willMessage) {
+        setWill(willTopic, willMessage);
+    };
 
-    bool publish(const char* topic, const char* payload) {
-        cout << "MQTT: " << topic << "-> " << payload << " (FAKE)" << endl;
-        values[topic] = payload;
+    bool publish(const char* topic, const char* payload, bool retained = false) {
+        if (retained) {
+            cout << "MQTT: " << topic << "-> " << payload << " [RETAINED]"  << " (FAKE)" << endl;
+            retainedMessages[topic] = payload;
+        } else {
+            cout << "MQTT: " << topic << "-> " << payload << " (FAKE)" << endl;
+            messages[topic] = payload;
+        }
         return true;
     }
 
@@ -27,13 +34,12 @@ public:
         return true;
     }
 
-    void setWill(const char* topic, const char* payload) {
-        cout << "MQTT will: " << topic << "-> " << payload << " (FAKE)" << endl;
-        wills[topic] = payload; 
-    }
-
-    String getValuePublishedTo(String topic) {
-        return values[topic];
+    String getValuePublishedTo(String topic, bool shouldBeRetained = false) {
+        if (shouldBeRetained) {
+            return retainedMessages[topic];
+        } else {
+            return messages[topic];
+        }
     }
 
     String getLastWillTo(String topic) {
@@ -52,7 +58,14 @@ public:
 
 
 private:
-    map<String, String> values;
+
+    void setWill(const char* topic, const char* payload) {
+        cout << "MQTT will: " << topic << "-> " << payload << " (FAKE)" << endl;
+        wills[topic] = payload; 
+    }
+
+    map<String, String> messages;
+    map<String, String> retainedMessages;
     list<String> subscribedTopics;
     map<String, String> wills;
 

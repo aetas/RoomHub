@@ -1,18 +1,19 @@
 #pragma once
 
 #include <inttypes.h>
-#include "MQTTClient.h"
+#include "PubSubClient.h"
 
 
 class MqttClient {
 public:
     virtual void begin(const char* hostname, uint16_t port, Client& connectionClient);
-    virtual void connect(const char* deviceName);
-    virtual bool publish(const char* topic, const char* payload);
+    virtual bool connected();
+    virtual void connect(const char* deviceName, const char* willTopic, uint8_t willQoS, bool willRetain, const char* willMessage);
+    virtual bool publish(const char* topic, const char* payload, bool retained = false);
     virtual bool subscribe(const char* topic);
-    virtual void setWill(const char* topic, const char* payload);
+    virtual void onMessage(MQTT_CALLBACK_SIGNATURE);
+    virtual void loop();
 
 private:
-    MQTTClient client;
-    const char* hubName;
+    PubSubClient client;
 };

@@ -21,7 +21,9 @@ const bool HomieNodeProperty::isRetained() {
 const char* HomieNodeProperty::getUnit() {
     switch(unit) {
         case PropertyUnit::COUNT: return "#";
-        case PropertyUnit::DEGREE : return "C";
+        case PropertyUnit::DEGREE : return "*";
+        case PropertyUnit::CELSIUS : return "C";
+        case PropertyUnit::FAHRENHEIT : return "F";
         case PropertyUnit::LITER: return "L";
         case PropertyUnit::GALON: return "gal";
         case PropertyUnit::VOLTS: return "V";
@@ -32,6 +34,8 @@ const char* HomieNodeProperty::getUnit() {
         case PropertyUnit::FEET: return "ft";
         case PropertyUnit::PASCAL: return "Pa";
         case PropertyUnit::PSI: return "psi";
+        case PropertyUnit::NONE: return "";
+        default: return "";
     }
 }
 const char* HomieNodeProperty::getDataType() {

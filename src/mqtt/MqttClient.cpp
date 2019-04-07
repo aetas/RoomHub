@@ -1,23 +1,28 @@
 #include "mqtt/MqttClient.hpp"
 
-#include "WString.h"
 #include "ArduinoLog.h"
-#include "Arduino.h"
+#include "WString.h"
 
 void MqttClient::begin(const char* hostname, uint16_t port, Client& connectionClient) {
-    client.begin(hostname, port, connectionClient);
+    client.setClient(connectionClient);
+    client.setServer(hostname, port);
 }
 
-void MqttClient::connect(const char* deviceName) {
-    while(!client.connect(deviceName)) {
+bool MqttClient::connected() {
+    return client.connected();
+}
+
+void MqttClient::connect(const char* deviceName, const char* willTopic, uint8_t willQoS, bool willRetain, const char* willMessage) {
+    while(!client.connect(deviceName, willTopic, willQoS, willRetain, willMessage)) {
         Log.notice(F("Connecting to MQTT..." CR));
-        delay(500);
+        delay(1000);
     }
+    Log.notice(F("MQTT connected. Will: %s -> %s" CR), willTopic, willMessage);
 }
 
-bool MqttClient::publish(const char* topic, const char* payload) {
+bool MqttClient::publish(const char* topic, const char* payload, bool retained) {
     Log.notice(F("MQTT: %s -> %s" CR), topic, payload);
-    if(!client.publish(topic, payload)){
+    if(!client.publish(topic, payload, retained)){
         Log.error(F("MQTT message sending failed. Topic: %s | Payload %s" CR), topic, payload);
         return false;
     }
@@ -26,14 +31,17 @@ bool MqttClient::publish(const char* topic, const char* payload) {
 
 bool MqttClient::subscribe(const char* topic) {
     Log.notice(F("MQTT subscribe: %s" CR), topic);
-    if(!client.subscribe(topic)) {
+    if(!client.subscribe(topic, 1)) {
         Log.error(F("MQTT subscription failed. Topic: %s" CR), topic);
         return false;
     }
     return true;
 }
 
-void MqttClient::setWill(const char* topic, const char* payload) {
-    Log.notice(F("MQTT will: %s -> %s" CR), topic, payload);
-    client.setWill(topic, payload);
+void MqttClient::onMessage(MQTT_CALLBACK_SIGNATURE) {
+    client.setCallback(callback);
+}
+
+void MqttClient::loop() {
+    client.loop();
 }
