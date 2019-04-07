@@ -80,7 +80,11 @@ void HomieDevice::setup() {
 }
 
 void HomieDevice::loop(const uint32_t& currentTimeMs) {
-    mqttClient.loop();
+    if (!mqttClient.loop()) {
+        String stateTopic = topicStart;
+        stateTopic += "/$state";
+        mqttClient.connect(name, stateTopic.c_str(), 1, 1, "lost");
+    }
     updateStats(currentTimeMs);
 }
 

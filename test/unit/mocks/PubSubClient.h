@@ -22,7 +22,7 @@ public:
     bool publish(const char* topic, const char* payload, bool retained = false) {};
     bool subscribe(const char* topic, uint8_t qos) {};
     void setCallback(MQTT_CALLBACK_SIGNATURE) {};
-    void loop() {};
+    bool loop() {};
 
 };
 

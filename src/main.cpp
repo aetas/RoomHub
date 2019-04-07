@@ -59,18 +59,25 @@ MqttClient mqttClient;
 // WiFi
 #ifdef USE_WIFI
 void wifiSetup() {
-  Log.notice(F("Connecting to WiFi..." CR));
-  WiFi.begin(WIFI_SSID, WIFI_PASS);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
+  uint8_t status = WL_IDLE_STATUS;
+  while (status != WL_CONNECTED) {
+    Log.trace(F("Trying to connect to WiFi (%d)..." CR), status);
+    status = WiFi.begin(WIFI_SSID, WIFI_PASS);
+    delay(WIFI_CONNECT_WAIT_MS);
   }
   Log.notice(F("Connected to WiFi on IP %s" CR), WiFi.localIP().toString().c_str());
+}
+
+void wifiConnectionCheck(long now) {
+  if (WiFi.status() != WL_CONNECTED) {
+    WiFi.reconnect();
+  }
 }
 #endif
 
 
 void messageReceivedTest(String &topic, String &payload) {
-  Log.notice("MQTT message received: %s <- %s" CR, topic, payload);
+  Log.notice(F("MQTT message received: %s <- %s" CR), topic, payload);
 }
 
 void setup() {
@@ -120,8 +127,7 @@ void loop() {
   devicesRegistry.loop(now);
   homieDevice->loop(now);
 
-  // TODO maj: hanging on WiFi Connection ?!?!?!?
-  // TODO maj: reconnect to wifi if disconnected
-  // TODO maj: reconnect to MQTT if disconnected (in HomieDevice.loop?)
+  wifiConnectionCheck(now);
+
   // TODO maj: send stats with memory used and program space used
 }

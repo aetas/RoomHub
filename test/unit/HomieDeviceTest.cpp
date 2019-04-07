@@ -85,4 +85,15 @@ TEST_CASE("HomieDevice") {
         REQUIRE(mqttClient.getValuePublishedTo("homie/devName/3/$name", true) == "name3");
     }
 
+     SECTION("should reconnect to MQTT client when disconnected during loop") {
+        // given
+        mqttClient.setConnected(false);
+
+        // when
+        homieDevice.loop(0);
+
+        // then
+        REQUIRE(mqttClient.loop() == true);
+    }
+
 }

@@ -15,6 +15,7 @@ public:
     void begin(const char* hostname, uint16_t port, Client& connectionClient) {};
     void connect(const char* deviceName, const char* willTopic, uint8_t willQoS, bool willRetain, const char* willMessage) {
         setWill(willTopic, willMessage);
+        connected = true;
     };
 
     bool publish(const char* topic, const char* payload, bool retained = false) {
@@ -32,6 +33,15 @@ public:
         cout << "MQTT subscribe: " << topic << " (FAKE)" << endl;
         subscribedTopics.push_back(topic);
         return true;
+    }
+
+    bool loop() {
+        return connected;
+    }
+
+
+    void setConnected(bool _connected) {
+        connected = _connected;
     }
 
     String getValuePublishedTo(String topic, bool shouldBeRetained = false) {
@@ -64,6 +74,7 @@ private:
         wills[topic] = payload; 
     }
 
+    bool connected = false;
     map<String, String> messages;
     map<String, String> retainedMessages;
     list<String> subscribedTopics;

@@ -42,6 +42,6 @@ void MqttClient::onMessage(MQTT_CALLBACK_SIGNATURE) {
     client.setCallback(callback);
 }
 
-void MqttClient::loop() {
-    client.loop();
+bool MqttClient::loop() {
+    return client.loop();
 }

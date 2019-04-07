@@ -12,7 +12,7 @@ public:
     virtual bool publish(const char* topic, const char* payload, bool retained = false);
     virtual bool subscribe(const char* topic);
     virtual void onMessage(MQTT_CALLBACK_SIGNATURE);
-    virtual void loop();
+    virtual bool loop();
 
 private:
     PubSubClient client;
