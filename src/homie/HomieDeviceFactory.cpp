@@ -55,7 +55,7 @@ HomieNode** HomieDeviceFactory::createNodes(DeviceConfig devicesConfig[], uint8_
 HomieNodeProperty** HomieDeviceFactory::createHomieNodeProperties(DeviceConfig* node) {
   if(node->getDeviceType() == DeviceType::ANALOG_INPUT) {
     HomieNodeProperty** properties = new HomieNodeProperty*[1];
-    properties[0] = new HomieNodeProperty("value", false, false, PropertyUnit::NONE, PropertyDataType::FLOAT, "");
+    properties[0] = new HomieNodeProperty("value", false, true, PropertyUnit::NONE, PropertyDataType::INTEGER, "0:4095");
     return properties;
   }
   if(node->getDeviceType() == DeviceType::BME280) {
@@ -80,6 +80,11 @@ HomieNodeProperty** HomieDeviceFactory::createHomieNodeProperties(DeviceConfig* 
     properties[0] = new HomieNodeProperty("state", true, true, PropertyUnit::NONE, PropertyDataType::ENUM, "ON,OFF");
     return properties;
   }
+  if(node->getDeviceType() == DeviceType::SCT013) {
+    HomieNodeProperty** properties = new HomieNodeProperty*[1];
+    properties[0] = new HomieNodeProperty("power", false, true, PropertyUnit::WATT, PropertyDataType::FLOAT, "");
+    return properties;
+  }
 
   return nullptr;
 }
@@ -93,6 +98,7 @@ const uint8_t HomieDeviceFactory::propertiesNumber(DeviceConfig* node) {
         case DeviceType::DHT22          : return 2;
         case DeviceType::DIGITAL_INPUT  : return 1;
         case DeviceType::DIGITAL_OUTPUT : return 1;
+        case DeviceType::SCT013         : return 1;
         default: return 0;
     }
 }

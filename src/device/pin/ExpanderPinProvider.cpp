@@ -3,13 +3,11 @@
 #include "device/pin/MuxAnalogPin.hpp"
 #include "ArduinoLog.h"
 
-ExpanderPinProvider::ExpanderPinProvider(Adafruit_MCP23017* _expanders, CD74HC4067* _mux) {
-    expanders = _expanders;
-    mux = _mux;
-}
+ExpanderPinProvider::ExpanderPinProvider(Adafruit_MCP23017* _expanders, CD74HC4067* _mux, uint8_t _muxCommonPin):
+    expanders(_expanders), mux(_mux), muxCommonPin(_muxCommonPin) {}
 
-ExpanderPinProvider& ExpanderPinProvider::getInstance(Adafruit_MCP23017* expanders, CD74HC4067* mux) {
-    static ExpanderPinProvider instance(expanders, mux);
+ExpanderPinProvider& ExpanderPinProvider::getInstance(Adafruit_MCP23017* expanders, CD74HC4067* mux, uint8_t muxCommonPin) {
+    static ExpanderPinProvider instance(expanders, mux, muxCommonPin);
     return instance;
 }
 

@@ -1,5 +1,7 @@
 #include "device/DevicesRegistry.hpp"
 #include "device/DigitalInputDevice.hpp"
+#include "device/Sct013Device.hpp"
+#include "device/AnalogInputDevice.hpp"
 
 #include "WString.h"
 #include "ArduinoLog.h"
@@ -21,6 +23,10 @@ void DevicesRegistry::loop(const uint32_t& currentTimeMs) {
     for(uint8_t i = 0; i < currentNumberOfDevices; i++) {
         if (devices[i]->getType() == DeviceType::DIGITAL_INPUT) {
             ((DigitalInputDevice*) devices[i])->loop(currentTimeMs);
+        } else if (devices[i]->getType() == DeviceType::SCT013) {
+            ((Sct013Device*) devices[i])->loop(currentTimeMs);
+        } else if (devices[i]->getType() == DeviceType::ANALOG_INPUT) {
+            ((AnalogInputDevice*) devices[i])->loop(currentTimeMs);
         }
     }
 }

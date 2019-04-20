@@ -48,6 +48,7 @@ MqttClient mqttClient;
 // DONE Implement DeviceRegistry
 // DONE Implement MqttEventPublisher (real implementation)
 // TODO prepare logs on web page
+// TODO maj: send stats with memory used and program space used
 
 // Logging
 #ifdef LOG_ENABLE_WEB
@@ -92,7 +93,7 @@ void setup() {
   setupComponents();
   Log.notice(F("Components set up" CR));
   
-  ExpanderPinProvider& pinProvider = ExpanderPinProvider::getInstance(expanders, &mux);
+  ExpanderPinProvider& pinProvider = ExpanderPinProvider::getInstance(expanders, &mux, MUX_COMMON_PIN);
   Log.notice(F("PinProvider prepared" CR));
   DeviceFactory& deviceFactory = DeviceFactory::getInstance(pinProvider);
   Log.notice(F("DeviceFactory prepared" CR));
@@ -129,5 +130,4 @@ void loop() {
 
   wifiConnectionCheck(now);
 
-  // TODO maj: send stats with memory used and program space used
 }

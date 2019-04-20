@@ -3,7 +3,7 @@
 #include <Adafruit_MCP23017.h>
 #include <CD74HC4067.h>
 
-#define EXPANDERS_NUMBER 8
+#define EXPANDERS_NUMBER 4
 #define MUX_COMMON_PIN 36
 #define MUX_S0 27
 #define MUX_S1 26

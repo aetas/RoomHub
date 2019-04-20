@@ -10,7 +10,7 @@
 class ExpanderPinProvider: public PinProvider {
 
 public:
-    static ExpanderPinProvider& getInstance(Adafruit_MCP23017* expanders, CD74HC4067* mux);
+    static ExpanderPinProvider& getInstance(Adafruit_MCP23017* expanders, CD74HC4067* mux, uint8_t muxCommonPin);
     
     ExpanderPinProvider(ExpanderPinProvider const&) = delete;
     void operator=(ExpanderPinProvider const&) = delete;
@@ -19,7 +19,7 @@ public:
     AnalogPin* analogPin(const uint8_t portNumber);
 
 private:
-    ExpanderPinProvider(Adafruit_MCP23017* expanders, CD74HC4067* mux);
+    ExpanderPinProvider(Adafruit_MCP23017* expanders, CD74HC4067* mux, uint8_t muxCommonPin);
     Adafruit_MCP23017* expanders;
     CD74HC4067* mux;
     uint8_t muxCommonPin;

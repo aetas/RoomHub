@@ -61,4 +61,16 @@ TEST_CASE("DeviceFactory creates Device from DeviceConfiguration")
       REQUIRE(device->getType() == DeviceType::DHT22);
    }
 
+    SECTION("should create SCT-013 when SCT013 DeviceConfig given") {
+      // given
+      DeviceConfig sct013DeviceConfig(46, "sct013A", DeviceType::SCT013, 2, WireColor::BROWN, 0);
+
+      // when
+      Device* device = deviceFactory.create(sct013DeviceConfig);
+
+      // then
+      REQUIRE(device->getId() == 46);
+      REQUIRE(device->getType() == DeviceType::SCT013);
+   }
+
 }

@@ -43,6 +43,7 @@ const char* DeviceConfig::deviceTypeToString(DeviceType deviceType) {
         case DeviceType::DHT22 :            return "DHT22";
         case DeviceType::DIGITAL_INPUT :    return "DigitalInput";
         case DeviceType::DIGITAL_OUTPUT :   return "DigitalOutput";
+        case DeviceType::SCT013 :           return "SCT-013";
         default: return "UNKNOWN";
     }
 }

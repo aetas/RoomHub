@@ -3,6 +3,7 @@
 #include "device/DigitalOutputDevice.hpp"
 #include "device/AnalogInputDevice.hpp"
 #include "device/Dht22Device.hpp"
+#include "device/Sct013Device.hpp"
 
 
 DeviceFactory& DeviceFactory::getInstance(PinProvider& _pinProvider) {
@@ -31,6 +32,11 @@ Device* DeviceFactory::create(DeviceConfig& deviceConfig) {
         {
             DigitalPin* digitalPin = pinProvider.digitalPin(deviceConfig.getPortNumber(), deviceConfig.getWireColor());
             return new Dht22Device(deviceConfig.getId(), digitalPin);   
+        }
+        case DeviceType::SCT013:
+        {
+            AnalogPin* analogPin = pinProvider.analogPin(deviceConfig.getPortNumber());
+            return new Sct013Device(deviceConfig.getId(), analogPin);   
         }
     }
     

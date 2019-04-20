@@ -18,3 +18,7 @@ uint16_t MuxAnalogPin::read() {
     mux->channel(channel);
     return analogRead(originPinNumber);
 }
+
+uint8_t MuxAnalogPin::getPinNumber() {
+    return originPinNumber;
+}

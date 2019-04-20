@@ -7,7 +7,8 @@ enum class DeviceType {
     DIGITAL_OUTPUT = 2,
     ANALOG_INPUT = 3,
     DHT22 = 4,
-    BME280 = 5
+    BME280 = 5,
+    SCT013 = 6
 };
 
 enum class WireColor {

@@ -17,6 +17,7 @@ public:
         cout << "Fake analog value set to " << fakeValue << endl;
         value = fakeValue;
     }   
+    uint8_t getPinNumber() { return 1; };
 
 private:
     uint16_t value = 0;

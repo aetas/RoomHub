@@ -12,6 +12,7 @@ public:
     ~MuxAnalogPin();
 
     uint16_t read();
+    uint8_t getPinNumber();
 private:
     CD74HC4067* mux;
     const uint8_t channel;
