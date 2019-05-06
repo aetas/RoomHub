@@ -2,6 +2,7 @@
 #include "config/FixedDeviceConfig.hpp"
 #include "config/FixedComponentsConfig.hpp"
 #include "config/UserConfig.hpp"
+#include "config/SpiffsConfigurationStorage.hpp"
 
 
 // Logging
@@ -22,7 +23,10 @@
 
 #include "homie/HomieDeviceFactory.hpp"
 
+#ifdef USE_WIFI
 #include <WiFi.h>
+#include "wifi/WiFi.h"
+#endif
 
 #ifdef USE_WIFI
 WiFiClient net;
@@ -35,7 +39,7 @@ DigitalInputDevice* motionSensor;
 uint32_t lastChangeTime = 0;
 uint8_t relayLastState = LOW;
 
-DevicesRegistry devicesRegistry(NUMBER_OF_DEVICES);
+DevicesRegistry* devicesRegistry;
 HomieDevice* homieDevice;
 
 MqttClient mqttClient;
@@ -47,8 +51,13 @@ MqttClient mqttClient;
 // DONE Prepare logging and get rid of Serial.print
 // DONE Implement DeviceRegistry
 // DONE Implement MqttEventPublisher (real implementation)
-// TODO prepare logs on web page
+// TODO maj: review code and push to repo
+// TODO maj: quick and dirty test for ConfigurationWebServer
+// TODO maj: proper implementation for ConfigurationWebServer
+// TODO maj: call reset wifi config on button pressed for 5 seconds
+// TODO maj: prepare logs on web page
 // TODO maj: send stats with memory used and program space used
+// TODO maj: comment out all trace logs
 
 // Logging
 #ifdef LOG_ENABLE_WEB
@@ -56,26 +65,6 @@ MqttClient mqttClient;
   Print* logTargets[2] = {&bufferedLogger, &Serial};
   MultiLogger multiLogger(logTargets, 2);
 #endif
-
-// WiFi
-#ifdef USE_WIFI
-void wifiSetup() {
-  uint8_t status = WL_IDLE_STATUS;
-  while (status != WL_CONNECTED) {
-    Log.trace(F("Trying to connect to WiFi (%d)..." CR), status);
-    status = WiFi.begin(WIFI_SSID, WIFI_PASS);
-    delay(WIFI_CONNECT_WAIT_MS);
-  }
-  Log.notice(F("Connected to WiFi on IP %s" CR), WiFi.localIP().toString().c_str());
-}
-
-void wifiConnectionCheck(long now) {
-  if (WiFi.status() != WL_CONNECTED) {
-    WiFi.reconnect();
-  }
-}
-#endif
-
 
 void messageReceivedTest(String &topic, String &payload) {
   Log.notice(F("MQTT message received: %s <- %s" CR), topic, payload);
@@ -90,6 +79,28 @@ void setup() {
     Log.begin(LOG_LEVEL, &Serial, false);
   #endif
 
+  Log.trace(F("Total heap = %i" CR), ESP.getHeapSize());
+  Log.trace(F("Free heap = %i" CR), ESP.getFreeHeap());
+  
+  #ifdef USE_WIFI
+  connectWiFi();
+  #endif
+
+  // Reading configuration 
+  prepareDevicesConfigs(); // TODO maj: temporary for testing - replace it with ConfigurationWebServer
+  SpiffsConfigurationStorage config;
+  const char* hubName = config.readName();
+  Log.trace(F("hubName = %s" CR), hubName);
+  const char* mqttHostname = config.readMqttHostname();
+  Log.trace(F("MqttHostname = %s" CR), mqttHostname);
+  DeviceConfig** devicesConfig = config.readDevicesConfig();
+  uint8_t devicesCount = config.numberOfDevices();
+  Log.notice(F("Devices (%i) configuration read from memory" CR), devicesCount);
+  
+
+  Log.trace(F("Total heap = %i" CR), ESP.getHeapSize());
+  Log.trace(F("Free heap = %i" CR), ESP.getFreeHeap());
+
   setupComponents();
   Log.notice(F("Components set up" CR));
   
@@ -98,34 +109,33 @@ void setup() {
   DeviceFactory& deviceFactory = DeviceFactory::getInstance(pinProvider);
   Log.notice(F("DeviceFactory prepared" CR));
 
-  for(int i = 0; i < NUMBER_OF_DEVICES; i++) {
-    devicesRegistry.add(deviceFactory.create(devicesConfig[i]));
+  devicesRegistry = new DevicesRegistry(devicesCount);
+  for(int i = 0; i < devicesCount; i++) {
+    devicesRegistry->add(deviceFactory.create(*devicesConfig[i]));
   }
 
-  #ifdef USE_WIFI
-  wifiSetup();
-  #endif
-  
-  mqttClient.begin(MQTT_HOST, MQTT_PORT, net);
+  mqttClient.begin(mqttHostname, MQTT_PORT, net);
 
   char* ipValue = new char[16];
   WiFi.localIP().toString().toCharArray(ipValue, 16);
   char* macValue = new char[18];
   WiFi.macAddress().toCharArray(macValue, 18);
   WiFi.RSSI();
-  homieDevice = HomieDeviceFactory::create(ipValue, macValue, devicesConfig, NUMBER_OF_DEVICES, mqttClient);
+  homieDevice = HomieDeviceFactory::create(ipValue, macValue, hubName, devicesConfig, devicesCount, mqttClient);
   
   homieDevice->setup();
 
   UpdateListener& mqttEventPublisher = MqttEventPublisher::getInstance(homieDevice);
-  devicesRegistry.setUpdateListener(&mqttEventPublisher);
-  MqttCommandReceiver::getInstance(&devicesRegistry, homieDevice);
+  devicesRegistry->setUpdateListener(&mqttEventPublisher);
+  MqttCommandReceiver::getInstance(devicesRegistry, homieDevice);
   mqttClient.onMessage(MqttCommandReceiver::messageReceived);
+  Log.trace(F("Total heap = %i" CR), ESP.getHeapSize());
+  Log.trace(F("Free heap = %i" CR), ESP.getFreeHeap());
 }
 
 void loop() {
   uint32_t now = millis();
-  devicesRegistry.loop(now);
+  devicesRegistry->loop(now);
   homieDevice->loop(now);
 
   wifiConnectionCheck(now);

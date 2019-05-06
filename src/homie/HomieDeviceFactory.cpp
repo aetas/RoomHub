@@ -1,5 +1,6 @@
 #include "homie/HomieDeviceFactory.hpp"
 #include "config/UserConfig.hpp"
+#include "ArduinoLog.h"
 
 #include "WString.h"
 
@@ -12,12 +13,12 @@ HomieDeviceFactory::~HomieDeviceFactory() {
 }
 
 
-HomieDevice* HomieDeviceFactory::create(const char* ip, const char* mac, DeviceConfig devicesConfig[], const uint8_t numberOfDevices, MqttClient& mqttClient) {
+HomieDevice* HomieDeviceFactory::create(const char* ip, const char* mac, const char* hubName, DeviceConfig** devicesConfig, const uint8_t numberOfDevices, MqttClient& mqttClient) {
 
-    HomieNode** nodes = createNodes(devicesConfig, numberOfDevices, mqttClient);
+    HomieNode** nodes = createNodes(hubName, devicesConfig, numberOfDevices, mqttClient);
 
   
-    HomieDevice* homieDevice = new HomieDevice(DEVICE_NAME,
+    HomieDevice* homieDevice = new HomieDevice(hubName,
                                                 HOMIE_STATS_INTERVAL_SEC,
                                                 FIRMWARE_NAME,
                                                 FIRMWARE_VERSION,
@@ -29,20 +30,20 @@ HomieDevice* HomieDeviceFactory::create(const char* ip, const char* mac, DeviceC
     return homieDevice;
 }
 
-HomieNode** HomieDeviceFactory::createNodes(DeviceConfig devicesConfig[], uint8_t numberOfDevices, MqttClient& mqttClient) {
+HomieNode** HomieDeviceFactory::createNodes(const char* hubName, DeviceConfig** devicesConfig, uint8_t numberOfDevices, MqttClient& mqttClient) {
 
     HomieNode** homieNodes = new HomieNode*[numberOfDevices];
     for(uint8_t i = 0; i < numberOfDevices; i++) {
-        HomieNodeProperty** properties = createHomieNodeProperties(&devicesConfig[i]);
-        const uint8_t numberOfProperties = propertiesNumber(&devicesConfig[i]);
+        HomieNodeProperty** properties = createHomieNodeProperties(devicesConfig[i]);
+        const uint8_t numberOfProperties = propertiesNumber(devicesConfig[i]);
         
         char* deviceId = new char[2 + 3 * sizeof(int)]();
-        strcpy(deviceId, String(devicesConfig[i].getId()).c_str());
+        strcpy(deviceId, String(devicesConfig[i]->getId()).c_str());
 
-        homieNodes[i] = new HomieNode(DEVICE_NAME,
+        homieNodes[i] = new HomieNode(hubName,
                                     deviceId,
-                                    devicesConfig[i].getName(),
-                                    DeviceConfig::deviceTypeToString(devicesConfig[i].getDeviceType()),
+                                    devicesConfig[i]->getName(),
+                                    DeviceConfig::deviceTypeToString(devicesConfig[i]->getDeviceType()),
                                     properties,
                                     numberOfProperties,
                                     mqttClient);

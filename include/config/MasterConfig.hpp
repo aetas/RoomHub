@@ -9,4 +9,5 @@
 
 // -- WIFI ----------------------------------------
 
-#define WIFI_CONNECT_WAIT_MS 1000
+#define WIFI_CONNECT_DELAY_MS 1000
+#define WIFI_CONNECT_TIMEOUT_MS 10000

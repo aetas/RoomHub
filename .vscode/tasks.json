@@ -14,7 +14,8 @@
                 "-I", "./test/ArduinoMocks",
                 "-I", "./test/unit/mocks",
                 "./test/ArduinoMocks/*.c", "./test/ArduinoMocks/*.cpp",
-                "./src/config/*.cpp", "./src/device/*.cpp", "./src/homie/*.cpp", "./src/log/*.cpp", "./src/mqtt/*.cpp",
+                "./src/config/DeviceConfig.cpp", "./src/config/DeviceConfigParser.cpp",
+                "./src/device/*.cpp", "./src/homie/*.cpp", "./src/log/*.cpp", "./src/mqtt/*.cpp",
                 "./test/unit/*.cpp"
             ],
             "group": "test"
