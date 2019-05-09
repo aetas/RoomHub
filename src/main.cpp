@@ -29,6 +29,8 @@
 #include "wifi/WiFi.h"
 #endif
 
+#include "buttons/buttons.hpp"
+
 #ifdef USE_WIFI
 WiFiClient net;
 #endif
@@ -47,9 +49,8 @@ MqttClient mqttClient;
 // DONE Implement MqttEventPublisher (real implementation)
 // DONE review code and push to repo
 // DONE quick and dirty test for ConfigurationWebServer
-// TODO maj: proper implementation for ConfigurationWebServer
-// TODO maj: call reset wifi config on button pressed for 5 seconds
-// TODO maj: subscribe for MQTT to reset configuration on demand (instead of button)
+// DONE proper implementation for ConfigurationWebServer
+// DONE: call reset wifi config on button pressed for 5 seconds
 // TODO maj: prepare logs on web page
 // TODO maj: send stats with memory used and program space used
 // TODO maj: comment out all trace and verbose logs
@@ -61,43 +62,22 @@ MqttClient mqttClient;
   MultiLogger multiLogger(logTargets, 2);
 #endif
 
-// extra buttons
-uint32_t resetButtonFirstPressedTime = 0;
-uint8_t resetButtonLastState = HIGH;
-
-
-void ledBlink(uint32_t delayMs, uint8_t times) {
-  uint8_t state = LOW;
-  for(int i = 0; i < times*2; i++) {
-    if(state == LOW) {
-      digitalWrite(LED_BUILTIN, HIGH);
-      state = HIGH;
-    } else {
-      digitalWrite(LED_BUILTIN, LOW);
-      state = LOW;
-    }
-    delay(delayMs);
-  }
-}
-
 void checkForResetButtonsPressed() {
   pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(EXTRA_BUTTON_RESET_PIN, INPUT_PULLUP);
-  int resetButtonState = digitalRead(EXTRA_BUTTON_RESET_PIN);
-  while(resetButtonState == LOW) {
-    uint32_t now = millis();
-    if (resetButtonLastState == HIGH) {
-      resetButtonFirstPressedTime = now;
-      resetButtonLastState = LOW;
-    } else if(now - resetButtonFirstPressedTime > EXTRA_BUTTON_RESET_TIME_TO_RESET_MS) {
-      Log.warning(F("Reset button pressed - all configuration will be removed..."));
-      ledBlink(500, 3);
-      SpiffsConfigurationStorage config;
-      config.resetConfig();
-      ESP.restart();
-    }
-    delay(100);
-    resetButtonState = digitalRead(EXTRA_BUTTON_RESET_PIN);
+  pinMode(EXTRA_BUTTON_CONFIG_RESET_PIN, INPUT_PULLUP);
+  pinMode(EXTRA_BUTTON_WIFI_RESET_PIN, INPUT_PULLUP);
+  if (hasTimedButtonBeenTriggered(EXTRA_BUTTON_CONFIG_RESET_PIN, EXTRA_BUTTON_CONFIG_RESET_TIME_TO_RESET_MS)) {
+    Log.warning(F("Reset button pressed - device configuration will be removed..."));
+    ledBlink(500, 3);
+    SpiffsConfigurationStorage config;
+    config.resetConfig();
+    ESP.restart();
+  }
+  if (hasTimedButtonBeenTriggered(EXTRA_BUTTON_WIFI_RESET_PIN, EXTRA_BUTTON_WIFI_RESET_TIME_TO_RESET_MS)) {
+    Log.warning(F("Reset button pressed - wifi configuration will be removed..."));
+    ledBlink(300, 5);
+    resetWiFiConfiguration();
+    ESP.restart();
   }
 }
 

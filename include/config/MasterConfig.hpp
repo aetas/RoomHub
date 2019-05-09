@@ -25,13 +25,15 @@
 #define LOG_BUFFERED_LOGGER_BUFFER_SIZE     1000 // [LogBufferedLoggerBufferSize] Size of the buffer - increase if web logs are cut
 
 
-// -- Homie  (MQTT) -------------------------------
+// -- Homie (MQTT) --------------------------------
 #define HOMIE_STATS_INTERVAL_SEC    20
-#define MQTT_PORT                   1883              // [MqttPort] MQTT port
-#define MQTT_USER                   ""                // [MqttUser] MQTT user
-#define MQTT_PASS                   ""                // [MqttPassword] MQTT password
+#define MQTT_PORT                   1883              // MQTT port
+#define MQTT_USER                   ""                // MQTT user
+#define MQTT_PASS                   ""                // MQTT password
 
 
 // -- EXTRA BUTTONS -------------------------------
-#define EXTRA_BUTTON_RESET_PIN                  12
-#define EXTRA_BUTTON_RESET_TIME_TO_RESET_MS     5000
+#define EXTRA_BUTTON_CONFIG_RESET_PIN               12
+#define EXTRA_BUTTON_CONFIG_RESET_TIME_TO_RESET_MS  5000
+#define EXTRA_BUTTON_WIFI_RESET_PIN                 14
+#define EXTRA_BUTTON_WIFI_RESET_TIME_TO_RESET_MS    5000
