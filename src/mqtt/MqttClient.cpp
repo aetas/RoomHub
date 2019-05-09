@@ -20,8 +20,10 @@ void MqttClient::connect(const char* deviceName, const char* willTopic, uint8_t 
     Log.notice(F("MQTT connected. Will: %s -> %s" CR), willTopic, willMessage);
 }
 
-bool MqttClient::publish(const char* topic, const char* payload, bool retained) {
-    Log.notice(F("MQTT: %s -> %s" CR), topic, payload);
+bool MqttClient::publish(const char* topic, const char* payload, bool retained, bool logMessage) {
+    if (logMessage) {
+        Log.notice(F("MQTT: %s -> %s" CR), topic, payload);
+    }
     if(!client.publish(topic, payload, retained)){
         Log.error(F("MQTT message sending failed. Topic: %s | Payload %s" CR), topic, payload);
         return false;

@@ -8,8 +8,12 @@
 
 // Logging
 #include "ArduinoLog.h"
+
+#ifdef LOG_MQTT_ENABLED
 #include "log/MultiLogger.hpp"
 #include "log/BufferedLogger.hpp"
+#include "mqtt/MqttLogger.hpp"
+#endif
 
 #include "device/DeviceFactory.hpp"
 #include "device/pin/ExpanderPinProvider.hpp"
@@ -51,15 +55,16 @@ MqttClient mqttClient;
 // DONE quick and dirty test for ConfigurationWebServer
 // DONE proper implementation for ConfigurationWebServer
 // DONE: call reset wifi config on button pressed for 5 seconds
-// TODO maj: prepare logs on web page
+// DONE: prepare logs on MQTT
 // TODO maj: send stats with memory used and program space used
 // TODO maj: comment out all trace and verbose logs
 
 // Logging
-#ifdef LOG_ENABLE_WEB
+#ifdef LOG_MQTT_ENABLED
   BufferedLogger bufferedLogger(LOG_BUFFERED_LOGGER_BUFFER_SIZE);
   Print* logTargets[2] = {&bufferedLogger, &Serial};
   MultiLogger multiLogger(logTargets, 2);
+  MqttLogger* mqttLogger;
 #endif
 
 void checkForResetButtonsPressed() {
@@ -84,7 +89,7 @@ void checkForResetButtonsPressed() {
 void setup() {
   Serial.begin(115200);
 
-  #ifdef LOG_ENABLE_WEB
+  #ifdef LOG_MQTT_ENABLED
     Log.begin(LOG_LEVEL, &multiLogger, false);
   #else
     Log.begin(LOG_LEVEL, &Serial, false);
@@ -101,6 +106,15 @@ void setup() {
   SpiffsConfigurationStorage* storage = new SpiffsConfigurationStorage();
   ConfigurationWebServer webServer(*storage);
   config.loadConfiguration(*storage, webServer);
+
+  #ifdef LOG_MQTT_ENABLED
+  String mqttLogsTopicString = HOMIE_PREFIX "/";
+  mqttLogsTopicString += config.getRoomHubName();
+  mqttLogsTopicString += "/$logs";
+  char* mqttLogsTopic = new char[mqttLogsTopicString.length()];
+  strcpy(mqttLogsTopic, mqttLogsTopicString.c_str());
+  mqttLogger = new MqttLogger(mqttClient, bufferedLogger, mqttLogsTopic);
+  #endif
 
   setupComponents();
   Log.notice(F("Components set up" CR));
@@ -134,6 +148,9 @@ void setup() {
   mqttClient.onMessage(MqttCommandReceiver::messageReceived);
 
   delete storage;
+  #ifdef LOG_MQTT_ENABLED
+  bufferedLogger.clearBuffer();
+  #endif
   Log.trace(F("Total heap = %i" CR), ESP.getHeapSize());
   Log.trace(F("Free heap = %i" CR), ESP.getFreeHeap());
 }
@@ -144,5 +161,9 @@ void loop() {
   homieDevice->loop(now);
 
   wifiConnectionCheck(now);
+
+  #ifdef LOG_MQTT_ENABLED
+  mqttLogger->loop(now);
+  #endif
 
 }
