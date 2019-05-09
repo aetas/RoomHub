@@ -1,8 +1,9 @@
 #pragma once
 
+#include "ConfigurationServer.hpp"
 #include "ConfigurationStorage.hpp"
 
-class ConfigurationWebServer {
+class ConfigurationWebServer: public ConfigurationServer {
 public:
     ConfigurationWebServer(ConfigurationStorage& storage);
     void startConfigServer();

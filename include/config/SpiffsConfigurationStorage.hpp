@@ -1,8 +1,8 @@
 #pragma once
 
-#include "DeviceConfig.hpp"
 #include "ConfigurationStorage.hpp"
-#include "DeviceConfigParser.hpp"
+#include "device/DeviceConfig.hpp"
+#include "device/DeviceConfigParser.hpp"
 #include <Arduino.h>
 
 #define NAME_CONFIG_FILE "/name.conf"

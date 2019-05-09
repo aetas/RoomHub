@@ -1,8 +1,9 @@
 #include <Arduino.h>
-#include "config/FixedDeviceConfig.hpp"
 #include "config/FixedComponentsConfig.hpp"
-#include "config/UserConfig.hpp"
+#include "config/MasterConfig.hpp"
 #include "config/SpiffsConfigurationStorage.hpp"
+#include "config/ConfigurationWebServer.hpp"
+#include "config/Configuration.hpp"
 
 
 // Logging
@@ -32,13 +33,6 @@
 WiFiClient net;
 #endif
 
-DigitalInputDevice* switchButton;
-DigitalOutputDevice* relay;
-DigitalInputDevice* motionSensor;
-
-uint32_t lastChangeTime = 0;
-uint8_t relayLastState = LOW;
-
 DevicesRegistry* devicesRegistry;
 HomieDevice* homieDevice;
 
@@ -51,13 +45,14 @@ MqttClient mqttClient;
 // DONE Prepare logging and get rid of Serial.print
 // DONE Implement DeviceRegistry
 // DONE Implement MqttEventPublisher (real implementation)
-// TODO maj: review code and push to repo
-// TODO maj: quick and dirty test for ConfigurationWebServer
+// DONE review code and push to repo
+// DONE quick and dirty test for ConfigurationWebServer
 // TODO maj: proper implementation for ConfigurationWebServer
 // TODO maj: call reset wifi config on button pressed for 5 seconds
+// TODO maj: subscribe for MQTT to reset configuration on demand (instead of button)
 // TODO maj: prepare logs on web page
 // TODO maj: send stats with memory used and program space used
-// TODO maj: comment out all trace logs
+// TODO maj: comment out all trace and verbose logs
 
 // Logging
 #ifdef LOG_ENABLE_WEB
@@ -66,8 +61,44 @@ MqttClient mqttClient;
   MultiLogger multiLogger(logTargets, 2);
 #endif
 
-void messageReceivedTest(String &topic, String &payload) {
-  Log.notice(F("MQTT message received: %s <- %s" CR), topic, payload);
+// extra buttons
+uint32_t resetButtonFirstPressedTime = 0;
+uint8_t resetButtonLastState = HIGH;
+
+
+void ledBlink(uint32_t delayMs, uint8_t times) {
+  uint8_t state = LOW;
+  for(int i = 0; i < times*2; i++) {
+    if(state == LOW) {
+      digitalWrite(LED_BUILTIN, HIGH);
+      state = HIGH;
+    } else {
+      digitalWrite(LED_BUILTIN, LOW);
+      state = LOW;
+    }
+    delay(delayMs);
+  }
+}
+
+void checkForResetButtonsPressed() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(EXTRA_BUTTON_RESET_PIN, INPUT_PULLUP);
+  int resetButtonState = digitalRead(EXTRA_BUTTON_RESET_PIN);
+  while(resetButtonState == LOW) {
+    uint32_t now = millis();
+    if (resetButtonLastState == HIGH) {
+      resetButtonFirstPressedTime = now;
+      resetButtonLastState = LOW;
+    } else if(now - resetButtonFirstPressedTime > EXTRA_BUTTON_RESET_TIME_TO_RESET_MS) {
+      Log.warning(F("Reset button pressed - all configuration will be removed..."));
+      ledBlink(500, 3);
+      SpiffsConfigurationStorage config;
+      config.resetConfig();
+      ESP.restart();
+    }
+    delay(100);
+    resetButtonState = digitalRead(EXTRA_BUTTON_RESET_PIN);
+  }
 }
 
 void setup() {
@@ -78,50 +109,42 @@ void setup() {
   #else
     Log.begin(LOG_LEVEL, &Serial, false);
   #endif
-
-  Log.trace(F("Total heap = %i" CR), ESP.getHeapSize());
-  Log.trace(F("Free heap = %i" CR), ESP.getFreeHeap());
   
   #ifdef USE_WIFI
   connectWiFi();
   #endif
-
-  // Reading configuration 
-  prepareDevicesConfigs(); // TODO maj: temporary for testing - replace it with ConfigurationWebServer
-  SpiffsConfigurationStorage config;
-  const char* hubName = config.readName();
-  Log.trace(F("hubName = %s" CR), hubName);
-  const char* mqttHostname = config.readMqttHostname();
-  Log.trace(F("MqttHostname = %s" CR), mqttHostname);
-  DeviceConfig** devicesConfig = config.readDevicesConfig();
-  uint8_t devicesCount = config.numberOfDevices();
-  Log.notice(F("Devices (%i) configuration read from memory" CR), devicesCount);
   
+  checkForResetButtonsPressed();
 
-  Log.trace(F("Total heap = %i" CR), ESP.getHeapSize());
-  Log.trace(F("Free heap = %i" CR), ESP.getFreeHeap());
+  // Reading configuration
+  Configuration config;
+  SpiffsConfigurationStorage* storage = new SpiffsConfigurationStorage();
+  ConfigurationWebServer webServer(*storage);
+  config.loadConfiguration(*storage, webServer);
 
   setupComponents();
   Log.notice(F("Components set up" CR));
   
   ExpanderPinProvider& pinProvider = ExpanderPinProvider::getInstance(expanders, &mux, MUX_COMMON_PIN);
-  Log.notice(F("PinProvider prepared" CR));
+  Log.trace(F("PinProvider prepared" CR));
   DeviceFactory& deviceFactory = DeviceFactory::getInstance(pinProvider);
-  Log.notice(F("DeviceFactory prepared" CR));
+  Log.trace(F("DeviceFactory prepared" CR));
 
-  devicesRegistry = new DevicesRegistry(devicesCount);
-  for(int i = 0; i < devicesCount; i++) {
+  DeviceConfig** devicesConfig = config.getDevicesConfig();
+  uint8_t numberOfDevices = config.getNumberOfDevices();
+  devicesRegistry = new DevicesRegistry(config.getNumberOfDevices());
+  for(int i = 0; i < numberOfDevices; i++) {
     devicesRegistry->add(deviceFactory.create(*devicesConfig[i]));
   }
 
-  mqttClient.begin(mqttHostname, MQTT_PORT, net);
+  mqttClient.begin(config.getMqttHostname(), MQTT_PORT, net);
 
   char* ipValue = new char[16];
   WiFi.localIP().toString().toCharArray(ipValue, 16);
   char* macValue = new char[18];
   WiFi.macAddress().toCharArray(macValue, 18);
   WiFi.RSSI();
-  homieDevice = HomieDeviceFactory::create(ipValue, macValue, hubName, devicesConfig, devicesCount, mqttClient);
+  homieDevice = HomieDeviceFactory::create(ipValue, macValue, config.getRoomHubName(), devicesConfig, numberOfDevices, mqttClient);
   
   homieDevice->setup();
 
@@ -129,6 +152,8 @@ void setup() {
   devicesRegistry->setUpdateListener(&mqttEventPublisher);
   MqttCommandReceiver::getInstance(devicesRegistry, homieDevice);
   mqttClient.onMessage(MqttCommandReceiver::messageReceived);
+
+  delete storage;
   Log.trace(F("Total heap = %i" CR), ESP.getHeapSize());
   Log.trace(F("Free heap = %i" CR), ESP.getFreeHeap());
 }

@@ -1,5 +1,5 @@
 #include "../main/catch.hpp"
-#include "config/DeviceConfigParser.hpp"
+#include "config/device/DeviceConfigParser.hpp"
 
 #include <typeinfo>
 #include <iostream>

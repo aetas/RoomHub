@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdarg.h>
+#include "WString.h"
 #define CR "\n"
 
 class Logger {

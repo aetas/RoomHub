@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 #include "UpdateListener.hpp"
-#include "config/DeviceConfig.hpp"
+#include "config/device/DeviceConfig.hpp"
 
 class Device {
 

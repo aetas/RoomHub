@@ -2,7 +2,7 @@
 
 #include "device/pin/DigitalPin.hpp"
 #include "device/pin/AnalogPin.hpp"
-#include "config/DeviceConfig.hpp"
+#include "config/device/DeviceConfig.hpp"
 
 class PinProvider {
 

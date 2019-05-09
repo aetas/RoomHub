@@ -3,7 +3,7 @@
 #include "device/pin/PinProvider.hpp"
 #include "device/pin/DigitalPin.hpp"
 #include "device/pin/AnalogPin.hpp"
-#include "config/DeviceConfig.hpp"
+#include "config/device/DeviceConfig.hpp"
 #include <Adafruit_MCP23017.h>
 #include <CD74HC4067.h>
 

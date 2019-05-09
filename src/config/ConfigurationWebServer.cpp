@@ -4,9 +4,7 @@
 #include "SPIFFS.h"
 #include "config/MasterConfig.hpp"
 
-// TODO maj: does it work at all??
 ConfigurationWebServer::ConfigurationWebServer(ConfigurationStorage& _storage): storage(_storage) {
-
 }
 
 
@@ -22,19 +20,19 @@ void ConfigurationWebServer::startConfigServer() {
      server.on("/config/name", HTTP_POST, [&server, this]() {
         String body = server.arg("plain");
         storage.storeName(body.c_str());
-        server.send(201, "text/plain", "Name stored");
+        server.send(201, "text/plain", body.c_str());
     });
     
     server.on("/config/mqtt", HTTP_POST, [&server, this]() {
         String body = server.arg("plain");
         storage.storeMqttHostname(body.c_str());
-        server.send(201, "text/plain", "MQTT configuration stored");
+        server.send(201, "text/plain", body.c_str());
     });
 
     server.on("/config/device", HTTP_POST, [&server, this]() {
         String body = server.arg("plain");
         storage.storeDeviceConfig(body.c_str());
-        server.send(201, "text/plain", "Device configuration stored");
+        server.send(201, "text/plain", body.c_str());
     });
 
     server.on("/config/finalize", HTTP_POST, [&server, this]() {
@@ -42,6 +40,7 @@ void ConfigurationWebServer::startConfigServer() {
         server.send(201, "text/plain", "Configuration finalized");
     });
 
+    server.begin();
     while(!configurationFinished) {
         server.handleClient();
     }

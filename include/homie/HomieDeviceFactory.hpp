@@ -1,6 +1,6 @@
 #pragma once
 
-#include "config/DeviceConfig.hpp"
+#include "config/device/DeviceConfig.hpp"
 #include "homie/HomieDevice.hpp"
 #include "mqtt/MqttClient.hpp"
 

@@ -1,4 +1,4 @@
-#include "config/DeviceConfig.hpp"
+#include "config/device/DeviceConfig.hpp"
 
 DeviceConfig::DeviceConfig(uint8_t _id, const char* _name, DeviceType _type, uint8_t _portNumber, WireColor _wire, uint16_t _debounceMs):
     id(_id), 

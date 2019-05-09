@@ -23,7 +23,11 @@ const char* SpiffsConfigurationStorage::readMqttHostname() {
 }
 
 void SpiffsConfigurationStorage::storeDeviceConfig(const char* deviceConfigString) {
-    store(DEVICES_CONFIG_FILE, deviceConfigString, true);
+    uint8_t length = strlen(deviceConfigString) + 1;
+    char* deviceConfigStringWithEndLine = new char[length];
+    strcpy(deviceConfigStringWithEndLine, deviceConfigString);
+    strcat(deviceConfigStringWithEndLine, "\n");
+    store(DEVICES_CONFIG_FILE, deviceConfigStringWithEndLine, true);
 }
 
 DeviceConfig** SpiffsConfigurationStorage::readDevicesConfig() {
@@ -43,6 +47,7 @@ DeviceConfig** SpiffsConfigurationStorage::readDevicesConfig() {
             Log.trace(F("End of devices file" CR));
             break;
         }
+        // Log.verbose("%s" CR, line.c_str());
         devicesConfigs[deviceNumber++] = deviceConfigParser.parse(line.c_str());
     }
     file.close();

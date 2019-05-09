@@ -1,9 +1,10 @@
 #pragma once
 
-#include "DeviceConfig.hpp"
+#include "device/DeviceConfig.hpp"
 
 class ConfigurationStorage {
     public:
+    virtual ~ConfigurationStorage() = default;
     virtual void storeName(const char* name) = 0;
     virtual const char* readName() = 0;
     virtual void storeMqttHostname(const char* mqttHostname) = 0;

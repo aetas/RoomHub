@@ -2,7 +2,6 @@
 
 #include "DeviceConfig.hpp"
 
-
 class DeviceConfigParser {
 public:
     DeviceConfig* parse(const char* line);

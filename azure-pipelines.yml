@@ -9,7 +9,7 @@ steps:
   displayName: 'Display g++ version'
 
 - script: |
-    g++ -g -std=gnu++11 test/main/test-main.o -o test/allTests -I ./include -I ./test/ArduinoMocks -I ./test/unit/mocks ./test/ArduinoMocks/*.c ./test/ArduinoMocks/*.cpp "./src/config/DeviceConfig.cpp", "./src/config/DeviceConfigParser.cpp", ./src/device/*.cpp ./src/homie/*.cpp ./src/log/*.cpp ./src/mqtt/*.cpp ./test/unit/*.cpp
+    g++ -g -std=gnu++11 test/main/test-main.o -o test/allTests -I ./include -I ./test/ArduinoMocks -I ./test/unit/mocks ./test/ArduinoMocks/*.c ./test/ArduinoMocks/*.cpp ./src/config/Configuration.cpp ./src/config/device/*.cpp ./src/device/*.cpp ./src/homie/*.cpp ./src/log/*.cpp ./src/mqtt/*.cpp ./test/unit/*.cpp
   displayName: 'Compile tests'
 
 - script: test/allTests

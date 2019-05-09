@@ -1,7 +1,7 @@
 #pragma once
 #include "pin/PinProvider.hpp"
 #include "Device.hpp"
-#include "../config/DeviceConfig.hpp"
+#include "config/device/DeviceConfig.hpp"
 
 class DeviceFactory {
 

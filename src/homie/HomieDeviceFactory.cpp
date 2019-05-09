@@ -1,5 +1,5 @@
 #include "homie/HomieDeviceFactory.hpp"
-#include "config/UserConfig.hpp"
+#include "config/MasterConfig.hpp"
 #include "ArduinoLog.h"
 
 #include "WString.h"
