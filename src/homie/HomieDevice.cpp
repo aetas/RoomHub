@@ -94,7 +94,7 @@ void HomieDevice::updateStats(const uint32_t& currentTimeMs) {
     if (statsIntervalSec*1000 < currentTimeMs - lastStatsUpdateMs) {
         refreshUptime(currentTimeMs);
         refreshSignalStrength();
-        // refreshFreeHeapStats();
+        refreshFreeHeapStats();
         lastStatsUpdateMs = currentTimeMs;
     }
 }

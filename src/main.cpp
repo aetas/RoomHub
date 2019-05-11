@@ -152,7 +152,7 @@ void setup() {
 
   delete storage;
   #ifdef LOG_MQTT_ENABLED
-  bufferedLogger.clearBuffer();
+  mqttLogger->sendLogs();
   #endif
 }
 
@@ -166,5 +166,5 @@ void loop() {
   #ifdef LOG_MQTT_ENABLED
   mqttLogger->loop(now);
   #endif
-
+  
 }

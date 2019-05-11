@@ -21,7 +21,7 @@
 
 #define LOG_LEVEL         LOG_LEVEL_VERBOSE      // (LOG_LEVEL_SILENT, LOG_LEVEL_FATAL, LOG_LEVEL_ERROR, LOG_LEVEL_WARNING, LOG_LEVEL_NOTICE, 
                                                  //  LOG_LEVEL_TRACE, LOG_LEVEL_VERBOSE)
-#define LOG_BUFFERED_LOGGER_BUFFER_SIZE     128  // [LogBufferedLoggerBufferSize] Size of the buffer - increase if web logs are cut
+#define LOG_BUFFERED_LOGGER_BUFFER_SIZE     512  // Size of the buffer - increase if logs on MQTT topic are cut
 #define LOG_MQTT_ENABLED                         // Enables publishing logs to MQTT topic ([HOMIE_PREFIX]/[HUB_NAME]/$logs, e.g. 'homie/livingroom/$logs') 
 #define LOG_MQTT_INTERVAL_MS                1000 // Specify how often logs are published to MQTT
 

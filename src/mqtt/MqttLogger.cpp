@@ -19,8 +19,10 @@ void MqttLogger::sendLogs() {
     if (bufferSize > 1) {
         char* bufferedLogs = new char[bufferSize];
         logger.read(bufferedLogs);
-        if (!mqttClient.publish(topic, bufferedLogs, false, false)) {
-            logger.clearBuffer();
+        char* line = strtok(bufferedLogs, "\n");
+        while (line != 0) {
+            mqttClient.publish(topic, line, false, false);
+            line = strtok(0, "\n");
         }
         delete[] bufferedLogs;
     }

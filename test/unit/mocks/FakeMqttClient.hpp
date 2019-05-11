@@ -3,6 +3,7 @@
 #include <iostream>
 #include <map>
 #include <list>
+#include <vector>
 #include "mqtt/MqttClient.hpp"
 #include "WString.h"
 
@@ -21,10 +22,10 @@ public:
     bool publish(const char* topic, const char* payload, bool retained = false, bool logMessage = true) {
         if (retained) {
             cout << "MQTT: " << topic << "-> " << payload << " [RETAINED]"  << " (FAKE)" << endl;
-            retainedMessages[topic] = payload;
+            retainedMessages[topic].push_back(payload);
         } else {
             cout << "MQTT: " << topic << "-> " << payload << " (FAKE)" << endl;
-            messages[topic] = payload;
+            messages[topic].push_back(payload);
         }
         return true;
     }
@@ -44,11 +45,11 @@ public:
         connected = _connected;
     }
 
-    String getValuePublishedTo(String topic, bool shouldBeRetained = false) {
+    String getValuePublishedTo(String topic, bool shouldBeRetained = false, uint8_t index = 0) {
         if (shouldBeRetained) {
-            return retainedMessages[topic];
+            return retainedMessages[topic].at(index);
         } else {
-            return messages[topic];
+            return messages[topic].at(index);
         }
     }
 
@@ -75,8 +76,8 @@ private:
     }
 
     bool connected = false;
-    map<String, String> messages;
-    map<String, String> retainedMessages;
+    map<String, vector<String>> messages;
+    map<String, vector<String>> retainedMessages;
     list<String> subscribedTopics;
     map<String, String> wills;
 

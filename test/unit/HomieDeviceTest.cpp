@@ -74,7 +74,7 @@ TEST_CASE("HomieDevice") {
         homieDevice.loop(10001);
 
         // then
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$stats/uptime", true) == "10");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$stats/uptime", true, 1) == "10");
     }
 
     SECTION("should setup all nodes on device setup") {
