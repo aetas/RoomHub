@@ -20,7 +20,7 @@ void MqttEventPublisher::valueUpdated(const uint8_t deviceId, const char* proper
     this->valueUpdated(deviceId, propertyName, stringValue.c_str());
 }
 void MqttEventPublisher::valueUpdated(const uint8_t deviceId, const char* propertyName, const char* newValue) {
-    Log.verbose(F("New value: %s on deviceId: %d, property %s" CR), newValue, deviceId, propertyName);
+    // Log.verbose(F("New value: %s on deviceId: %d, property %s" CR), newValue, deviceId, propertyName);
 
     HomieNode* node = homieDevice->getNode(deviceId);
     node->propertyValueUpdated(propertyName, newValue);

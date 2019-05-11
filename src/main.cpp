@@ -49,20 +49,6 @@ HomieDevice* homieDevice;
 MqttClient mqttClient;
 
 
-// DONE test output device (relay)
-// DONE test input device (switchbutton)
-// DONE test input device (movement sensor)
-// DONE Prepare logging and get rid of Serial.print
-// DONE Implement DeviceRegistry
-// DONE Implement MqttEventPublisher (real implementation)
-// DONE review code and push to repo
-// DONE quick and dirty test for ConfigurationWebServer
-// DONE proper implementation for ConfigurationWebServer
-// DONE: call reset wifi config on button pressed for 5 seconds
-// DONE: prepare logs on MQTT
-// DONE: send stats with memory used and program space used
-// TODO maj: comment out all trace and verbose logs
-
 // Logging
 #ifdef LOG_MQTT_ENABLED
   BufferedLogger bufferedLogger(LOG_BUFFERED_LOGGER_BUFFER_SIZE);
@@ -121,12 +107,12 @@ void setup() {
   #endif
 
   setupComponents();
-  Log.notice(F("Components set up" CR));
+  // Log.trace(F("Components set up" CR));
   
   ExpanderPinProvider& pinProvider = ExpanderPinProvider::getInstance(expanders, &mux, MUX_COMMON_PIN);
-  Log.trace(F("PinProvider prepared" CR));
+  // Log.trace(F("PinProvider prepared" CR));
   DeviceFactory& deviceFactory = DeviceFactory::getInstance(pinProvider);
-  Log.trace(F("DeviceFactory prepared" CR));
+  // Log.trace(F("DeviceFactory prepared" CR));
 
   DeviceConfig** devicesConfig = config.getDevicesConfig();
   uint8_t numberOfDevices = config.getNumberOfDevices();

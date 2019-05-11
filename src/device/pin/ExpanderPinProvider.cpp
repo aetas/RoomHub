@@ -16,7 +16,7 @@ DigitalPin* ExpanderPinProvider::digitalPin(const uint8_t portNumber, const Wire
     uint8_t expanderAddress = (portNumber-1) / 4;
     uint8_t expanderPinNumber = ((portNumber-1) % 4) * 4 + (wireColorAsNumber-3);
     
-    Log.trace(F("expander address: %d, expander pin number: %d" CR), expanderAddress, expanderPinNumber);
+    // Log.trace(F("expander address: %d, expander pin number: %d" CR), expanderAddress, expanderPinNumber);
     
     return new ExpanderDigitalPin(&expanders[expanderAddress], expanderPinNumber);
 }

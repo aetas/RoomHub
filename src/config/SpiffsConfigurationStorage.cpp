@@ -41,10 +41,10 @@ DeviceConfig** SpiffsConfigurationStorage::readDevicesConfig() {
         return NULL;
     }
     uint8_t deviceNumber = 0;
-    Log.notice(F("Reading stored devices configuration..." CR));
+    // Log.trace(F("Reading stored devices configuration..." CR));
     while (String line = file.readStringUntil('\n')) {
         if (line == nullptr) {
-            Log.trace(F("End of devices file" CR));
+            // Log.trace(F("End of devices file" CR));
             break;
         }
         // Log.verbose("%s" CR, line.c_str());

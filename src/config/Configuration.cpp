@@ -8,9 +8,9 @@ void Configuration::loadConfiguration(ConfigurationStorage& storage, Configurati
     }
     Log.notice(F("Configuration found - starting RoomHub" CR));
     roomHubName = storage.readName();
-    Log.trace(F("hubName = %s" CR), roomHubName);
+    // Log.trace(F("hubName = %s" CR), roomHubName);
     mqttHostname = storage.readMqttHostname();
-    Log.trace(F("MqttHostname = %s" CR), mqttHostname);
+    // Log.trace(F("MqttHostname = %s" CR), mqttHostname);
     devicesConfig = storage.readDevicesConfig();
     numberOfDevices = storage.numberOfDevices();
     Log.notice(F("Devices (%i) configuration read from memory" CR), numberOfDevices);
