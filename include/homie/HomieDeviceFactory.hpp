@@ -3,11 +3,12 @@
 #include "config/device/DeviceConfig.hpp"
 #include "homie/HomieDevice.hpp"
 #include "mqtt/MqttClient.hpp"
+#include "stats/StatsData.hpp"
 
 class HomieDeviceFactory {
 
 public:
-    static HomieDevice* create(const char* ip, const char* mac, const char* hubName, DeviceConfig** devicesConfig, const uint8_t numberOfDevices, MqttClient& mqttClient);
+    static HomieDevice* create(const char* ip, const char* mac, const char* hubName, DeviceConfig** devicesConfig, const uint8_t numberOfDevices, MqttClient& mqttClient, StatsData& statsData);
 
 private:
     HomieDeviceFactory();

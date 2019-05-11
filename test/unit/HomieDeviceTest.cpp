@@ -4,6 +4,7 @@
 #include "homie/HomieNodeProperty.hpp"
 #include "mocks/FakeMqttClient.hpp"
 #include "mocks/ArduinoLog.h"
+#include "mocks/FakeStatsData.hpp"
 
 #include <typeinfo>
 #include <iostream>
@@ -14,6 +15,7 @@ Logger Log = Logger();
 TEST_CASE("HomieDevice") {
 
     FakeMqttClient mqttClient;
+    FakeStatsData statsData;
     
     const char* deviceName = "devName";
     HomieNodeProperty node1prop1("testProp1", false, false, PropertyUnit::COUNT, PropertyDataType::INTEGER, "");
@@ -26,7 +28,7 @@ TEST_CASE("HomieDevice") {
     HomieNode homieNode2(deviceName, "2", "name2", "diffType", props2, 1, mqttClient);
     HomieNode homieNode3(deviceName, "3", "name3", "thirdType", props3, 1, mqttClient);
     HomieNode* nodes[3] = {&homieNode1, &homieNode2, &homieNode3};
-    HomieDevice homieDevice(deviceName, 10, "firmware name value", "7.8.9", "192.154.1.25", "00:0a:95:9d:68:16",  nodes, 3, mqttClient);
+    HomieDevice homieDevice(deviceName, 10, "firmware name value", "7.8.9", "192.154.1.25", "00:0a:95:9d:68:16",  nodes, 3, mqttClient, statsData);
 
     SECTION("should send basic, non-modifiable properties to MQTT on setup (homie,name,stats,implementation,stats interval,firmware,state)") {
         // when
@@ -35,7 +37,7 @@ TEST_CASE("HomieDevice") {
         // then
         REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$homie", true) == "3.0.1");
         REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$name", true) == "devName");
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$stats", true) == "uptime,signal");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$stats", true) == "uptime,signal,freeheap");
         REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$implementation", true) == "Aetas");
         REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$stats/interval", true) == "10");
         REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$fw/name", true) == "firmware name value");

@@ -5,6 +5,7 @@
 #include <string.h>
 #include "Uptime.hpp"
 #include "../mqtt/MqttClient.hpp"
+#include "stats/StatsData.hpp"
 
 #ifndef HOMIE_PREFIX
 #define HOMIE_PREFIX "homie"
@@ -27,7 +28,8 @@ class HomieDevice {
 public:
     HomieDevice(const char* _name, const uint8_t _statsIntervalSec,
                 const char* _firmwareName, const char* _firmwareVersion, const char* _ip, const char* _mac,
-                HomieNode** _nodes, const uint8_t _nodesNumber, MqttClient& _mqttClient);
+                HomieNode** _nodes, const uint8_t _nodesNumber, MqttClient& _mqttClient,
+                StatsData& _statsData);
 
     ~HomieDevice();
 
@@ -59,10 +61,13 @@ private:
     HomieDeviceState state = HomieDeviceState::INIT;
     MqttClient& mqttClient;
 
+    StatsData& statsData;
+
     Uptime uptime = Uptime();
 
     void updateStats(const uint32_t& currentTimeMs);
     const void refreshUptime(const uint32_t& currentTimeMs);
     const void refreshSignalStrength();
+    const void refreshFreeHeapStats();
     const char* getNodesString();
 };

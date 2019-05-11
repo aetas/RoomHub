@@ -8,7 +8,8 @@
 
 HomieDevice::HomieDevice(const char* _name, const uint8_t _statsIntervalSec,
                          const char*_firmwareName, const char*_firmwareVersion, const char* _ip, const char* _mac,
-                         HomieNode** _nodes, const uint8_t _nodesNumber, MqttClient& _mqttClient): 
+                         HomieNode** _nodes, const uint8_t _nodesNumber, MqttClient& _mqttClient,
+                         StatsData& _statsData): 
         name(_name),
         statsIntervalSec(_statsIntervalSec),
         firmwareName(_firmwareName),
@@ -17,7 +18,8 @@ HomieDevice::HomieDevice(const char* _name, const uint8_t _statsIntervalSec,
         mac(_mac),
         nodes(_nodes),
         nodesNumber(_nodesNumber),
-        mqttClient(_mqttClient) {
+        mqttClient(_mqttClient),
+        statsData(_statsData) {
     
     String topicStartString = HOMIE_PREFIX "/";
     topicStartString += name;
@@ -62,7 +64,7 @@ void HomieDevice::setup() {
     mqttClient.publish(macTopic.c_str(), mac, true);
     String statsListTopic = topicStart;
     statsListTopic += "/$stats";
-    mqttClient.publish(statsListTopic.c_str(), "uptime,signal", true);
+    mqttClient.publish(statsListTopic.c_str(), "uptime,signal,freeheap", true);
     String statsIntervalTopic = topicStart;
     statsIntervalTopic += "/$stats/interval";
     char statsIntervalSecString[4];
@@ -92,6 +94,7 @@ void HomieDevice::updateStats(const uint32_t& currentTimeMs) {
     if (statsIntervalSec*1000 < currentTimeMs - lastStatsUpdateMs) {
         refreshUptime(currentTimeMs);
         refreshSignalStrength();
+        // refreshFreeHeapStats();
         lastStatsUpdateMs = currentTimeMs;
     }
 }
@@ -123,9 +126,16 @@ const void HomieDevice::refreshUptime(const uint32_t& currentTimeMs) {
 const void HomieDevice::refreshSignalStrength() {
     String signalStrengthTopic = topicStart;
     signalStrengthTopic += "/$stats/signal";
-    mqttClient.publish(signalStrengthTopic.c_str(), "0", true); // TODO maj: real signal strength needed
+    String signalStrengthString = String(statsData.getSignalStrength());
+    mqttClient.publish(signalStrengthTopic.c_str(), signalStrengthString.c_str(), true);
 }
 
+const void HomieDevice::refreshFreeHeapStats() {
+    String signalStrengthTopic = topicStart;
+    signalStrengthTopic += "/$stats/freeheap";
+    String freeHeapStatsString = String(statsData.getFreeHeapInBytes());
+    mqttClient.publish(signalStrengthTopic.c_str(), freeHeapStatsString.c_str(), true);
+}
 
 void HomieDevice::setState(HomieDeviceState state) {
     this->state = state;

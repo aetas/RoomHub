@@ -13,7 +13,9 @@ HomieDeviceFactory::~HomieDeviceFactory() {
 }
 
 
-HomieDevice* HomieDeviceFactory::create(const char* ip, const char* mac, const char* hubName, DeviceConfig** devicesConfig, const uint8_t numberOfDevices, MqttClient& mqttClient) {
+HomieDevice* HomieDeviceFactory::create(const char* ip, const char* mac, const char* hubName, 
+                                        DeviceConfig** devicesConfig, const uint8_t numberOfDevices, 
+                                        MqttClient& mqttClient, StatsData& statsData) {
 
     HomieNode** nodes = createNodes(hubName, devicesConfig, numberOfDevices, mqttClient);
 
@@ -26,7 +28,8 @@ HomieDevice* HomieDeviceFactory::create(const char* ip, const char* mac, const c
                                                 mac,
                                                 nodes,
                                                 numberOfDevices,
-                                                mqttClient);
+                                                mqttClient,
+                                                statsData);
     return homieDevice;
 }
 

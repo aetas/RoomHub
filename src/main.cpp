@@ -26,6 +26,8 @@
 #include "mqtt/MqttEventPublisher.hpp"
 #include "mqtt/MqttCommandReceiver.hpp"
 
+#include "stats/EspStatsData.hpp"
+
 #include "homie/HomieDeviceFactory.hpp"
 
 #ifdef USE_WIFI
@@ -38,6 +40,8 @@
 #ifdef USE_WIFI
 WiFiClient net;
 #endif
+
+EspStatsData statsData;
 
 DevicesRegistry* devicesRegistry;
 HomieDevice* homieDevice;
@@ -56,7 +60,7 @@ MqttClient mqttClient;
 // DONE proper implementation for ConfigurationWebServer
 // DONE: call reset wifi config on button pressed for 5 seconds
 // DONE: prepare logs on MQTT
-// TODO maj: send stats with memory used and program space used
+// DONE: send stats with memory used and program space used
 // TODO maj: comment out all trace and verbose logs
 
 // Logging
@@ -137,8 +141,7 @@ void setup() {
   WiFi.localIP().toString().toCharArray(ipValue, 16);
   char* macValue = new char[18];
   WiFi.macAddress().toCharArray(macValue, 18);
-  WiFi.RSSI();
-  homieDevice = HomieDeviceFactory::create(ipValue, macValue, config.getRoomHubName(), devicesConfig, numberOfDevices, mqttClient);
+  homieDevice = HomieDeviceFactory::create(ipValue, macValue, config.getRoomHubName(), devicesConfig, numberOfDevices, mqttClient, statsData);
   
   homieDevice->setup();
 
@@ -151,8 +154,6 @@ void setup() {
   #ifdef LOG_MQTT_ENABLED
   bufferedLogger.clearBuffer();
   #endif
-  Log.trace(F("Total heap = %i" CR), ESP.getHeapSize());
-  Log.trace(F("Free heap = %i" CR), ESP.getFreeHeap());
 }
 
 void loop() {
