@@ -18,7 +18,7 @@ public:
         connected = true;
     };
 
-    bool publish(const char* topic, const char* payload, bool retained = false) {
+    bool publish(const char* topic, const char* payload, bool retained = false, bool logMessage = true) {
         if (retained) {
             cout << "MQTT: " << topic << "-> " << payload << " [RETAINED]"  << " (FAKE)" << endl;
             retainedMessages[topic] = payload;
