@@ -10,4 +10,6 @@ public:
 private:
     ConfigurationStorage& storage;
     bool configurationFinished = false;
+
+    const char* SUPPORTED_DEVICE_FORMAT_VERSION = "1.0";
 };

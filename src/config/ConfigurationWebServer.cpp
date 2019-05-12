@@ -31,6 +31,9 @@ void ConfigurationWebServer::startConfigServer() {
 
     server.on("/config/device", HTTP_POST, [&server, this]() {
         String body = server.arg("plain");
+        if (!body.startsWith(SUPPORTED_DEVICE_FORMAT_VERSION)) {
+            server.send(400, "text/plain", "Unsupported device format version");
+        }
         storage.storeDeviceConfig(body.c_str());
         server.send(201, "text/plain", body.c_str());
     });
