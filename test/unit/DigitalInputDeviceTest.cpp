@@ -83,4 +83,20 @@ TEST_CASE("DigitalInputDevice")
         // then
         REQUIRE(listener->smallIntValue == HIGH);
     }
+
+    SECTION("should not send updated value when value has not changed and debounceMs == 0") {   
+        // given
+        DigitalInputDevice deviceWithoutDebounce(1, pin, 0);
+        deviceWithoutDebounce.setUpdateListener(listener);
+        listener->smallIntValue = HIGH;
+        
+        // when
+        pin->digitalWrite(HIGH);
+        deviceWithoutDebounce.loop(0);
+        deviceWithoutDebounce.loop(1);
+        deviceWithoutDebounce.loop(2);
+
+        // then
+        REQUIRE(listener->valueUpdatedCalledTimes == 0);
+    }
 }
