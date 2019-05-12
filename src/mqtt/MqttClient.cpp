@@ -3,8 +3,9 @@
 #include "ArduinoLog.h"
 #include "WString.h"
 
-void MqttClient::begin(const char* hostname, uint16_t port, Client& connectionClient) {
-    client.setClient(connectionClient);
+void MqttClient::begin(const char* hostname, uint16_t port, Client& _connectionClient) {
+    // Log.trace(F("MQTT client set up (hostname = '%s', port = '%i')" CR), hostname, port);
+    client.setClient(_connectionClient);
     client.setServer(hostname, port);
 }
 
@@ -14,7 +15,7 @@ bool MqttClient::connected() {
 
 void MqttClient::connect(const char* deviceName, const char* willTopic, uint8_t willQoS, bool willRetain, const char* willMessage) {
     while(!client.connect(deviceName, willTopic, willQoS, willRetain, willMessage)) {
-        Log.notice(F("Connecting to MQTT..." CR));
+        Log.notice(F("Connecting to MQTT as %s..." CR), deviceName);
         delay(1000);
     }
     Log.notice(F("MQTT connected. Will: %s -> %s" CR), willTopic, willMessage);
