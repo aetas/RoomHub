@@ -4,11 +4,21 @@
 // -- Basic ---------------------------------------
 
 #define FIRMWARE_NAME       "Aetas RoomHub"
-#define FIRMWARE_VERSION    "3.0.0"
+#define FIRMWARE_VERSION    "3.1.0"
 
 
 // -- Network --------------------------------------
-#define USE_WIFI
+// #define USE_WIFI                                 // Use WiFi for network (e.g. to connect to MQTT) - use this or USE_ETHERNET, never both
+#define USE_ETHERNET                                // Use wired ethernet for network - use this or USE_WIFI, never both
+#define ETHERNET_MAC            "5F:D9:98:B9:10:49" // Ethernet MAC address (have to be unique between devices in the same network)
+#define ETHERNET_IP             "10.0.88.105"       // IP address of RoomHub when on Ethernet connection
+// #define ETHERNET_DNS            10, 0, 88, 1        // DNS IP (optional, defaults to the device IP address with the last octet set to 1)
+// #define ETHERNET_GATEWAY        10, 0, 88, 1        // Gateway IP (optional, defaults to the device IP address with the last octet set to 1)
+// #define ETHERNET_SUBNET_MASK    255, 255, 255, 0    // Subnet mask (optional, defaults to 255.255.255.0)
+
+#define ETHERNET_RESET_PIN      11      // ESP32 pin where reset pin from W5500 is connected
+#define ETHERNET_CS_PIN         5       // ESP32 pin where CS pin from W5500 is connected
+
 
 
 // -- WIFI ----------------------------------------
@@ -27,7 +37,7 @@
 
 
 // -- Homie (MQTT) --------------------------------
-#define HOMIE_STATS_INTERVAL_SEC    20
+#define HOMIE_STATS_INTERVAL_SEC    30
 #define MQTT_PORT                   1883              // MQTT port
 #define MQTT_USER                   ""                // MQTT user
 #define MQTT_PASS                   ""                // MQTT password

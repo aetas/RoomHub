@@ -83,6 +83,7 @@ void HomieDevice::setup() {
 
 void HomieDevice::loop(const uint32_t& currentTimeMs) {
     if (!mqttClient.loop()) {
+        Log.warning(F("Problem with MQTT communication" CR));
         String stateTopic = topicStart;
         stateTopic += "/$state";
         mqttClient.connect(name, stateTopic.c_str(), 1, 1, "lost");

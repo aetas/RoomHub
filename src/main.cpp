@@ -30,16 +30,9 @@
 
 #include "homie/HomieDeviceFactory.hpp"
 
-#ifdef USE_WIFI
-#include <WiFi.h>
-#include "wifi/WiFi.h"
-#endif
+#include "network/NetworkConnection.hpp"
 
 #include "buttons/buttons.hpp"
-
-#ifdef USE_WIFI
-WiFiClient net;
-#endif
 
 EspStatsData statsData;
 
@@ -48,6 +41,7 @@ HomieDevice* homieDevice;
 
 MqttClient mqttClient;
 
+NetworkConnection networkConnection;
 
 // Logging
 #ifdef LOG_MQTT_ENABLED
@@ -68,12 +62,14 @@ void checkForResetButtonsPressed() {
     config.resetConfig();
     ESP.restart();
   }
+  #ifdef USE_WIFI
   if (hasTimedButtonBeenTriggered(EXTRA_BUTTON_WIFI_RESET_PIN, EXTRA_BUTTON_WIFI_RESET_TIME_TO_RESET_MS)) {
     Log.warning(F("Reset button pressed - wifi configuration will be removed..."));
     ledBlink(300, 5);
-    resetWiFiConfiguration();
+    networkConnection.resetWiFiConfiguration();
     ESP.restart();
   }
+  #endif
 }
 
 void setup() {
@@ -84,11 +80,8 @@ void setup() {
   #else
     Log.begin(LOG_LEVEL, &Serial, false);
   #endif
-  
-  #ifdef USE_WIFI
-  connectWiFi();
-  #endif
-  
+
+  networkConnection.connect();
   checkForResetButtonsPressed();
 
   // Reading configuration
@@ -121,13 +114,10 @@ void setup() {
     devicesRegistry->add(deviceFactory.create(*devicesConfig[i]));
   }
 
-  mqttClient.begin(config.getMqttHostname(), MQTT_PORT, net);
+  mqttClient.begin(config.getMqttHostname(), MQTT_PORT, networkConnection.getClient());
 
-  char* ipValue = new char[16];
-  WiFi.localIP().toString().toCharArray(ipValue, 16);
-  char* macValue = new char[18];
-  WiFi.macAddress().toCharArray(macValue, 18);
-  homieDevice = HomieDeviceFactory::create(ipValue, macValue, config.getRoomHubName(), devicesConfig, numberOfDevices, mqttClient, statsData);
+  homieDevice = HomieDeviceFactory::create(networkConnection.getIpAddress(), networkConnection.getMacAddress(), 
+                                           config.getRoomHubName(), devicesConfig, numberOfDevices, mqttClient, statsData);
   
   homieDevice->setup();
 
@@ -147,7 +137,7 @@ void loop() {
   devicesRegistry->loop(now);
   homieDevice->loop(now);
 
-  wifiConnectionCheck(now);
+  networkConnection.checkConnection(now);
 
   #ifdef LOG_MQTT_ENABLED
   mqttLogger->loop(now);

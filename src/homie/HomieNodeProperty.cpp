@@ -46,7 +46,7 @@ const char* HomieNodeProperty::getDataType() {
         case PropertyDataType::STRING: return "string";
         case PropertyDataType::ENUM: return "enum";
         case PropertyDataType::COLOR: return "color";
-        default: "UNKNOWN";
+        default: return "UNKNOWN";
     }
 }
 const char* HomieNodeProperty::getFormat() { 
