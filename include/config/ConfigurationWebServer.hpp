@@ -23,6 +23,7 @@ private:
     void startWiFiConfigServer();
     #elif defined(USE_ETHERNET)
     void startEthernetConfigServer();
+    // TODO maj: reset ethernet configuration to defaults to be able to configure new IP and MAC
     // void ethernetHandleReset(WebServer &server, WebServer::ConnectionType type, char* urlTail, bool tailComplete);
     #endif
 };
