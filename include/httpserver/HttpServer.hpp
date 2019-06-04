@@ -1,21 +1,24 @@
 #pragma once
 
-#include <Arduino.h>
+#include <WString.h>
+#include <Client.h>
+#include <functional>
+
+#include "HttpMethod.hpp"
+#include "ServerHandler.hpp"
 
 class HttpServer {
 public:
+    ~HttpServer();
     void handleClient(Client& client);
-    void on(const String& method, const String& path);
+    void on(HttpMethod method, const String& path, ServerHandler::THandlerFunction fn);
+    void send(int code, const String& content_type, const String& content);
+
+private:
+    ServerHandler* handlers[16];
+    uint8_t handlersSize = 0;
+    Client* currentClient;
+
+    void handle(HttpMethod method, const String& path, const String& body);
+    HttpMethod methodFromString(String& methodString);
 };
-
-/**
-POST /config/reset HTTP/1.1
-Host: 10.0.88.42
-User-Agent: curl/7.58.0
-Accept: *\/*
-Content-Type: text/plain
-Content-Length: 25
-
-test 12893712 kdjflksdjfs
-
- */

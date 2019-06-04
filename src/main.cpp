@@ -43,6 +43,8 @@ MqttClient mqttClient;
 
 NetworkConnection networkConnection;
 
+// TODO maj: make it work with 192.168.1.1 for the beginning so it may be configured by ethernet connected to computer directly
+
 // Logging
 #ifdef LOG_MQTT_ENABLED
   BufferedLogger bufferedLogger(LOG_BUFFERED_LOGGER_BUFFER_SIZE);
