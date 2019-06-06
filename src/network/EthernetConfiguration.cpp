@@ -1,8 +1,10 @@
 #include "network/EthernetConfiguration.hpp"
 
 EthernetConfiguration::EthernetConfiguration() {
+    #ifdef USE_ETHERNET
     strcpy(macAddress, ETHERNET_MAC);
     ipAddress.fromString(ETHERNET_IP);
+    #endif
 };
 
 void EthernetConfiguration::setMacAddress(const char* _macAddress) { 

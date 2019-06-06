@@ -76,17 +76,17 @@ EthernetConfiguration SpiffsConfigurationStorage::readEthernetConfiguration() {
         return ethConfig;
     }
 
-    // Log.trace(F("Reading ethernet configuration..." CR));
+    Log.notice(F("Reading ethernet configuration..." CR));
     ethConfig.setMacAddress(file.readStringUntil(';').c_str());
-    // Log.verbose(F("MAC address: %s" CR), ethConfig.getMacAddress());
+    Log.notice(F("MAC address: %s" CR), ethConfig.getMacAddress());
     ethConfig.setIpAddress(file.readStringUntil(';').c_str());
-    // Log.verbose(F("IP address: %s" CR), ethConfig.getIpAddress().toString().c_str());
+    Log.notice(F("IP address: %s" CR), ethConfig.getIpAddress().toString().c_str());
     ethConfig.setDnsAddress(file.readStringUntil(';').c_str());
-    // Log.verbose(F("DNS address: %s" CR), ethConfig.getDnsAddress().toString().c_str());
+    // Log.trace(F("DNS address: %s" CR), ethConfig.getDnsAddress().toString().c_str());
     ethConfig.setGateway(file.readStringUntil(';').c_str());
-    // Log.verbose(F("Gateway: %s" CR), ethConfig.getGateway().toString().c_str());
+    // Log.trace(F("Gateway: %s" CR), ethConfig.getGateway().toString().c_str());
     ethConfig.setSubnetMask(file.readStringUntil(';').c_str());
-    // Log.verbose(F("Subnet mask: %s" CR), ethConfig.getSubnetMask().toString().c_str());
+    // Log.trace(F("Subnet mask: %s" CR), ethConfig.getSubnetMask().toString().c_str());
 
     file.close();
     return ethConfig;

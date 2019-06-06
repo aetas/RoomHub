@@ -92,8 +92,12 @@ void NetworkConnection::connectWiFi() {
         }
     }
     if (waitForConnection(500, 5000)) {
+        char* ipAddress = new char[16];
+        char* macAddress = new char[18];
         WiFi.localIP().toString().toCharArray(ipAddress, 16);
         WiFi.macAddress().toCharArray(macAddress, 18);
+        networkConfiguration.setIpAddress(ipAddress);
+        networkConfiguration.setMacAddress(macAddress);
     }
 }
 

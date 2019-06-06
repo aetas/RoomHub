@@ -43,10 +43,6 @@ MqttClient mqttClient;
 
 NetworkConnection networkConnection;
 
-// TODO maj: change to USE_WIFI and check that everything in compiliing and works fine
-// TODO maj: comment out all trace and verbose logs
-
-
 // Logging
 #ifdef LOG_MQTT_ENABLED
   BufferedLogger bufferedLogger(LOG_BUFFERED_LOGGER_BUFFER_SIZE);
@@ -55,32 +51,43 @@ NetworkConnection networkConnection;
   MqttLogger* mqttLogger;
 #endif
 
-void checkForResetButtonsPressed() {
+void checkForGeneralConfigResetButtonsPressed() {
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(EXTRA_BUTTON_CONFIG_RESET_PIN, INPUT_PULLUP);
-  pinMode(EXTRA_BUTTON_NETWORK_RESET_PIN, INPUT_PULLUP);
-  SpiffsConfigurationStorage config;
   if (hasTimedButtonBeenTriggered(EXTRA_BUTTON_CONFIG_RESET_PIN, EXTRA_BUTTON_CONFIG_RESET_TIME_TO_RESET_MS)) {
     Log.warning(F("Reset button pressed - device configuration will be removed..."));
     ledBlink(500, 3);
+    SpiffsConfigurationStorage config;
     config.resetConfig();
     ESP.restart();
   }
+}
+
+void checkForEthernetConfigResetButtonPressed() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(EXTRA_BUTTON_NETWORK_RESET_PIN, INPUT_PULLUP);
   if (hasTimedButtonBeenTriggered(EXTRA_BUTTON_NETWORK_RESET_PIN, EXTRA_BUTTON_NETWORK_RESET_TIME_TO_RESET_MS)) {
-    #if defined(USE_WIFI)
+    Log.warning(F("Reset button pressed - ethernet configuration will be removed..."));
+    ledBlink(300, 5);
+    SpiffsConfigurationStorage config;
+    config.resetEthernetConfig();
+    ESP.restart();
+  }
+}
+#ifdef USE_WIFI
+void checkForWifiConfigResetButtonPressed() {
+  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(EXTRA_BUTTON_NETWORK_RESET_PIN, INPUT_PULLUP);
+  if (hasTimedButtonBeenTriggered(EXTRA_BUTTON_NETWORK_RESET_PIN, EXTRA_BUTTON_NETWORK_RESET_TIME_TO_RESET_MS)) {
     Log.warning(F("Reset button pressed - wifi configuration will be removed..."));
     ledBlink(300, 5);
     networkConnection.resetWiFiConfiguration();
+    SpiffsConfigurationStorage config;
     config.resetEthernetConfig();
     ESP.restart();
-    #elif defined(USE_ETHERNET)
-    Log.warning(F("Reset button pressed - ethernet configuration will be removed..."));
-    ledBlink(300, 5);
-    config.resetEthernetConfig();
-    ESP.restart();
-    #endif
   }
 }
+#endif
 
 void setup() {
   Serial.begin(115200);
@@ -91,12 +98,21 @@ void setup() {
     Log.begin(LOG_LEVEL, &Serial, false);
   #endif
 
-  // TODO maj: test and remove comment below
-  // in case there is a problem with resetting WiFi configuration - consider moving checForResetButtonsPressed() below connect() - but remember about ethernet
-  checkForResetButtonsPressed();
+  checkForGeneralConfigResetButtonsPressed();
+  
   SpiffsConfigurationStorage* storage = new SpiffsConfigurationStorage();
+
+  #ifdef USE_ETHERNET
+  checkForEthernetConfigResetButtonPressed();
   networkConnection.setEthernetConfiguration(storage->readEthernetConfiguration());
+  #endif
+
   networkConnection.connect();
+  
+  #ifdef USE_WIFI
+  checkForWifiConfigResetButtonPressed();
+  #endif
+
 
   // Reading configuration
   Configuration config;
