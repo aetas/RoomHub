@@ -50,6 +50,12 @@ void ConfigurationWebServer::startWiFiConfigServer() {
         server.send(201, "text/plain", body.c_str());
     });
 
+    server.on("/config/ethernet", HTTP_POST, [&server, this]() {
+        String body = server.arg("plain");
+        storage.storeEthernetConfig(body.c_str());
+        server.send(201, "text/plain", body.c_str());
+    });
+
     server.on("/config/finalize", HTTP_POST, [&server, this]() {
         configurationFinished = true;
         server.send(201, "text/plain", "Configuration finalized");
@@ -89,6 +95,11 @@ void ConfigurationWebServer::startEthernetConfigServer()  {
             httpServer.send(400, "text/plain", "Unsupported device format version");
         }
         storage.storeDeviceConfig(body.c_str());
+        httpServer.send(201, "text/plain", body.c_str());
+    });
+
+    httpServer.on(HttpMethod::POST, "/config/ethernet", [&httpServer, this](const String& body) {
+        storage.storeEthernetConfig(body.c_str());
         httpServer.send(201, "text/plain", body.c_str());
     });
 

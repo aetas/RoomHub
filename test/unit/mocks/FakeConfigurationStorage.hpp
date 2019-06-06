@@ -26,8 +26,11 @@ public:
         return devicesConfig;
     }
     uint8_t numberOfDevices() { return devicesConfigString.size(); }
+    void storeEthernetConfig(const char* ethernetConfigString) {};
+    EthernetConfiguration readEthernetConfiguration() {};
     bool isDevicesConfigurationSet() { return devicesConfigString.size() > 0; }
     bool isMqttConfigurationSet() { return mqttHostname != ""; }
+    bool isEthernetConfigurationSet() { return true; };
     void resetConfig() { name = ""; mqttHostname = ""; }
 private:
     string name = "";

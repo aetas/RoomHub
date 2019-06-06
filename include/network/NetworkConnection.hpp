@@ -2,6 +2,7 @@
 
 #include <inttypes.h>
 #include "config/MasterConfig.hpp"
+#include "EthernetConfiguration.hpp"
 
 #ifdef USE_WIFI
 #include <WiFi.h>
@@ -14,23 +15,23 @@
 
 class NetworkConnection {
 public:
-    NetworkConnection();
     void connect();
     void checkConnection(uint32_t now);
     const char* getIpAddress();
     const char* getMacAddress();
     Client& getClient();
 
-    #ifdef USE_WIFI
+    #if defined(USE_WIFI)
     void resetWiFiConfiguration();
+    #elif defined(USE_ETHERNET)
+    void setEthernetConfiguration(EthernetConfiguration ethConfig);
     #endif
 private:
-    char* ipAddress = new char[16];
-    char* macAddress = new char[18];
+    EthernetConfiguration networkConfiguration;
 
     #ifdef USE_ETHERNET
     byte* mac = new byte[6];
-    IPAddress ip;
+    
     EthernetClient ethClient;
 
     void ethernetWizReset(const uint8_t resetPin);

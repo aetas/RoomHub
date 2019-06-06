@@ -43,7 +43,9 @@ MqttClient mqttClient;
 
 NetworkConnection networkConnection;
 
-// TODO maj: make it work with 192.168.1.1 for the beginning so it may be configured by ethernet connected to computer directly
+// TODO maj: change to USE_WIFI and check that everything in compiliing and works fine
+// TODO maj: comment out all trace and verbose logs
+
 
 // Logging
 #ifdef LOG_MQTT_ENABLED
@@ -56,22 +58,28 @@ NetworkConnection networkConnection;
 void checkForResetButtonsPressed() {
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(EXTRA_BUTTON_CONFIG_RESET_PIN, INPUT_PULLUP);
-  pinMode(EXTRA_BUTTON_WIFI_RESET_PIN, INPUT_PULLUP);
+  pinMode(EXTRA_BUTTON_NETWORK_RESET_PIN, INPUT_PULLUP);
+  SpiffsConfigurationStorage config;
   if (hasTimedButtonBeenTriggered(EXTRA_BUTTON_CONFIG_RESET_PIN, EXTRA_BUTTON_CONFIG_RESET_TIME_TO_RESET_MS)) {
     Log.warning(F("Reset button pressed - device configuration will be removed..."));
     ledBlink(500, 3);
-    SpiffsConfigurationStorage config;
     config.resetConfig();
     ESP.restart();
   }
-  #ifdef USE_WIFI
-  if (hasTimedButtonBeenTriggered(EXTRA_BUTTON_WIFI_RESET_PIN, EXTRA_BUTTON_WIFI_RESET_TIME_TO_RESET_MS)) {
+  if (hasTimedButtonBeenTriggered(EXTRA_BUTTON_NETWORK_RESET_PIN, EXTRA_BUTTON_NETWORK_RESET_TIME_TO_RESET_MS)) {
+    #if defined(USE_WIFI)
     Log.warning(F("Reset button pressed - wifi configuration will be removed..."));
     ledBlink(300, 5);
     networkConnection.resetWiFiConfiguration();
+    config.resetEthernetConfig();
     ESP.restart();
+    #elif defined(USE_ETHERNET)
+    Log.warning(F("Reset button pressed - ethernet configuration will be removed..."));
+    ledBlink(300, 5);
+    config.resetEthernetConfig();
+    ESP.restart();
+    #endif
   }
-  #endif
 }
 
 void setup() {
@@ -83,12 +91,15 @@ void setup() {
     Log.begin(LOG_LEVEL, &Serial, false);
   #endif
 
-  networkConnection.connect();
+  // TODO maj: test and remove comment below
+  // in case there is a problem with resetting WiFi configuration - consider moving checForResetButtonsPressed() below connect() - but remember about ethernet
   checkForResetButtonsPressed();
+  SpiffsConfigurationStorage* storage = new SpiffsConfigurationStorage();
+  networkConnection.setEthernetConfiguration(storage->readEthernetConfiguration());
+  networkConnection.connect();
 
   // Reading configuration
   Configuration config;
-  SpiffsConfigurationStorage* storage = new SpiffsConfigurationStorage();
   ConfigurationWebServer webServer(*storage);
   config.loadConfiguration(*storage, webServer);
 
@@ -118,7 +129,9 @@ void setup() {
 
   mqttClient.begin(config.getMqttHostname(), MQTT_PORT, networkConnection.getClient());
 
-  homieDevice = HomieDeviceFactory::create(networkConnection.getIpAddress(), networkConnection.getMacAddress(), 
+  char* ipAddress = new char[15];
+  strcpy(ipAddress, networkConnection.getIpAddress());
+  homieDevice = HomieDeviceFactory::create(ipAddress, networkConnection.getMacAddress(), 
                                            config.getRoomHubName(), devicesConfig, numberOfDevices, mqttClient, statsData);
   
   homieDevice->setup();

@@ -2,7 +2,14 @@
 #include "ArduinoLog.h"
 
 void Configuration::loadConfiguration(ConfigurationStorage& storage, ConfigurationServer& configurationServer) {
-    if (!storage.isDevicesConfigurationSet() || !storage.isMqttConfigurationSet()) {
+
+    #if defined(USE_ETHERNET)
+    bool useEthernet = true;
+    #elif defined(USE_WIFI)
+    bool useEthernet = false;
+    #endif
+    
+    if (!storage.isDevicesConfigurationSet() || !storage.isMqttConfigurationSet() || (useEthernet && !storage.isEthernetConfigurationSet())) {
         Log.warning(F("Configuration not found starting configuration server" CR));
         configurationServer.startConfigServer();
     }

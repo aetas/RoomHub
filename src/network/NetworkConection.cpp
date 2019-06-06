@@ -3,19 +3,12 @@
 #include <Arduino.h>
 #include <ArduinoLog.h>
 
-NetworkConnection::NetworkConnection() { 
-    #ifdef USE_ETHERNET
-    ip.fromString(ETHERNET_IP); 
-    macCharArrayToBytes(ETHERNET_MAC, mac);
-    #endif
-}
-
 const char* NetworkConnection::getIpAddress() {
-  return ipAddress;
+  return networkConfiguration.getIpAddress().toString().c_str();
 }
 
 const char* NetworkConnection::getMacAddress() {
-  return macAddress;
+  return networkConfiguration.getMacAddress();
 }
 
 
@@ -53,15 +46,22 @@ void NetworkConnection::ethernetWizReset(const uint8_t resetPin) {
     delay(350);
 }
 
-void NetworkConnection::connectEthernet() {
-  delay(500);
-  Ethernet.init(ETHERNET_CS_PIN);
-  ethernetWizReset(ETHERNET_RESET_PIN);
-  Ethernet.begin(mac, ip);
-  delay(200);
+void NetworkConnection::setEthernetConfiguration(EthernetConfiguration _ethConfig) {
+    networkConfiguration = _ethConfig;
+}
 
-  strcpy(ipAddress, ETHERNET_IP);
-  strcpy(macAddress, ETHERNET_MAC);
+void NetworkConnection::connectEthernet() {
+    delay(500);
+    
+    macCharArrayToBytes(networkConfiguration.getMacAddress(), mac);
+    Ethernet.init(ETHERNET_CS_PIN);
+    ethernetWizReset(ETHERNET_RESET_PIN);
+    Ethernet.begin(mac, 
+                   networkConfiguration.getIpAddress(), 
+                   networkConfiguration.getDnsAddress(), 
+                   networkConfiguration.getGateway(), 
+                   networkConfiguration.getSubnetMask());
+    delay(200);
 }
 
 void NetworkConnection::macCharArrayToBytes(const char* str, byte* bytes) {
