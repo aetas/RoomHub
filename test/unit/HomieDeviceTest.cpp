@@ -66,15 +66,16 @@ TEST_CASE("HomieDevice") {
         // when
         homieDevice.setup();
         homieDevice.loop(0);
-        homieDevice.loop(9999);
+        homieDevice.loop(10001);
+        homieDevice.loop(19999);
         // then
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$stats/uptime", true) == "0");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$stats/uptime", true) == "10");
         
         // and when
-        homieDevice.loop(10001);
+        homieDevice.loop(20002);
 
         // then
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$stats/uptime", true, 1) == "10");
+        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/$stats/uptime", true, 1) == "20");
     }
 
     SECTION("should setup all nodes on device setup") {
