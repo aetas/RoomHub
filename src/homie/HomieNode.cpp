@@ -45,6 +45,10 @@ void HomieNode::setupProperties() {
         propertyTopic += "/";
         propertyTopic += property->getName();
         
+
+        String nameTopic = propertyTopic;
+        nameTopic += "/$name";
+        mqttClient.publish(nameTopic.c_str(), property->getName(), true);
         String settableTopic = propertyTopic;
         settableTopic += "/$settable";
         mqttClient.publish(settableTopic.c_str(), property->isSettable() ? "true" : "false", true);

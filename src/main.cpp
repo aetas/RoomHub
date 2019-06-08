@@ -142,7 +142,7 @@ void setup() {
   for(int i = 0; i < numberOfDevices; i++) {
     devicesRegistry->add(deviceFactory.create(*devicesConfig[i]));
   }
-
+ 
   mqttClient.begin(config.getMqttHostname(), MQTT_PORT, networkConnection.getClient());
 
   char* ipAddress = new char[15];
