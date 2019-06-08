@@ -19,17 +19,16 @@ void MqttCommandReceiver::informDevice(String& deviceId, String& propertyName, c
 }
 
 void MqttCommandReceiver::messageReceived(const char* topic, byte* payload, unsigned int length) {
-    char* payloadString = new char[length];
-    for(uint8_t i = 0; i < length; i++) {
-        payloadString[i] = (char)payload[i];
-    }
-    payloadString[length] = '\0';
+    char* payloadCopy = (char*)malloc(length+1);
+    memcpy(payloadCopy, payload, length);
+    payloadCopy[length] = '\0';
     
-    Log.notice(F("MQTT received: %s <- %s" CR), topic, payloadString);
+    Log.notice(F("MQTT received: %s <- %s" CR), topic, payloadCopy);
     String topicString = String(topic);
     String nodeId = getHomieNodeId(topicString);
     String propertyName = getHomiePropertyName(topicString);
-    MqttCommandReceiver::getInstance(nullptr, nullptr).informDevice(nodeId, propertyName, payloadString);
+    MqttCommandReceiver::getInstance(nullptr, nullptr).informDevice(nodeId, propertyName, payloadCopy);
+    free(payloadCopy);
 }
 
 bool MqttCommandReceiver::isHomieNodePropertyValue(String& topic) {
