@@ -70,10 +70,7 @@ void HomieDevice::setup() {
     char statsIntervalSecString[4];
     sprintf(statsIntervalSecString, "%d", statsIntervalSec);
     mqttClient.publish(statsIntervalTopic.c_str(), statsIntervalSecString, true);
-    String uptimeTopic = topicStart;
-    uptimeTopic += "/$stats/uptime";
-    mqttClient.publish(uptimeTopic.c_str(), "0", true);
-    
+
     mqttClient.publish(stateTopic.c_str(), "ready", true);
 
     for(uint8_t i = 0; i < nodesNumber; i++) {
@@ -84,9 +81,7 @@ void HomieDevice::setup() {
 void HomieDevice::loop(const uint32_t& currentTimeMs) {
     if (!mqttClient.loop()) {
         Log.warning(F("Problem with MQTT communication" CR));
-        String stateTopic = topicStart;
-        stateTopic += "/$state";
-        mqttClient.connect(name, stateTopic.c_str(), 1, 1, "lost");
+        setup();
     }
     updateStats(currentTimeMs);
 }
