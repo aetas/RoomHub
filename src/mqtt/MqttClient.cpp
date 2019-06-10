@@ -46,5 +46,9 @@ void MqttClient::onMessage(MQTT_CALLBACK_SIGNATURE) {
 }
 
 bool MqttClient::loop() {
-    return client.loop();
+    bool connected = client.loop();
+    if (!connected) {
+        Log.error(F("MQTT connection failed RC=%i" CR), client.state());
+    }
+    return connected;
 }

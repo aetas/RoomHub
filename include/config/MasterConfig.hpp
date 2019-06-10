@@ -4,7 +4,7 @@
 // -- Basic ---------------------------------------
 
 #define FIRMWARE_NAME       "Aetas RoomHub"
-#define FIRMWARE_VERSION    "3.1.0-RC1"
+#define FIRMWARE_VERSION    "3.1.0-RC2"
 
 
 // -- Network --------------------------------------
@@ -45,3 +45,4 @@
 #define EXTRA_BUTTON_CONFIG_RESET_TIME_TO_RESET_MS  5000
 #define EXTRA_BUTTON_NETWORK_RESET_PIN              14
 #define EXTRA_BUTTON_NETWORK_RESET_TIME_TO_RESET_MS 5000
+
