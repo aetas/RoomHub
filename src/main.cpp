@@ -168,8 +168,7 @@ void loop() {
   devicesRegistry->loop(now);
   boolean workingCorrectly = homieDevice->loop(now);
   if (!workingCorrectly) {
-    Log.error(F("HomieDevice cannot continue to work properly - check logs - restarting ESP..."));
-    ESP.restart();
+    Log.error(F("HomieDevice is having MQTT connection problems..."));
   }
 
   networkConnection.checkConnection(now);
