@@ -166,7 +166,11 @@ void setup() {
 void loop() {
   uint32_t now = millis();
   devicesRegistry->loop(now);
-  homieDevice->loop(now);
+  boolean workingCorrectly = homieDevice->loop(now);
+  if (!workingCorrectly) {
+    Log.error(F("HomieDevice cannot continue to work properly - check logs - restarting ESP..."));
+    ESP.restart();
+  }
 
   networkConnection.checkConnection(now);
 

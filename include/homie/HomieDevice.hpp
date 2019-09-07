@@ -40,7 +40,7 @@ public:
     void setState(HomieDeviceState state);
 
     void setup();
-    void loop(const uint32_t& currentTimeMs);
+    boolean loop(const uint32_t& currentTimeMs);
 
 private:
     char* topicStart;
