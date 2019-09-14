@@ -82,7 +82,7 @@ void NetworkConnection::resetWiFiConfiguration() {
     delay(1000);
 };
 void NetworkConnection::connectWiFi() {
-    WiFi.mode(WIFI_AP_STA);
+    WiFi.mode(WIFI_STA);
     if (WiFi.psk().equals("")) {
         Log.notice(F("WiFi config not found. Starting WiFi Smart Config..."));
         WiFi.beginSmartConfig();
