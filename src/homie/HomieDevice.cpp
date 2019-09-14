@@ -80,11 +80,12 @@ void HomieDevice::setup() {
 
 boolean HomieDevice::loop(const uint32_t& currentTimeMs) {
     if (!mqttClient.loop()) {
-        Log.warning(F("Problem with MQTT communication" CR));
-        // TODO maj: testing different approach - cannot continue normal work of the device - restart!
+        Log.warning(F("Problem with MQTT communication. Trying to reconnect..." CR));
+        setup();
         return false;
     }
     updateStats(currentTimeMs);
+    return true;
 }
 
 void HomieDevice::updateStats(const uint32_t& currentTimeMs) {
