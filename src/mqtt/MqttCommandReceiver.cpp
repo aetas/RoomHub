@@ -2,12 +2,12 @@
 #include "device/DevicesRegistry.hpp"
 #include "ArduinoLog.h"
 
-MqttCommandReceiver::MqttCommandReceiver(DevicesRegistry* _devicesRegistry, HomieDevice* _homieDevice)
-    : devicesRegistry(_devicesRegistry), homieDevice(_homieDevice) {
+MqttCommandReceiver::MqttCommandReceiver(DevicesRegistry* _devicesRegistry)
+    : devicesRegistry(_devicesRegistry) {
 }
 
-MqttCommandReceiver& MqttCommandReceiver::getInstance(DevicesRegistry* _devicesRegistry, HomieDevice* _homieDevice) {
-    static MqttCommandReceiver instance(_devicesRegistry, _homieDevice);
+MqttCommandReceiver& MqttCommandReceiver::getInstance(DevicesRegistry* _devicesRegistry) {
+    static MqttCommandReceiver instance(_devicesRegistry);
     return instance;
 }
 
@@ -15,7 +15,6 @@ void MqttCommandReceiver::informDevice(String& deviceId, String& propertyName, c
     Log.notice(F("Device state change: %s(%s) <- %s" CR), deviceId.c_str(), propertyName.c_str(), value);
     uint8_t deviceIdInt = deviceId.toInt();
     devicesRegistry->getDevice(deviceIdInt)->setProperty(propertyName.c_str(), value);
-    homieDevice->getNode(deviceIdInt)->propertyValueUpdated(propertyName.c_str(), value);
 }
 
 void MqttCommandReceiver::messageReceived(const char* topic, byte* payload, unsigned int length) {
@@ -27,7 +26,7 @@ void MqttCommandReceiver::messageReceived(const char* topic, byte* payload, unsi
     String topicString = String(topic);
     String nodeId = getHomieNodeId(topicString);
     String propertyName = getHomiePropertyName(topicString);
-    MqttCommandReceiver::getInstance(nullptr, nullptr).informDevice(nodeId, propertyName, payloadCopy);
+    MqttCommandReceiver::getInstance(nullptr).informDevice(nodeId, propertyName, payloadCopy);
     free(payloadCopy);
 }
 

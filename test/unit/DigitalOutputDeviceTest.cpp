@@ -1,6 +1,7 @@
 #include "../main/catch.hpp"
 #include "device/DigitalOutputDevice.hpp"
 #include "mocks/FakeDigitalPin.hpp"
+#include "mocks/SimpleUpdateListener.hpp"
 
 #include <typeinfo>
 #include <iostream>
@@ -27,5 +28,32 @@ TEST_CASE("DigitalOutputDevice")
 
         //then
         REQUIRE(pin->digitalRead() == LOW);
+    }
+
+    SECTION("should notify update listener on state change to ON") {
+        // given
+        SimpleUpdateListener* listener = new SimpleUpdateListener();
+        device.setUpdateListener(listener);
+
+        // when
+        device.setProperty("state", "ON");
+        string stringValueString(listener->stringValue);
+
+        // then
+        REQUIRE(stringValueString == "ON");
+    }
+
+    SECTION("should notify update listener on state change to OFF") {
+        // given
+        SimpleUpdateListener* listener = new SimpleUpdateListener();
+        device.setUpdateListener(listener);
+
+        // when
+        device.setProperty("state", "ON");
+        device.setProperty("state", "OFF");
+        string stringValueString(listener->stringValue);
+
+        // then
+        REQUIRE(stringValueString == "OFF");
     }
 }

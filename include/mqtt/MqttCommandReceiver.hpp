@@ -9,7 +9,7 @@
 class MqttCommandReceiver {
 
 public:
-    static MqttCommandReceiver& getInstance(DevicesRegistry* devicesRegistry, HomieDevice* _homieDevice);
+    static MqttCommandReceiver& getInstance(DevicesRegistry* devicesRegistry);
     
     MqttCommandReceiver(MqttCommandReceiver const&) = delete;
     void operator=(MqttCommandReceiver const&) = delete;
@@ -19,7 +19,7 @@ public:
     static void messageReceived(const char* topic, byte* payload, unsigned int length);
 
 private:
-    MqttCommandReceiver(DevicesRegistry* _devicesRegistry, HomieDevice* _homieDevice);
+    MqttCommandReceiver(DevicesRegistry* _devicesRegistry);
     DevicesRegistry* devicesRegistry;
     HomieDevice* homieDevice;
 

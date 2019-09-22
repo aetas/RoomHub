@@ -17,7 +17,7 @@ void Sct013Device::loop(const uint32_t& currentTimeMs) {
         double power = emon1.calcIrms(1480) * 230.0;
         char powerChar[15];
         sprintf(powerChar, "%f", power);
-        updateListener->valueUpdated(getId(), "power", powerChar);
+        notify("power", powerChar);
         lastReadTime = currentTimeMs;
     }
 

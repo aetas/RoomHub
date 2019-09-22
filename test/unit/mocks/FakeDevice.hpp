@@ -11,10 +11,7 @@ class FakeDevice: public Device {
 public:
     FakeDevice(const uint16_t _id, DeviceType _deviceType): Device(_id, _deviceType) {};
     void fakeSmallIntChange(uint8_t newValue) { 
-        if (this->updateListener == nullptr) {
-            return;
-        }
-        this->updateListener->valueUpdated(this->getId(), "fakeValue", newValue); 
+        notify("fakeValue", newValue);
     };
 
     void setProperty(const char* propertyName, const char* newValue) {

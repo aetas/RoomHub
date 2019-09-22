@@ -12,8 +12,8 @@ MqttEventPublisher& MqttEventPublisher::getInstance(HomieDevice* _homieDevice) {
 }
 
 void MqttEventPublisher::valueUpdated(const uint8_t deviceId, const char* propertyName, const uint8_t newValue) {
-    String stringValue = String(newValue);
-    this->valueUpdated(deviceId, propertyName, stringValue.c_str());
+        String stringValue = String(newValue);
+        this->valueUpdated(deviceId, propertyName, stringValue.c_str());
 }
 void MqttEventPublisher::valueUpdated(const uint8_t deviceId, const char* propertyName, const uint16_t newValue) {
     String stringValue = String(newValue);

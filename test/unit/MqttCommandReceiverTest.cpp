@@ -23,7 +23,7 @@ TEST_CASE("MqttCommandReceiver") {
     HomieNode* nodes[1] = {&homieNode1};
     HomieDevice homieDevice(deviceName, 10, "firmware name value", "7.8.9", "192.154.1.25", "00:0a:95:9d:68:16", nodes, 1, mqttClient, statsData);
 
-    MqttCommandReceiver& commandReceiver = MqttCommandReceiver::getInstance(&registry, &homieDevice);
+    MqttCommandReceiver& commandReceiver = MqttCommandReceiver::getInstance(&registry);
     
 
     SECTION("should change device state when command receiver receives command") {
@@ -42,19 +42,5 @@ TEST_CASE("MqttCommandReceiver") {
 
         // then
         REQUIRE(fakeDevice1.currentPropertyValue("testProp1") == "newState123");
-    }
-
-      SECTION("should send MQTT message when new value is set") {
-        // given
-        FakeDevice fakeDevice1(1, DeviceType::DIGITAL_OUTPUT);
-        registry.add(&fakeDevice1);
-
-        // when
-        byte* value = (unsigned char*)"newState456";
-        const char* topic = "homie/devName/1/testProp1/set";
-        MqttCommandReceiver::messageReceived(topic, value, 12);
-
-        // then
-        REQUIRE(mqttClient.getValuePublishedTo("homie/devName/1/testProp1") == "newState456");
     }
 }

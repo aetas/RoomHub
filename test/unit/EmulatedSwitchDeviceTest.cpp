@@ -1,6 +1,7 @@
 #include "../main/catch.hpp"
 #include "device/EmulatedSwitchDevice.hpp"
 #include "mocks/FakeDigitalPin.hpp"
+#include "mocks/SimpleUpdateListener.hpp"
 
 #include <typeinfo>
 #include <iostream>
@@ -11,6 +12,8 @@ TEST_CASE("EmulatedSwitchDevice")
 {
     FakeDigitalPin* pin = new FakeDigitalPin();
     EmulatedSwitchDevice device(1, pin);
+    SimpleUpdateListener* listener = new SimpleUpdateListener();
+    device.setUpdateListener(listener);
 
     SECTION("should change pin state when changing state on device") {
         // given
@@ -18,9 +21,11 @@ TEST_CASE("EmulatedSwitchDevice")
 
         // when
         device.setProperty("state", "ON");
+        string stringValueString(listener->stringValue);
 
         //then
         REQUIRE(pin->digitalRead() == LOW);
+        REQUIRE(stringValueString == "ON");
     }
 
 
@@ -32,9 +37,11 @@ TEST_CASE("EmulatedSwitchDevice")
         device.setProperty("state", "ON");
         device.loop(1000L);
         device.loop(1501L);
+        string stringValueString(listener->stringValue);
 
         //then
         REQUIRE(pin->digitalRead() == HIGH);
+        REQUIRE(stringValueString == "OFF");
     }
 
 }

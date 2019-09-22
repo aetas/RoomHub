@@ -10,7 +10,7 @@ AnalogInputDevice::~AnalogInputDevice() {
 void AnalogInputDevice::loop(const uint32_t& currentTimeMs) {
     if (READ_INTERVAL_MS < currentTimeMs - lastReadTime) {
         uint16_t value = analogPin->read();
-        updateListener->valueUpdated(getId(), "value", value);
+        notify("value", value);
         lastReadTime = currentTimeMs;
     }
 }

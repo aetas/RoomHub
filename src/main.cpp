@@ -154,7 +154,7 @@ void setup() {
 
   UpdateListener& mqttEventPublisher = MqttEventPublisher::getInstance(homieDevice);
   devicesRegistry->setUpdateListener(&mqttEventPublisher);
-  MqttCommandReceiver::getInstance(devicesRegistry, homieDevice);
+  MqttCommandReceiver::getInstance(devicesRegistry);
   mqttClient.onMessage(MqttCommandReceiver::messageReceived);
 
   delete storage;

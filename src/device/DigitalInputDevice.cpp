@@ -6,9 +6,7 @@ void DigitalInputDevice::loop(const uint32_t& currentTimeMs) {
     uint8_t value = digitalPin->digitalRead();
 
     if ((inIntermediateState && currentTimeMs - intermediateStateStart > debounceMs) || (debounceMs == 0 && currentState != value))   {
-        if (updateListener != nullptr) {
-            updateListener->valueUpdated(getId(), "state", value);
-        }
+        notify("state", value);
         endIntermediateState();
     }
 

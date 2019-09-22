@@ -9,6 +9,7 @@ void EmulatedSwitchDevice::setProperty(const char* propertyName, const char* new
     if (strcmp("ON", newValue) == 0) {
         digitalPin->digitalWrite(LOW);
         isPressed = true;
+        notify("state", newValue);
     }
 }
 
@@ -20,5 +21,6 @@ void EmulatedSwitchDevice::loop(const uint32_t& currentTimeMs) {
         isPressed = false;
         pressedAcknowledged = false;
         digitalPin->digitalWrite(HIGH);
+        notify("state", "OFF");
     }
 }
