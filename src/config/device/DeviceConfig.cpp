@@ -44,6 +44,7 @@ const char* DeviceConfig::deviceTypeToString(DeviceType deviceType) {
         case DeviceType::DIGITAL_INPUT :    return "DigitalInput";
         case DeviceType::DIGITAL_OUTPUT :   return "DigitalOutput";
         case DeviceType::SCT013 :           return "SCT-013";
+        case DeviceType::EMULATED_SWITCH :  return "EmulatedSwitch";
         default: return "UNKNOWN";
     }
 }

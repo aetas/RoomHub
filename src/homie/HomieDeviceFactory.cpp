@@ -89,6 +89,11 @@ HomieNodeProperty** HomieDeviceFactory::createHomieNodeProperties(DeviceConfig* 
     properties[0] = new HomieNodeProperty("power", false, true, PropertyUnit::WATT, PropertyDataType::FLOAT, "");
     return properties;
   }
+  if(node->getDeviceType() == DeviceType::EMULATED_SWITCH) {
+    HomieNodeProperty** properties = new HomieNodeProperty*[1];
+    properties[0] = new HomieNodeProperty("state", true, false, PropertyUnit::NONE, PropertyDataType::ENUM, "ON,OFF");
+    return properties;
+  }
 
   return nullptr;
 }

@@ -4,6 +4,7 @@
 #include "device/AnalogInputDevice.hpp"
 #include "device/Dht22Device.hpp"
 #include "device/Sct013Device.hpp"
+#include "device/EmulatedSwitchDevice.hpp"
 
 
 DeviceFactory& DeviceFactory::getInstance(PinProvider& _pinProvider) {
@@ -23,7 +24,7 @@ Device* DeviceFactory::create(DeviceConfig& deviceConfig) {
         {
             // Log.trace(F("DIGITAL_OUTPUT device created" CR));
             DigitalPin* digitalPin = pinProvider.digitalPin(deviceConfig.getPortNumber(), deviceConfig.getWireColor());
-            return new DigitalOutputDevice(deviceConfig.getId(), digitalPin);   
+            return new DigitalOutputDevice(deviceConfig.getId(), digitalPin);
         }
         case DeviceType::ANALOG_INPUT:
         {
@@ -42,6 +43,12 @@ Device* DeviceFactory::create(DeviceConfig& deviceConfig) {
             // Log.trace(F("SCT013 device created" CR));
             AnalogPin* analogPin = pinProvider.analogPin(deviceConfig.getPortNumber());
             return new Sct013Device(deviceConfig.getId(), analogPin);   
+        }
+        case DeviceType::EMULATED_SWITCH:
+        {
+            // Log.trace(F("EMULATED_SWITCH device created" CR));
+            DigitalPin* digitalPin = pinProvider.digitalPin(deviceConfig.getPortNumber(), deviceConfig.getWireColor());
+            return new EmulatedSwitchDevice(deviceConfig.getId(), digitalPin);
         }
     }
     

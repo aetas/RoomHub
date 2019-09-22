@@ -73,4 +73,16 @@ TEST_CASE("DeviceFactory creates Device from DeviceConfiguration")
       REQUIRE(device->getType() == DeviceType::SCT013);
    }
 
+   SECTION("should create EmulatedSwitchDevice when EMULATED_SWITCH DeviceConfig given") {
+      // given
+      DeviceConfig emulatedSwitchDeviceConfig(47, "emulated switch", DeviceType::EMULATED_SWITCH, 4, WireColor::BLUE, 0);
+
+      // when
+      Device* device = deviceFactory.create(emulatedSwitchDeviceConfig);
+
+      // then
+      REQUIRE(device->getId() == 47);
+      REQUIRE(device->getType() == DeviceType::EMULATED_SWITCH);
+   }
+
 }

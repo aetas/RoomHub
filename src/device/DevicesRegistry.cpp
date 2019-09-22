@@ -1,8 +1,5 @@
 #include "device/DevicesRegistry.hpp"
-#include "device/DigitalInputDevice.hpp"
-#include "device/Sct013Device.hpp"
-#include "device/AnalogInputDevice.hpp"
-#include "device/EmulatedSwitchDevice.hpp"
+#include "device/Device.hpp"
 
 #include "WString.h"
 #include "ArduinoLog.h"
