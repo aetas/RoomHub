@@ -13,6 +13,7 @@ public:
     DeviceType getType() { return type; };
     void setUpdateListener(UpdateListener* _listener) { updateListener = _listener; };
     virtual void setProperty(const char* propertyName, const char* newValue) {};
+    virtual void loop(const uint32_t& currentTimeMs) {};
 
 protected:
     UpdateListener* updateListener = nullptr;

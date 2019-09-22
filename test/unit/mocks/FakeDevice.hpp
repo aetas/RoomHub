@@ -26,6 +26,15 @@ public:
         return properties[propertyName];
     }
 
+    void loop(const uint32_t& currentTimeMs) {
+        lastLoopMs = currentTimeMs;
+    }
+
+    uint32_t getLastLoopMs() {
+        return lastLoopMs;
+    }
+
 private:
     map<String, String> properties;
+    uint32_t lastLoopMs = -1;
 };
