@@ -10,9 +10,9 @@ jobs:
       vmImage: 'Ubuntu-16.04'
       container: 'aetas/platformio:4.0.3'
     steps:
-      - script: "run"
+      - script: "pio run"
         displayName: "Build WIFI"
-      - script: "run"
+      - script: "pio run"
         displayName: "Build ETHERNET"
   - job: Test
     pool:
