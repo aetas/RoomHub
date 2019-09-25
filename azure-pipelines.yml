@@ -12,7 +12,6 @@ jobs:
     steps:
       - script: "run"
         displayName: "Build WIFI"
-    steps:
       - script: "run"
         displayName: "Build ETHERNET"
   - job: Test
