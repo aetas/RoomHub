@@ -1,11 +1,16 @@
 trigger:
 - master
 
+resources:
+  containers:
+  - container: platformio
+    image: aetas/platformio:4.0.3
+
 jobs:
   - job: Build
     pool:
       vmImage: 'Ubuntu-16.04'
-      container: 'aetas/platformio:4.0.3'
+      container: 'platformio'
     steps:
       - script: "pio run"
         displayName: "Build WIFI"
