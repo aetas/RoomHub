@@ -1,22 +1,16 @@
 trigger:
 - master
 
-container: aetas/platformio:4.0.3
-
-resources:
-  containers:
-  - container: platformio
-    image: aetas/platformio:4.0.3
-
 jobs:
   - job: Build
     pool:
       vmImage: 'Ubuntu-16.04'
-      container: 'platformio'
     steps:
-      - script: "pio run"
+      - script: "docker pull aetas/platformio:4.0.3"
+        displayName: "docker pull aetas/platformio:4.0.3"
+      - script: "docker run --rm --name pio -v $PWD:/workspace aetas/platformio:4.0.3 run"
         displayName: "Build WIFI"
-      - script: "pio run"
+      - script: "docker run --rm --name pio -v $PWD:/workspace aetas/platformio:4.0.3 run"
         displayName: "Build ETHERNET"
   - job: Test
     pool:
