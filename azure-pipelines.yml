@@ -1,6 +1,8 @@
 trigger:
 - master
 
+container: aetas/platformio:4.0.3
+
 resources:
   containers:
   - container: platformio
