@@ -9,12 +9,13 @@
 
 // -- Network --------------------------------------
 #define USE_WIFI                                 // Use WiFi for network (e.g. to connect to MQTT) - use this or USE_ETHERNET, never both
-// #define USE_ETHERNET                                // Use wired ethernet for network - use this or USE_WIFI, never both
-// #define ETHERNET_MAC            "5F:D9:98:B9:10:49" // Ethernet MAC address (have to be unique between devices in the same network)
-// #define ETHERNET_IP             "192.168.1.2"       // IP address of RoomHub when on Ethernet connection
 
-// #define ETHERNET_RESET_PIN      11      // ESP32 pin where reset pin from W5500 is connected
-// #define ETHERNET_CS_PIN         5       // ESP32 pin where CS pin from W5500 is connected
+// #define USE_ETHERNET                             // Use wired ethernet for network - use this or USE_WIFI, never both
+#define ETHERNET_MAC            "5F:D9:98:B9:10:49" // Ethernet MAC address (have to be unique between devices in the same network)
+#define ETHERNET_IP             "192.168.1.2"       // IP address of RoomHub when on Ethernet connection
+
+#define ETHERNET_RESET_PIN      11      // ESP32 pin where reset pin from W5500 is connected
+#define ETHERNET_CS_PIN         5       // ESP32 pin where CS pin from W5500 is connected
 
 
 

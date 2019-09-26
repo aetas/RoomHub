@@ -8,10 +8,14 @@ jobs:
     steps:
       - script: "docker pull aetas/platformio:4.0.3"
         displayName: "docker pull aetas/platformio:4.0.3"
-      - script: "docker run --rm --name pio -v $PWD:/workspace aetas/platformio:4.0.3 run"
-        displayName: "Build WIFI"
-      - script: "docker run --rm --name pio -v $PWD:/workspace aetas/platformio:4.0.3 run"
+      - script: |
+          gradle switchToEthernet    
+          docker run --rm --name pio -v $PWD:/workspace aetas/platformio:4.0.3 run
         displayName: "Build ETHERNET"
+      - script: |
+          gradle switchToWifi
+          docker run --rm --name pio -v $PWD:/workspace aetas/platformio:4.0.3 run"
+        displayName: "Build WIFI"
   - job: Test
     pool:
       vmImage: 'Ubuntu-16.04'
