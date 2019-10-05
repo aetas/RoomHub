@@ -36,9 +36,10 @@ jobs:
       vmImage: 'Ubuntu-16.04'
     steps:
       - script: |
-        if [ $START_DEVELOPMENT ] 
-        then 
-          START_DEVELOPMENT_FLAG="-PstartDevelopment"
-        fi
-        gradle bumpVersion -PversionIncrementer=$VERSION_INCREMENTER $START_DEVELOPMENT_FLAG
+          if [ $START_DEVELOPMENT ] 
+          then 
+            START_DEVELOPMENT_FLAG="-PstartDevelopment"
+          fi
+          gradle bumpVersion -PversionIncrementer=$VERSION_INCREMENTER $START_DEVELOPMENT_FLAG
+        displayName: Change version
         
