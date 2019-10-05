@@ -8,9 +8,9 @@
 
 
 // -- Network --------------------------------------
-// #define USE_WIFI                                 // Use WiFi for network (e.g. to connect to MQTT) - use this or USE_ETHERNET, never both
+#define USE_WIFI                                 // Use WiFi for network (e.g. to connect to MQTT) - use this or USE_ETHERNET, never both
 
-#define USE_ETHERNET                             // Use wired ethernet for network - use this or USE_WIFI, never both
+// #define USE_ETHERNET                             // Use wired ethernet for network - use this or USE_WIFI, never both
 #define ETHERNET_MAC            "5F:D9:98:B9:10:49" // Ethernet MAC address (have to be unique between devices in the same network)
 #define ETHERNET_IP             "192.168.1.2"       // IP address of RoomHub when on Ethernet connection
 
