@@ -27,7 +27,7 @@ jobs:
         displayName: 'Compile tests'
       - script: test/allTests
         displayName: "Run all tests"
-  - job: Release new version
+  - job: Release
     dependsOn: ["Build", "Test"]
     # variables: # these variables are settable at queue time (needs to be set in Azure DevOps)
     #  version_incrementer: dev
