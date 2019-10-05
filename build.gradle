@@ -27,7 +27,7 @@ task switchToEthernet {
     }
 }
 
-task setNextVersion {
+task nextVersion {
     ext.firmwareVersionPattern = ~/(?s).*#define FIRMWARE_VERSION\s+"(?<version>[^\s]+)"(?s).*/
     doLast {
         def currentVersionMatcher = firmwareVersionPattern.matcher(new File(masterConfigFilePath).text)
@@ -83,7 +83,20 @@ task setNextVersion {
         def isDevelopment = (project.hasProperty("startDevelopment") || incrementer == "dev")
         def devPart = isDevelopment ? "dev.${newDev}-" : ""
         def newVersion = "${newMajor}.${newMinor}.${newPatch}-${devPart}$variant"
-        println ("New version is $newVersion")
-        // TODO put newVersion to file and tag on git
+        project.ext."nextVersion" = newVersion
+        println ("Next version is ${project.nextVersion}")
+    }
+}
+
+task bumpVersion {
+    dependsOn tasks.nextVersion
+    ext.firmwareVersionDefineLine = /#define FIRMWARE_VERSION\s+\"[^\s]+\"/
+    doLast {
+        def masterConfigFile = new File(masterConfigFilePath)
+        def masterConfigContent = masterConfigFile.text
+        def newMasterConfigContent = masterConfigContent.replaceFirst(firmwareVersionDefineLine, "#define FIRMWARE_VERSION    \"${nextVersion}\"")
+        masterConfigFile.write(newMasterConfigContent)
+        println "$masterConfigFilePath changed to:"
+        println newMasterConfigContent
     }
 }

@@ -27,3 +27,18 @@ jobs:
         displayName: 'Compile tests'
       - script: test/allTests
         displayName: "Run all tests"
+  - job: Release new version
+    dependsOn: ["Build", "Test"]
+    # variables: # these variables are settable at queue time (needs to be set in Azure DevOps)
+    #  version_incrementer: dev
+    #  start_development: "true"
+    pool:
+      vmImage: 'Ubuntu-16.04'
+    steps:
+      - script: |
+        if [ $START_DEVELOPMENT ] 
+        then 
+          START_DEVELOPMENT_FLAG="-PstartDevelopment"
+        fi
+        gradle bumpVersion -PversionIncrementer=$VERSION_INCREMENTER $START_DEVELOPMENT_FLAG
+        
