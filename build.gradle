@@ -10,7 +10,7 @@ task switchToWifi {
         newMasterConfigContent = newMasterConfigContent.replace("// ${wifiDefineLine}", wifiDefineLine)
         masterConfigFile.write(newMasterConfigContent)
         println "$masterConfigFilePath changed to:"
-        println $newMasterConfigContent
+        println newMasterConfigContent
     }
 }
 
@@ -23,7 +23,7 @@ task switchToEthernet {
         newMasterConfigContent = newMasterConfigContent.replace("// ${ethernetDefineLine}", ethernetDefineLine)
         masterConfigFile.write(newMasterConfigContent)
         println "$masterConfigFilePath changed to:"
-        println $newMasterConfigContent
+        println newMasterConfigContent
     }
 }
 
