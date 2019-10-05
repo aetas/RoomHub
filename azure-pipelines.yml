@@ -14,7 +14,7 @@ jobs:
         displayName: "Build ETHERNET"
       - script: |
           gradle switchToWifi
-          docker run --rm --name pio -v $PWD:/workspace aetas/platformio:4.0.3 run"
+          docker run --rm --name pio -v $PWD:/workspace aetas/platformio:4.0.3 run
         displayName: "Build WIFI"
   - job: Test
     pool:
