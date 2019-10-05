@@ -1,0 +1,28 @@
+ext.wifiDefineLine = "#define USE_WIFI"
+ext.ethernetDefineLine = "#define USE_ETHERNET"
+ext.masterConfigFilePath = "include/config/MasterConfig.hpp"
+
+task switchToWifi {
+    doLast {
+        def masterConfigFile = new File(masterConfigFilePath)
+        def masterConfigContent = masterConfigFile.text
+        def newMasterConfigContent = masterConfigContent.replace(ethernetDefineLine, "// ${ethernetDefineLine}")
+        newMasterConfigContent = newMasterConfigContent.replace("// ${wifiDefineLine}", wifiDefineLine)
+        masterConfigFile.write(newMasterConfigContent)
+        println "$masterConfigFilePath changed to:"
+        println newMasterConfigContent
+    }
+}
+
+
+task switchToEthernet {
+    doLast {
+        def masterConfigFile = new File(masterConfigFilePath)
+        def masterConfigContent = masterConfigFile.text
+        def newMasterConfigContent = masterConfigContent.replace(wifiDefineLine, "// ${wifiDefineLine}")
+        newMasterConfigContent = newMasterConfigContent.replace("// ${ethernetDefineLine}", ethernetDefineLine)
+        masterConfigFile.write(newMasterConfigContent)
+        println "$masterConfigFilePath changed to:"
+        println newMasterConfigContent
+    }
+}

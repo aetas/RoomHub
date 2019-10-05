@@ -1,16 +1,29 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'Ubuntu-16.04'
-
-steps:
-- script: g++ -v
-  displayName: 'Display g++ version'
-
-- script: |
-    g++ -g -std=gnu++11 test/main/test-main.o -o test/allTests -I ./include -I ./test/ArduinoMocks -I ./test/unit/mocks ./test/ArduinoMocks/*.c ./test/ArduinoMocks/*.cpp ./src/config/Configuration.cpp ./src/config/device/*.cpp ./src/device/*.cpp ./src/homie/*.cpp ./src/log/*.cpp ./src/mqtt/*.cpp ./src/httpserver/*.cpp ./test/unit/*.cpp
-  displayName: 'Compile tests'
-
-- script: test/allTests
-  displayName: "Run all tests"
+jobs:
+  - job: Build
+    pool:
+      vmImage: 'Ubuntu-16.04'
+    steps:
+      - script: "docker pull aetas/platformio:4.0.3"
+        displayName: "docker pull aetas/platformio:4.0.3"
+      - script: |
+          gradle switchToEthernet    
+          docker run --rm --name pio -v $PWD:/workspace aetas/platformio:4.0.3 run
+        displayName: "Build ETHERNET"
+      - script: |
+          gradle switchToWifi
+          docker run --rm --name pio -v $PWD:/workspace aetas/platformio:4.0.3 run
+        displayName: "Build WIFI"
+  - job: Test
+    pool:
+      vmImage: 'Ubuntu-16.04'
+    steps:
+      - script: g++ -v
+        displayName: 'Display g++ version'
+      - script: |
+          g++ -g -std=gnu++11 test/main/test-main.o -o test/allTests -I ./include -I ./test/ArduinoMocks -I ./test/unit/mocks ./test/ArduinoMocks/*.c ./test/ArduinoMocks/*.cpp ./src/config/Configuration.cpp ./src/config/device/*.cpp ./src/device/*.cpp ./src/homie/*.cpp ./src/log/*.cpp ./src/mqtt/*.cpp ./src/httpserver/*.cpp ./test/unit/*.cpp
+        displayName: 'Compile tests'
+      - script: test/allTests
+        displayName: "Run all tests"
