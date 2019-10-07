@@ -29,6 +29,7 @@ jobs:
         displayName: "Run all tests"
   - job: Release
     dependsOn: ["Build", "Test"]
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     # variables: # these variables are settable at queue time (needs to be set in Azure DevOps)
     #  version_incrementer: dev
     #  start_development: "true"
@@ -40,6 +41,6 @@ jobs:
           then 
             START_DEVELOPMENT_FLAG="-PstartDevelopment"
           fi
-          gradle bumpVersion -PversionIncrementer=$VERSION_INCREMENTER $START_DEVELOPMENT_FLAG
-        displayName: Change version
+          gradle release -PversionIncrementer=$VERSION_INCREMENTER $START_DEVELOPMENT_FLAG
+        displayName: Release new version
         

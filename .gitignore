@@ -7,6 +7,7 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .gradle
+build/
 
 test/allTests
 

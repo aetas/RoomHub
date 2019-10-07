@@ -1,9 +1,5 @@
 plugins {
-    id 'org.ajoberstar.git-publish' version '2.1.1'
-}
-
-gitPublish {
-     commitMessage = "Releasing version ${project.version}" 
+    id 'org.ajoberstar.grgit' version '4.0.0-rc.1'
 }
 
 ext.wifiDefineLine = "#define USE_WIFI"
@@ -109,4 +105,21 @@ task bumpVersion {
     }
 }
 
-// TODO git add and git commit of "include/config/MasterConfig.hpp"
+
+
+task publishNewVersion {
+    doLast {
+        grgit.tag.add {
+            name = "v${nextVersion}"
+            message = "Release of version ${nextVersion}"
+        }
+        grgit.add(patterns: ['include/config/MasterConfig.hpp'])
+        grgit.commit(message: "Releasing new version ${nextVersion}")
+        grgit.push(tags: true)
+    }
+}
+
+task release {}
+
+publishNewVersion.dependsOn bumpVersion
+release.dependsOn publishNewVersion
