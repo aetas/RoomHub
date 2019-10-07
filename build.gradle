@@ -100,3 +100,5 @@ task bumpVersion {
         println newMasterConfigContent
     }
 }
+
+// TODO git add and git commit of "include/config/MasterConfig.hpp"
