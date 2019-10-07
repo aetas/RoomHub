@@ -111,6 +111,7 @@ task publishNewVersion {
         grgit.add(patterns: ['include/config/MasterConfig.hpp'])
         grgit.commit(message: "Releasing new version ${nextVersion} [skip ci]")
         grgit.tag.add(name: "v${nextVersion}", message: "Release of version ${nextVersion}")
+        grgit.push()
         grgit.push(tags: true)
     }
 }
