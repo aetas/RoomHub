@@ -45,5 +45,7 @@ jobs:
             START_DEVELOPMENT_FLAG="-PstartDevelopment"
           fi
           gradle release -PversionIncrementer=$VERSION_INCREMENTER $START_DEVELOPMENT_FLAG
+        env:
+          GRGIT_USER: $(git.token)
         displayName: Release new version
         
