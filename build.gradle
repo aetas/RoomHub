@@ -105,16 +105,15 @@ task bumpVersion {
     }
 }
 
-
-
 task publishNewVersion {
     doLast {
         grgit.tag.add {
             name = "v${nextVersion}"
             message = "Release of version ${nextVersion}"
         }
+        grgit.checkout(branch: 'master')
         grgit.add(patterns: ['include/config/MasterConfig.hpp'])
-        grgit.commit(message: "Releasing new version ${nextVersion}")
+        grgit.commit(message: "Releasing new version ${nextVersion} [skip ci]")
         grgit.push(tags: true)
     }
 }

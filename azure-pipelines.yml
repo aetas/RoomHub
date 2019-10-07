@@ -3,6 +3,7 @@ trigger:
 
 jobs:
   - job: Build
+    condition: ne(variables['skipBuild'], 'true')
     pool:
       vmImage: 'Ubuntu-16.04'
     steps:
@@ -36,6 +37,8 @@ jobs:
     pool:
       vmImage: 'Ubuntu-16.04'
     steps:
+      - checkout: self
+        persistCredentials: true
       - script: |
           if [ $START_DEVELOPMENT ] 
           then 
