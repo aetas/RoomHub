@@ -102,12 +102,13 @@ HomieNodeProperty** HomieDeviceFactory::createHomieNodeProperties(DeviceConfig* 
 
 const uint8_t HomieDeviceFactory::propertiesNumber(DeviceConfig* node) {
     switch (node->getDeviceType()) {
-        case DeviceType::ANALOG_INPUT   : return 1;
-        case DeviceType::BME280         : return 2;
-        case DeviceType::DHT22          : return 2;
-        case DeviceType::DIGITAL_INPUT  : return 1;
-        case DeviceType::DIGITAL_OUTPUT : return 1;
-        case DeviceType::SCT013         : return 1;
+        case DeviceType::ANALOG_INPUT    : return 1;
+        case DeviceType::BME280          : return 2;
+        case DeviceType::DHT22           : return 2;
+        case DeviceType::DIGITAL_INPUT   : return 1;
+        case DeviceType::DIGITAL_OUTPUT  : return 1;
+        case DeviceType::SCT013          : return 1;
+        case DeviceType::EMULATED_SWITCH : return 1;
         default: return 0;
     }
 }
