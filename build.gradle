@@ -1,3 +1,7 @@
+plugins {
+    id 'org.ajoberstar.grgit' version '4.0.0-rc.1'
+}
+
 ext.wifiDefineLine = "#define USE_WIFI"
 ext.ethernetDefineLine = "#define USE_ETHERNET"
 ext.masterConfigFilePath = "include/config/MasterConfig.hpp"
@@ -26,3 +30,96 @@ task switchToEthernet {
         println newMasterConfigContent
     }
 }
+
+task nextVersion {
+    ext.firmwareVersionPattern = ~/(?s).*#define FIRMWARE_VERSION\s+"(?<version>[^\s]+)"(?s).*/
+    doLast {
+        def currentVersionMatcher = firmwareVersionPattern.matcher(new File(masterConfigFilePath).text)
+        currentVersionMatcher.matches()
+        def currentVersion = currentVersionMatcher.group("version")
+        println "currentVersion = $currentVersion"
+        // major.minor.patch-(dev.number)-variant
+        
+        def versionPattern = ~/(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)\-(?<dev>dev\.(?<devnumber>\d+)\-)?(?<variant>(WIFI|Ethernet))/
+        def detailedVersionMatcher = versionPattern.matcher(currentVersion)
+        detailedVersionMatcher.matches()
+        def currentMajor = detailedVersionMatcher.group("major")
+        def currentMinor = detailedVersionMatcher.group("minor")
+        def currentPatch = detailedVersionMatcher.group("patch")
+        def currentDev = detailedVersionMatcher.group("devnumber")
+        def variant = detailedVersionMatcher.group("variant")
+        def newMajor = currentMajor;
+        def newMinor = currentMinor;
+        def newPatch = currentPatch;
+        def newDev = currentDev;
+        def incrementer = project.versionIncrementer
+        def stableRelease = false
+        switch(incrementer) {
+            case "major":
+                newMajor = currentMajor.toInteger() + 1
+                newMinor = 0
+                newPatch = 0
+                newDev = 1
+                break
+            case "minor":
+                newMinor = currentMinor.toInteger() + 1
+                newPatch = 0
+                newDev = 1
+                break
+            case "patch":
+                newPatch = currentPatch.toInteger() + 1
+                newDev = 1
+                break
+            case "dev":
+                if (!currentDev) {
+                    throw new IllegalArgumentException("Cannot increment dev when no development has not been started first. " +
+                                                       "Add '-PstartDevelopment' and use incrementer 'major', 'minor' or 'patch'.")
+                }
+                newDev = currentDev.toInteger() + 1
+                break
+            case "stable":
+                stableRelease = true
+                if (project.hasProperty("startDevelopment")) {
+                    throw new IllegalArgumentException("Cannot do stable release and startDevelopment in the same time")
+                }
+                break;
+        }
+        def isDevelopment = (project.hasProperty("startDevelopment") || incrementer == "dev")
+        def devPart = isDevelopment ? "dev.${newDev}-" : ""
+        def newVersion = "${newMajor}.${newMinor}.${newPatch}-${devPart}$variant"
+        project.ext."nextVersion" = newVersion
+        println ("Next version is ${project.nextVersion}")
+    }
+}
+
+task bumpVersion {
+    dependsOn tasks.nextVersion
+    ext.firmwareVersionDefineLine = /#define FIRMWARE_VERSION\s+\"[^\s]+\"/
+    doLast {
+        def masterConfigFile = new File(masterConfigFilePath)
+        def masterConfigContent = masterConfigFile.text
+        def newMasterConfigContent = masterConfigContent.replaceFirst(firmwareVersionDefineLine, "#define FIRMWARE_VERSION    \"${nextVersion}\"")
+        masterConfigFile.write(newMasterConfigContent)
+        println "$masterConfigFilePath changed to:"
+        println newMasterConfigContent
+    }
+}
+
+
+
+task publishNewVersion {
+    doLast {
+        grgit.tag.add {
+            name = "v${nextVersion}"
+            message = "Release of version ${nextVersion}"
+        }
+        grgit.add(patterns: ['include/config/MasterConfig.hpp'])
+        grgit.commit(message: "Releasing new version ${nextVersion}")
+        grgit.push(tags: true)
+    }
+}
+
+task release {}
+
+publishNewVersion.dependsOn bumpVersion
+release.dependsOn publishNewVersion
