@@ -1,3 +1,11 @@
+plugins {
+    id 'org.ajoberstar.git-publish' version '2.1.1'
+}
+
+gitPublish {
+     commitMessage = "Releasing version ${project.version}" 
+}
+
 ext.wifiDefineLine = "#define USE_WIFI"
 ext.ethernetDefineLine = "#define USE_ETHERNET"
 ext.masterConfigFilePath = "include/config/MasterConfig.hpp"
