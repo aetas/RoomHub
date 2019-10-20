@@ -7,10 +7,10 @@ DigitalOutputDevice::~DigitalOutputDevice() {
 
 void DigitalOutputDevice::setProperty(const char* propertyName, const char* newValue) {
     if (strcmp("ON", newValue) == 0) {
-        digitalPin->digitalWrite(LOW);
+        digitalPin->digitalWrite(ACTION_STATE);
         notify("state", newValue);
     } else {
-        digitalPin->digitalWrite(HIGH);
+        digitalPin->digitalWrite(DEFAULT_STATE);
         notify("state", "OFF");
     }
 }

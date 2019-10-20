@@ -15,6 +15,11 @@ TEST_CASE("EmulatedSwitchDevice")
     SimpleUpdateListener* listener = new SimpleUpdateListener();
     device.setUpdateListener(listener);
 
+    SECTION("should set pin to HIGH state on start") {
+        //then
+        REQUIRE(pin->digitalRead() == HIGH);
+    }
+
     SECTION("should change pin state when changing state on device") {
         // given
         pin->digitalWrite(HIGH);

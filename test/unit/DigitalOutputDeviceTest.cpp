@@ -13,6 +13,11 @@ TEST_CASE("DigitalOutputDevice")
     FakeDigitalPin* pin = new FakeDigitalPin();
     DigitalOutputDevice device(1, pin);
 
+    SECTION("should set pin state to HIGH on start") {
+        //then
+        REQUIRE(pin->digitalRead() == HIGH);
+    }
+
     SECTION("should change pin state when changing state on device") {   
         // when
         device.setProperty("state", "OFF");

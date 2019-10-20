@@ -6,8 +6,13 @@
 class EmulatedSwitchDevice: public Device {
 
 public:
+
+    const uint8_t ACTION_STATE = LOW;
+    const uint8_t DEFAULT_STATE = HIGH;
+
     EmulatedSwitchDevice(const uint16_t _id, DigitalPin* _digitalPin): Device(_id, DeviceType::EMULATED_SWITCH), digitalPin(_digitalPin) {
         digitalPin->pinMode(OUTPUT);
+        digitalPin->digitalWrite(DEFAULT_STATE);
     };
 
     ~EmulatedSwitchDevice();
