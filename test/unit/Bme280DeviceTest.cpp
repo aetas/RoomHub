@@ -15,7 +15,7 @@ TEST_CASE("Bme280Device")
 
     SECTION("should notify about temperature, humidity and pressure when receiving new PJON message with values") {
         // when
-        PjonMessage pjonMessage = PjonMessage::fromString("VALUES;2296;5435;99241");
+        PjonMessage pjonMessage = PjonMessage::fromString("VALUES;2296;54355;99241");
         device.messageReceived(pjonMessage);
 
         // then
@@ -24,7 +24,7 @@ TEST_CASE("Bme280Device")
         uint32_t pressure = updateListener.receivedBigIntValues["pressure"];
 
         REQUIRE(temperature == 22.96f);
-        REQUIRE(humidity == 54.35f);
+        REQUIRE(humidity == 54.355f);
         REQUIRE(pressure == 99241);
 
     }
