@@ -40,10 +40,11 @@ void PjonBus::receiverFunctionForwarder(uint8_t *payload, uint16_t length, const
 }
 
 void PjonBus::receiverFunction(uint8_t *payload, uint16_t length, const PJON_Packet_Info &packet_info) {
-  Log.notice("New PJON message received");
+  // Log.trace(F("New PJON message received: " CR));
   char* message = new char[length];
   strcpy(message, (char*) payload);
   pjonListener.messageReceived(packet_info.sender_id, message, millis());
-  // Log.trace(message);
+  // Log.trace("from: %i | message: %s" CR, packet_info.sender_id, message);
+  
   delete[] message;
 };

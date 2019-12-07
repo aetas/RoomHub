@@ -13,7 +13,7 @@ void Bme280Device::messageReceived(PjonMessage& message) {
         const char** values = message.getValues();
 
         float temperature = atof(values[0]) / 100;
-        float humidity = atof(values[1]) / 100;
+        float humidity = atof(values[1]) / 1000;
         uint32_t pressure = atoi(values[2]);
 
         notify("temperature", temperature);

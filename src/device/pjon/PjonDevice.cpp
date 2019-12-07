@@ -37,7 +37,7 @@ void PjonDevice::handlePing(const uint32_t& now, uint32_t uptime) {
 }
  
 void PjonDevice::healthcheck(const uint32_t& now) {
-    if (now - lastMessageTime > PJON_MAX_MESSAGES_INTERVAL_MS) {
+    if (strcmp(currentState, STATE_LOST) != 0 && now - lastMessageTime > PJON_MAX_MESSAGES_INTERVAL_MS) {
         currentState = STATE_LOST;
         notify(PROPERTY_STATE, STATE_LOST);
     }
