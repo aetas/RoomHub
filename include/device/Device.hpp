@@ -17,8 +17,9 @@ public:
     
 protected:
     void notify(const char* propertyName, const char* value);
-    void notify(const char* propertyName, const uint8_t value);
-    void notify(const char* propertyName, const uint16_t value);
+    void notify(const char* propertyName, const uint8_t& value);
+    void notify(const char* propertyName, const uint32_t& value);
+    void notify(const char* propertyName, const float& value);
 
 private:
     const uint16_t id;

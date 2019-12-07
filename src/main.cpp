@@ -26,6 +26,11 @@
 #include "mqtt/MqttEventPublisher.hpp"
 #include "mqtt/MqttCommandReceiver.hpp"
 
+#if PJON_ENABLED == true
+#include "device/pjon/PjonBus.hpp"
+#include "device/pjon/PjonRegistry.hpp"
+#endif
+
 #include "stats/EspStatsData.hpp"
 
 #include "homie/HomieDeviceFactory.hpp"
@@ -40,6 +45,11 @@ DevicesRegistry* devicesRegistry;
 HomieDevice* homieDevice;
 
 MqttClient mqttClient;
+#if PJON_ENABLED == true
+PJON<SoftwareBitBang> pjon(PJON_DEVICE_ID);
+PjonRegistry pjonRegistry(PJON_MAX_NUMBER_OF_DEVICES);
+PjonBus pjonBus(pjon, pjonRegistry);
+#endif
 
 NetworkConnection networkConnection;
 
@@ -130,6 +140,10 @@ void setup() {
 
   setupComponents();
   // Log.trace(F("Components set up" CR));
+  #if PJON_ENABLED == true
+  pjonBus.begin(PJON_PIN);
+  // Log.trace(F("PjonBus initialized" CR));
+  #endif
   
   ExpanderPinProvider& pinProvider = ExpanderPinProvider::getInstance(expanders, &mux, MUX_COMMON_PIN);
   // Log.trace(F("PinProvider prepared" CR));
@@ -140,7 +154,13 @@ void setup() {
   uint8_t numberOfDevices = config.getNumberOfDevices();
   devicesRegistry = new DevicesRegistry(config.getNumberOfDevices());
   for(int i = 0; i < numberOfDevices; i++) {
-    devicesRegistry->add(deviceFactory.create(*devicesConfig[i]));
+    Device* device = deviceFactory.create(*devicesConfig[i]);
+    devicesRegistry->add(device);
+    #if PJON_ENABLED == true
+    if (devicesConfig[i]->isPjonDevice()) {
+      pjonRegistry.addDevice(static_cast<PjonDevice*>(device));
+    }
+    #endif
   }
  
   mqttClient.begin(config.getMqttHostname(), MQTT_PORT, networkConnection.getClient());
@@ -176,5 +196,8 @@ void loop() {
   #ifdef LOG_MQTT_ENABLED
   mqttLogger->loop(now);
   #endif
-  
+
+  #if PJON_ENABLED == true
+  pjonBus.loop(now);
+  #endif
 }

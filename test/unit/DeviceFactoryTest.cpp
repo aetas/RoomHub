@@ -1,6 +1,7 @@
 #include "../main/catch.hpp"
 #include "device/DeviceFactory.hpp"
 #include "mocks/FakePinProvider.hpp"
+#include "device/pjon/PjonDevice.hpp"
 
 #include <typeinfo>
 #include <iostream>
@@ -85,4 +86,16 @@ TEST_CASE("DeviceFactory creates Device from DeviceConfiguration")
       REQUIRE(device->getType() == DeviceType::EMULATED_SWITCH);
    }
 
+   SECTION("should create Bme280Device when BME280 DeviceConfig given") {
+      // given
+      DeviceConfig emulatedSwitchDeviceConfig(11, "BME280", DeviceType::BME280, 4, WireColor::BROWN_WHITE, 0, 140);
+
+      // when
+      PjonDevice* device = static_cast<PjonDevice*>(deviceFactory.create(emulatedSwitchDeviceConfig));
+
+      // then
+      REQUIRE(device->getId() == 11);
+      REQUIRE(device->getType() == DeviceType::BME280);
+      REQUIRE(device->getPjonId() == 140);
+   }
 }

@@ -15,18 +15,24 @@ void Device::setUpdateListener(UpdateListener* _listener) {
 
 void Device::notify(const char* propertyName, const char* value) {
     if (updateListener != nullptr) {
-        updateListener->valueUpdated(getId(), "state", value);
+        updateListener->valueUpdated(getId(), propertyName, value);
     }
 }
 
-void Device::notify(const char* propertyName, const uint8_t value) {
+void Device::notify(const char* propertyName, const uint8_t& value) {
     if (updateListener != nullptr) {
-        updateListener->valueUpdated(getId(), "state", value);
+        updateListener->valueUpdated(getId(), propertyName, value);
     }
 }
 
-void Device::notify(const char* propertyName, const uint16_t value) {
+void Device::notify(const char* propertyName, const uint32_t& value) {
     if (updateListener != nullptr) {
-        updateListener->valueUpdated(getId(), "state", value);
+        updateListener->valueUpdated(getId(), propertyName, value);
+    }
+}
+
+void Device::notify(const char* propertyName, const float& value) {
+    if (updateListener != nullptr) {
+        updateListener->valueUpdated(getId(), propertyName, value);
     }
 }

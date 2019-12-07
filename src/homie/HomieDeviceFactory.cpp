@@ -63,9 +63,12 @@ HomieNodeProperty** HomieDeviceFactory::createHomieNodeProperties(DeviceConfig* 
     return properties;
   }
   if(node->getDeviceType() == DeviceType::BME280) {
-    HomieNodeProperty** properties = new HomieNodeProperty*[2];
+    HomieNodeProperty** properties = new HomieNodeProperty*[5];
     properties[0] = new HomieNodeProperty("temperature", false, true, PropertyUnit::CELSIUS, PropertyDataType::FLOAT, "");
     properties[1] = new HomieNodeProperty("humidity", false, true, PropertyUnit::PERCENT, PropertyDataType::FLOAT, "");
+    properties[2] = new HomieNodeProperty("pressure", false, true, PropertyUnit::PASCAL, PropertyDataType::INTEGER, "");
+    properties[3] = new HomieNodeProperty("uptime", false, false, PropertyUnit::NONE, PropertyDataType::INTEGER, "");
+    properties[4] = new HomieNodeProperty("state", false, true, PropertyUnit::NONE, PropertyDataType::ENUM, "starting,ready,lost");
     return properties;
   }
   if(node->getDeviceType() == DeviceType::DHT22) {
@@ -103,7 +106,7 @@ HomieNodeProperty** HomieDeviceFactory::createHomieNodeProperties(DeviceConfig* 
 const uint8_t HomieDeviceFactory::propertiesNumber(DeviceConfig* node) {
     switch (node->getDeviceType()) {
         case DeviceType::ANALOG_INPUT    : return 1;
-        case DeviceType::BME280          : return 2;
+        case DeviceType::BME280          : return 5;
         case DeviceType::DHT22           : return 2;
         case DeviceType::DIGITAL_INPUT   : return 1;
         case DeviceType::DIGITAL_OUTPUT  : return 1;

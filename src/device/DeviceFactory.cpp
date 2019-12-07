@@ -1,3 +1,4 @@
+#include <ArduinoLog.h>
 #include "device/DeviceFactory.hpp"
 #include "device/DigitalInputDevice.hpp"
 #include "device/DigitalOutputDevice.hpp"
@@ -5,6 +6,8 @@
 #include "device/Dht22Device.hpp"
 #include "device/Sct013Device.hpp"
 #include "device/EmulatedSwitchDevice.hpp"
+#include "device/Bme280Device.hpp"
+#include "config/MasterConfig.hpp"
 
 
 DeviceFactory& DeviceFactory::getInstance(PinProvider& _pinProvider) {
@@ -50,7 +53,18 @@ Device* DeviceFactory::create(DeviceConfig& deviceConfig) {
             DigitalPin* digitalPin = pinProvider.digitalPin(deviceConfig.getPortNumber(), deviceConfig.getWireColor());
             return new EmulatedSwitchDevice(deviceConfig.getId(), digitalPin);
         }
-    }
-    
 
+        #if PJON_ENABLED == true
+        case DeviceType::BME280: 
+        {
+            // Log.trace(F("BME280 device created" CR));
+            return new Bme280Device(deviceConfig.getId(), deviceConfig.getPjonId());
+        }
+        #endif
+        
+        default: {
+            Log.error(F("Unknown device type with id: %d. Check PJON_ENABLED." CR), deviceConfig.getId());
+            throw;
+        }
+    }
 }

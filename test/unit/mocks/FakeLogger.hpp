@@ -11,6 +11,7 @@ class FakeLogger : public Print {
 public:
     virtual size_t write(uint8_t character) {
         buffer += character;
+        return 0;
     };
     string getLogs() {
         return buffer;

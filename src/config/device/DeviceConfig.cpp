@@ -1,12 +1,13 @@
 #include "config/device/DeviceConfig.hpp"
 
-DeviceConfig::DeviceConfig(uint8_t _id, const char* _name, DeviceType _type, uint8_t _portNumber, WireColor _wire, uint16_t _debounceMs):
+DeviceConfig::DeviceConfig(uint8_t _id, const char* _name, DeviceType _type, uint8_t _portNumber, WireColor _wire, uint16_t _debounceMs, uint8_t _pjonId):
     id(_id), 
     name(_name),
     type(_type),
     portNumber(_portNumber),
     wire(_wire),
-    debounceMs(_debounceMs) {}
+    debounceMs(_debounceMs),
+    pjonId(_pjonId) {}
 
 DeviceConfig::~DeviceConfig() {
 
@@ -34,6 +35,17 @@ const WireColor DeviceConfig::getWireColor() {
 
 const uint16_t DeviceConfig::getDebounceMs() {
     return debounceMs;
+}
+
+const uint8_t DeviceConfig::getPjonId() {
+    return pjonId;
+}
+
+bool DeviceConfig::isPjonDevice() {
+    switch(getDeviceType()) {
+        case DeviceType::BME280 : return true;
+        default: return false;
+    }
 }
 
 const char* DeviceConfig::deviceTypeToString(DeviceType deviceType) {

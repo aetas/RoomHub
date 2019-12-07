@@ -11,8 +11,9 @@ public:
     MqttEventPublisher(MqttEventPublisher const&) = delete;
     void operator=(MqttEventPublisher const&) = delete;
 
-    void valueUpdated(const uint8_t deviceId, const char* propertyName, const uint8_t newValue);
-    void valueUpdated(const uint8_t deviceId, const char* propertyName, const uint16_t newValue);
+    void valueUpdated(const uint8_t deviceId, const char* propertyName, const uint8_t& newValue);
+    void valueUpdated(const uint8_t deviceId, const char* propertyName, const uint32_t& newValue);
+    void valueUpdated(const uint8_t deviceId, const char* propertyName, const float& newValue);
     void valueUpdated(const uint8_t deviceId, const char* propertyName, const char* newValue);
 
 private:

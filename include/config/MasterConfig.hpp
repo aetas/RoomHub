@@ -47,3 +47,9 @@
 #define EXTRA_BUTTON_NETWORK_RESET_PIN              14
 #define EXTRA_BUTTON_NETWORK_RESET_TIME_TO_RESET_MS 5000
 
+
+// -- PJON -----------------------------------------
+#define PJON_ENABLED                true
+#define PJON_PIN                    25
+#define PJON_DEVICE_ID              254
+#define PJON_MAX_NUMBER_OF_DEVICES  16

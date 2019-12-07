@@ -33,8 +33,8 @@ TEST_CASE("Configuration")
         // given
         configurationStorage.storeName("Some RoomHub Name");
         configurationStorage.storeMqttHostname("192.168.144.145");
-        configurationStorage.storeDeviceConfig("1.0;101;switch_1;1;1;3;50");
-        configurationStorage.storeDeviceConfig("1.0;102;relay 123;2;2;4;150");
+        configurationStorage.storeDeviceConfig("1.0;101;switch_1;1;1;3;50;0");
+        configurationStorage.storeDeviceConfig("1.0;102;relay 123;2;2;4;150;0");
 
         // when
         configuration.loadConfiguration(configurationStorage, configurationServer);

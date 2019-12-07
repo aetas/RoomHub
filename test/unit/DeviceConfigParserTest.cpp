@@ -13,7 +13,7 @@ TEST_CASE("DeviceConfigParser")
     SECTION("should parse semicolon-separated-values to DeviceConfig") {
         // given:
         // version;id;name;type_int;port;wire_color_int;debounce
-        const char* line = "1.0;103;test device name;2;16;4;100";
+        const char* line = "1.0;103;test device name;2;16;4;100;45";
         
         // when
         DeviceConfig* device = parser.parse(line);
@@ -26,12 +26,13 @@ TEST_CASE("DeviceConfigParser")
         REQUIRE(device->getPortNumber() == 16);
         REQUIRE(device->getWireColor() == WireColor::BLUE);
         REQUIRE(device->getDebounceMs() == 100);
+        REQUIRE(device->getPjonId() == 45);
     }
 
     SECTION("should return null if version is not supported (1.0 for now)") {
         // given:
         // version;id;name;type_int;port;wire_color_int;debounce
-        const char* line = "2.0;103;test device name;2;16;4;100";
+        const char* line = "2.0;103;test device name;2;16;4;100;44";
 
         // when
         DeviceConfig* device = parser.parse(line);

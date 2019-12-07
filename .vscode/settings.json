@@ -2,5 +2,8 @@
     "catch2TestExplorer.executables": "test/allTests",
     "catch2TestExplorer.logpanel": true,
     "catch2TestExplorer.logfile": "test-explorer",
-    "C_Cpp.intelliSenseEngineFallback": "Enabled"
+    "C_Cpp.intelliSenseEngineFallback": "Enabled",
+    "cSpell.words": [
+        "pjon"
+    ]
 }
