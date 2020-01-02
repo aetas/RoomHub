@@ -11,6 +11,8 @@ jobs:
 - job: deploy_documentation
   displayName: Deploy documentation
   steps:
+  - checkout: self
+    persistCredentials: true
   - bash: |
       cd docs/docker
       docker build -t mkdocs . 
@@ -21,7 +23,7 @@ jobs:
     displayName: Configure Git user
   - bash: |
       cd $(Build.SourcesDirectory)
-      git remote set-url origin https://$GITHUB_PAT@github.com/aetas/RoomHub.git 
+      # git remote set-url origin https://$GITHUB_PAT@github.com/aetas/RoomHub.git 
       docker run --rm --name mkdocs \
         -v $PWD:/doc \
         mkdocs gh-deploy -f docs/mkdocs.yml
