@@ -8,7 +8,7 @@ trigger:
 
 
 jobs:
-- job: deploy-documentation
+- job: deploy_documentation
   displayName: Deploy documentation
   steps:
   - bash: |
