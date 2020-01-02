@@ -1,0 +1,26 @@
+trigger:
+  branches:
+    include:
+    - master
+  paths:
+    include:
+    - docs/*    
+
+
+jobs:
+- job: deploy-documentation
+  displayName: Deploy documentation
+  steps:
+  - bash: |
+      cd docs/docker
+      docker build -t mkdocs . 
+  - bash: |
+      git config --global user.email "ci@aetas.pl"
+      git config --global user.name "CI"
+  - bash: |
+      cd $(Build.SourcesDirectory)
+      git remote set-url origin https://$GITHUB_PAT@github.com/aetas/RoomHub.git 
+      docker run --rm --name mkdocs \
+        -v $PWD:/doc \
+        mkdocs gh-deploy gh-deploy -f docs/mkdocs.yml
+    
