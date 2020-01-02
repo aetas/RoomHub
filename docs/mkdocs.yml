@@ -1,0 +1,21 @@
+site_name: RoomHub 3
+theme:
+  name: "material"
+nav:
+- Home: 'index.md'
+- Quick Start: 'user-guide/quick-start.md'
+- User Guide:
+  - 'Naming convention': 'user-guide/naming-convention.md'
+  - 'Wiring': 'user-guide/wiring.md'
+  - 'Supported devices': 'user-guide/supported-devices.md'
+  - 'Configuration': 'user-guide/configuration.md'
+  - 'Communication': 'user-guide/communication.md'
+  - 'Logging': 'user-guide/logging.md'
+  - 'Troubleshooting': 'user-guide/troubleshooting.md'
+- Hardware:
+  - 'Components': 'hardware/components.md'
+  - 'Board layout': 'hardware/board-layout.md'
+markdown_extensions:
+  - admonition
+  - attr_list
+  - codehilite
