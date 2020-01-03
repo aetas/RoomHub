@@ -4,7 +4,7 @@
 // -- Basic ---------------------------------------
 
 #define FIRMWARE_NAME       "Aetas RoomHub"
-#define FIRMWARE_VERSION    "3.1.0-dev.17-WIFI"
+#define FIRMWARE_VERSION    "3.1.0-dev.18-WIFI"
 
 
 // -- Network --------------------------------------
