@@ -15,7 +15,10 @@ nav:
 - Hardware:
   - 'Components': 'hardware/components.md'
   - 'Board layout': 'hardware/board-layout.md'
+- Advanced topics:
+  - 'Raw configuration': 'advanced/configuration-raw.md'
 markdown_extensions:
   - admonition
   - attr_list
   - codehilite
+  - pymdownx.superfences
