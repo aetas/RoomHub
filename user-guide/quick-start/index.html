@@ -385,6 +385,42 @@
   </li>
 
     
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Advanced topics
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Advanced topics
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../advanced/configuration-raw/" title="Raw configuration" class="md-nav__link">
+      Raw configuration
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
   </ul>
 </nav>
                   </div>
@@ -463,17 +499,14 @@
 <li>Connect RoomHub to power supply (make sure it is not connected to USB)</li>
 <li>Keep button 1 pressed on RoomHub and restart it by pressing "EN" button on ESP32 (keep button 1 pressed until blue LED will blink 3 times - around 5 seconds)</li>
 <li>
-<p>Use <a href="https://play.google.com/store/apps/details?id=com.cmmakerclub.iot.esptouch&amp;hl=en">ESP8266 SmartConfig</a> (on Android) or <a href="https://apps.apple.com/us/app/espressif-esptouch/id1071176700">EspTouch</a> (on iOS) to connect RoomHub to your WiFi network</p>
+<p>Use EspTouch to connect RoomHub to your WiFi network (<a href="https://play.google.com/store/apps/details?id=com.khoazero123.iot_esptouch_demo">Google Play</a> or <a href="https://apps.apple.com/us/app/espressif-esptouch/id1071176700">Apple Store</a>) - <a href="../configuration/#wifi-configuration">more</a></p>
 <ol>
 <li>connect with your phone to the WiFi network you want RoomHub to be connected</li>
 <li>Put your WiFi password in the application </li>
 <li>Press "Confirm" in the app</li>
-<li>After some time you should get information about successful connection and IP address assigned to RoomHub (save this IP for later)</li>
+<li>After around 30 seconds you should get success message with IP address of RoomHub - store this IP address for later</li>
 </ol>
-<p>[TODO: add photo with buttons to press shown and powers supply port]
-[TODO: add screenshots from mobile apps]</p>
 </li>
-<li></li>
 <li>
 <p>Prepare UTP cable with plug on one side (according to standard T568B)
 <a href="../images/T568B.png"><img alt="cable termination" src="../images/T568B.png" style="height:150px; display: block; margin: 0 auto;transform: rotate(90deg)" /></a></p>
@@ -493,8 +526,8 @@
 <li>[TODO: photo with cable plugged into port 1]</li>
 </ul>
 </li>
-<li>Prepare configuration file in YAML - look into comments to find out which value to change<br></li>
-</ol>
+<li>
+<p>Prepare configuration file in YAML - look into comments to find out which value to change<br>
 <div class="codehilite"><pre><span></span><span class="nt">configVersion</span><span class="p">:</span> <span class="s">&quot;3.0&quot;</span>
 <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;TestRoomHub&quot;</span>
 <span class="nt">destinationIpAddress</span><span class="p">:</span> <span class="s">&quot;192.168.1.66&quot;</span> <span class="c1"># IP of RoomHub (see point 1.)</span>
@@ -513,13 +546,13 @@
             <span class="nt">wires</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;BLUE&quot;</span><span class="p p-Indicator">]</span>
             <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">RELAY</span>
 </pre></div>
-
-
-<p><br>
+<br>
 For more details on configuration files see <a href="../configuration/#configuration-with-roomhub-configurator">Configuration with RoomHub Configurator</a>
 [TODO: add information which values to change and how]</p>
-<ol>
-<li>Apply configuration with configurator</li>
+</li>
+<li>
+<p>Apply configuration with configurator</p>
+</li>
 <li>Download latest version of RoomHub Configurator from <a href="https://github.com/aetas/RoomHubConfigurator/releases">GitHub release page</a></li>
 <li>
 <p>Run Configurator CLI with command </p>
@@ -529,14 +562,12 @@ For more details on configuration files see <a href="../configuration/#configura
 </ul>
 </li>
 <li>
-<p>Try to send MQTT message to RoomHub to turn switch relay</p>
-</li>
-</ol>
+<p>Try to send MQTT message to RoomHub to turn switch relay
 <div class="codehilite"><pre><span></span>
 </pre></div>
-
-
-<p>[TODO: more points?]</p>
+[TODO: more points?]</p>
+</li>
+</ol>
 <p>[TODO: go through points with device and check that everything is described - ask Piotr or Ania to do that]</p>
                 
                   
