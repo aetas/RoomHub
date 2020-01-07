@@ -218,6 +218,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    What's next?
+  </a>
+  
+</li>
+      
       
       
       
@@ -453,6 +460,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#whats-next" class="md-nav__link">
+    What's next?
+  </a>
+  
+</li>
+      
       
       
       
@@ -476,20 +490,19 @@
 <p class="admonition-title">Info</p>
 <p>This quick start guide assumes you have RoomHub hardware ready. If you are looking for how to prepare the hardware - look into <a href="../../hardware/board-layout/">hardware section</a>.</p>
 </div>
-<p>Quick start guide shows how to connect relay module and configure to work with it RoomHub. Connecting other types of devices is similar and can be done with the same steps.  </p>
+<p>Quick start guide shows how to connect relay module and configure RoomHub to control it. Connecting other types of devices is similar and can be done with the similar steps.  </p>
 <h2 id="what-do-you-need">What do you need</h2>
 <ul>
 <li>Assembled Aetas RoomHub 3</li>
-<li><a href="https://platformio.org/">PlatformIO</a> installed</li>
+<li><a href="https://platformio.org/">PlatformIO</a> installed (if your RoomHub doesn't have firmware installed)</li>
 <li>WiFi network</li>
 <li>Mobile phone (Android or iOS)</li>
-<li>Running MQTT broker (e.g. Mosquitto)</li>
+<li>Running MQTT broker (e.g. <a href="https://mosquitto.org/">Mosquitto</a>)</li>
 <li>MQTT client installed on your computer (e.g. <a href="https://github.com/mqttjs/MQTT.js#readme">MQTT.js</a>)</li>
 <li>UTP cable</li>
 <li>relay module</li>
 </ul>
 <h2 id="connect-and-configure-device">Connect and configure device</h2>
-<p>[TODO: this is only template add all needed elements and polish it]</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Make sure RoomHub is never connected to power supply and USB port at the same time. This will destroy the device and may damage your computer.</p>
@@ -497,11 +510,11 @@
 <ol>
 <li>Install RoomHub firmware (see <a href="https://github.com/aetas/roomhub#installation">instruction</a>)</li>
 <li>Connect RoomHub to power supply (make sure it is not connected to USB)</li>
-<li>Keep button 1 pressed on RoomHub and restart it by pressing "EN" button on ESP32 (keep button 1 pressed until blue LED will blink 3 times - around 5 seconds)</li>
+<li>Keep button 1 pressed on RoomHub and restart it by pressing "EN" button on ESP32 (keep button 1 pressed until blue LED will blink 3 times - around 5 seconds) [TODO: add link to RoomHub schema with button 1 shown]</li>
 <li>
 <p>Use EspTouch to connect RoomHub to your WiFi network (<a href="https://play.google.com/store/apps/details?id=com.khoazero123.iot_esptouch_demo">Google Play</a> or <a href="https://apps.apple.com/us/app/espressif-esptouch/id1071176700">Apple Store</a>) - <a href="../configuration/#wifi-configuration">more</a></p>
 <ol>
-<li>connect with your phone to the WiFi network you want RoomHub to be connected</li>
+<li>Connect your phone to the WiFi network you want RoomHub to be connected to</li>
 <li>Put your WiFi password in the application </li>
 <li>Press "Confirm" in the app</li>
 <li>After around 30 seconds you should get success message with IP address of RoomHub - store this IP address for later</li>
@@ -530,8 +543,8 @@
 <p>Prepare configuration file in YAML - look into comments to find out which value to change<br>
 <div class="codehilite"><pre><span></span><span class="nt">configVersion</span><span class="p">:</span> <span class="s">&quot;3.0&quot;</span>
 <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;TestRoomHub&quot;</span>
-<span class="nt">destinationIpAddress</span><span class="p">:</span> <span class="s">&quot;192.168.1.66&quot;</span> <span class="c1"># IP of RoomHub (see point 1.)</span>
-<span class="nt">mqttHostname</span><span class="p">:</span> <span class="s">&quot;192.168.1.52&quot;</span> <span class="c1"># IP of your MQTT broker</span>
+<span class="nt">destinationIpAddress</span><span class="p">:</span> <span class="s">&quot;192.168.1.66&quot;</span> <span class="c1"># set IP of RoomHub (see point 4.d.)</span>
+<span class="nt">mqttHostname</span><span class="p">:</span> <span class="s">&quot;192.168.1.52&quot;</span> <span class="c1"># set IP of your MQTT broker</span>
 <span class="nt">network</span><span class="p">:</span> <span class="c1"># only for Ethernet - leave as it is for WiFi connection</span>
   <span class="nt">macAddress</span><span class="p">:</span> <span class="s">&quot;6D:CB:54:AD:E9:93&quot;</span>
   <span class="nt">ipAddress</span><span class="p">:</span> <span class="s">&quot;0.0.0.0&quot;</span>
@@ -547,27 +560,53 @@
             <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">RELAY</span>
 </pre></div>
 <br>
-For more details on configuration files see <a href="../configuration/#configuration-with-roomhub-configurator">Configuration with RoomHub Configurator</a>
-[TODO: add information which values to change and how]</p>
+For more details on configuration files see <a href="../configuration/#roomhub-configuration-file">configuration page</a>.</p>
 </li>
 <li>
 <p>Apply configuration with configurator</p>
-</li>
-<li>Download latest version of RoomHub Configurator from <a href="https://github.com/aetas/RoomHubConfigurator/releases">GitHub release page</a></li>
+<ul>
+<li>Download latest version of RoomHub Configurator for <a href="https://github.com/aetas/RoomHubConfigurator/releases/download/release-0.1.0-alpha.20/room-hub-configurator-0.1.0-alpha.20-linux.zip">Linux</a>, <a href="https://github.com/aetas/RoomHubConfigurator/releases/download/release-0.1.0-alpha.20/room-hub-configurator-0.1.0-alpha.20-mac.zip">MacOS</a> or <a href="https://github.com/aetas/RoomHubConfigurator/releases/download/release-0.1.0-alpha.20/room-hub-configurator-0.1.0-alpha.20-win.zip">Windows</a></li>
+<li>Extract archive</li>
 <li>
 <p>Run Configurator CLI with command </p>
-<ul>
-<li>on Linux/MacOS <code>./rhc workshop.roomhub.yml</code></li>
-<li>on Windows <code>rhc.bat workshop.roomhub.yml</code></li>
+<div class="superfences-tabs">
+<input name="__tabs_1" type="radio" id="__tab_1_0" checked="checked" />
+<label for="__tab_1_0">Linux</label>
+<div class="superfences-content"><div class="codehilite"><pre><span></span>bin/room-hub-configurator your-file.roomhub.yml
+</pre></div></div>
+<input name="__tabs_1" type="radio" id="__tab_1_1" />
+<label for="__tab_1_1">MacOS</label>
+<div class="superfences-content"><div class="codehilite"><pre><span></span>bin/room-hub-configurator your-file.roomhub.yml
+</pre></div></div>
+<input name="__tabs_1" type="radio" id="__tab_1_2" />
+<label for="__tab_1_2">Windows</label>
+<div class="superfences-content"><div class="codehilite"><pre><span></span>bin/room-hub-configurator.bat your-file.roomhub.yml
+</pre></div></div>
+</div>
+</li>
 </ul>
 </li>
 <li>
-<p>Try to send MQTT message to RoomHub to turn switch relay
-<div class="codehilite"><pre><span></span>
+<p>Subscribe to MQTT topic to see device has been initialized (replace IP address with your MQTT broker address)
+  <div class="codehilite"><pre><span></span>mqtt sub -t <span class="s1">&#39;homie/TestRoomHub/#&#39;</span> -h <span class="s1">&#39;192.168.1.52&#39;</span> -v
 </pre></div>
-[TODO: more points?]</p>
+  <details>
+    <summary>Sample output</summary>
+    [TODO: add proper output after subscribing]
+  </details></p>
+</li>
+<li>
+<p>Send MQTT message to switch relay state (replace IP address with your MQTT broker address)
+  <div class="codehilite"><pre><span></span>mqtt pub -t <span class="s1">&#39;homie/TestRoomHub/1/state/set&#39;</span> -h <span class="s1">&#39;192.168.1.52&#39;</span> -m <span class="s1">&#39;ON&#39;</span>
+</pre></div></p>
 </li>
 </ol>
+<p>Congratulation! You have just configured your first device on RoomHub.</p>
+<h2 id="whats-next">What's next?</h2>
+<ul>
+<li><a href="../naming-convention">Read full user guide starting with naming conventions</a></li>
+<li><a href="../supported-devices">Find out all supported devices</a></li>
+</ul>
 <p>[TODO: go through points with device and check that everything is described - ask Piotr or Ania to do that]</p>
                 
                   

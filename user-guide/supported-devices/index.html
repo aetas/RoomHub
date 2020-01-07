@@ -270,43 +270,43 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#relay-module-relay" class="md-nav__link">
-    Relay module (RELAY)
+  <a href="#relay-module" class="md-nav__link">
+    Relay module
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#switch-button-switch_button" class="md-nav__link">
-    Switch button (SWITCH_BUTTON)
+  <a href="#switch-button" class="md-nav__link">
+    Switch button
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#emulated-switch-emulated_switch" class="md-nav__link">
-    Emulated switch (EMULATED_SWITCH)
+  <a href="#emulated-switch" class="md-nav__link">
+    Emulated switch
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#motion-detector-motion_detector" class="md-nav__link">
-    Motion detector (MOTION_DETECTOR)
+  <a href="#motion-detector" class="md-nav__link">
+    Motion detector
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#digital-input-digital_input" class="md-nav__link">
-    Digital input (DIGITAL_INPUT)
+  <a href="#digital-input" class="md-nav__link">
+    Digital input
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#digital-output-digital_output" class="md-nav__link">
-    Digital output (DIGITAL_OUTPUT)
+  <a href="#digital-output" class="md-nav__link">
+    Digital output
   </a>
   
 </li>
@@ -325,8 +325,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sct013-sct013" class="md-nav__link">
-    SCT013 (SCT013)
+  <a href="#sct013" class="md-nav__link">
+    SCT013
   </a>
   
 </li>
@@ -345,8 +345,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bme280-bme280-github-issue-6" class="md-nav__link">
-    BME280 (BME280) GitHub issue #6
+  <a href="#bme280" class="md-nav__link">
+    BME280
   </a>
   
 </li>
@@ -551,43 +551,43 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#relay-module-relay" class="md-nav__link">
-    Relay module (RELAY)
+  <a href="#relay-module" class="md-nav__link">
+    Relay module
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#switch-button-switch_button" class="md-nav__link">
-    Switch button (SWITCH_BUTTON)
+  <a href="#switch-button" class="md-nav__link">
+    Switch button
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#emulated-switch-emulated_switch" class="md-nav__link">
-    Emulated switch (EMULATED_SWITCH)
+  <a href="#emulated-switch" class="md-nav__link">
+    Emulated switch
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#motion-detector-motion_detector" class="md-nav__link">
-    Motion detector (MOTION_DETECTOR)
+  <a href="#motion-detector" class="md-nav__link">
+    Motion detector
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#digital-input-digital_input" class="md-nav__link">
-    Digital input (DIGITAL_INPUT)
+  <a href="#digital-input" class="md-nav__link">
+    Digital input
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#digital-output-digital_output" class="md-nav__link">
-    Digital output (DIGITAL_OUTPUT)
+  <a href="#digital-output" class="md-nav__link">
+    Digital output
   </a>
   
 </li>
@@ -606,8 +606,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sct013-sct013" class="md-nav__link">
-    SCT013 (SCT013)
+  <a href="#sct013" class="md-nav__link">
+    SCT013
   </a>
   
 </li>
@@ -626,8 +626,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#bme280-bme280-github-issue-6" class="md-nav__link">
-    BME280 (BME280) GitHub issue #6
+  <a href="#bme280" class="md-nav__link">
+    BME280
   </a>
   
 </li>
@@ -679,59 +679,83 @@
                 <p>This is a list of devices currently supported by RoomHub. That means you can connect device either with digital, analog or PJON connection to RoomHub and configure it with RoomHub Configurator.</p>
 <p>All supported devices need to be compatible with 5V power supply.</p>
 <p>The name in the parenthesis in the header is used in configuration </p>
+<p>[TODO: add configuration examples to each device]</p>
 <h3 id="digital-devices">Digital devices</h3>
-<h4 id="relay-module-relay">Relay module (<code>RELAY</code>)</h4>
+<h4 id="relay-module">Relay module</h4>
 <p>Relay module which allows to control turning on/off electrical devices and lights. Controlled with LOW signal.</p>
 <ul>
-<li>Additional configuration: NONE</li>
+<li>configuration type: <code>RELAY</code></li>
+<li>additional configuration: NONE</li>
 </ul>
-<h4 id="switch-button-switch_button">Switch button (<code>SWITCH_BUTTON</code>)</h4>
+<details>
+  <summary>Example configuration</summary>
+  <div class="codehilite"><pre><span></span><span class="p p-Indicator">[</span><span class="nv">...</span><span class="p p-Indicator">]</span>
+<span class="nt">rooms</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;workshop&quot;</span>
+  <span class="nt">points</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;point</span><span class="nv"> </span><span class="s">with</span><span class="nv"> </span><span class="s">relay&quot;</span>
+    <span class="nt">portNumber</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+    <span class="nt">devices</span><span class="p">:</span>
+    <span class="p p-Indicator">-</span> <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;relay</span><span class="nv"> </span><span class="s">name&quot;</span>
+      <span class="nt">id</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+      <span class="nt">wires</span><span class="p">:</span> <span class="p p-Indicator">[</span><span class="s">&quot;BLUE&quot;</span><span class="p p-Indicator">]</span>
+      <span class="nt">type</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">RELAY</span>
+</pre></div>
+</details>
+
+<h4 id="switch-button">Switch button</h4>
 <p>Switch button or push button.</p>
 <ul>
-<li>Additional configuration: <ul>
+<li>configuration type: <code>SWITCH_BUTTON</code></li>
+<li>additional configuration: <ul>
 <li><code>debounceMs</code> [default: 0] - number of milliseconds for debounce (helps to avoid flickering)</li>
 </ul>
 </li>
 </ul>
-<h4 id="emulated-switch-emulated_switch">Emulated switch (<code>EMULATED_SWITCH</code>)</h4>
+<h4 id="emulated-switch">Emulated switch</h4>
 <p>Emulates switch button press with changing digital output from HIGH to LOW for 500ms and back to HIGH state. It is useful for controlling devices which has possibility to connect switch button (e.g. garage gate opener).</p>
 <ul>
-<li>Additional configuration: NONE</li>
+<li>configuration type: <code>EMULATED_SWITCH</code></li>
+<li>additional configuration: NONE</li>
 </ul>
-<h4 id="motion-detector-motion_detector">Motion detector (<code>MOTION_DETECTOR</code>)</h4>
+<h4 id="motion-detector">Motion detector</h4>
 <p>PIR Motion Sensor/Detector.</p>
 <ul>
-<li>Additional configuration:<ul>
+<li>configuration type: <code>MOTION_DETECTOR</code></li>
+<li>additional configuration:<ul>
 <li><code>debounceMs</code> [default: 0] - number of milliseconds for debounce (helps to avoid flickering)</li>
 </ul>
 </li>
 </ul>
-<h4 id="digital-input-digital_input">Digital input (<code>DIGITAL_INPUT</code>)</h4>
+<h4 id="digital-input">Digital input</h4>
 <p>General purpose single digital input. Can be used for measuring state on any digital input. Works for devices like buttons (prefer <code>SWITCH_BUTTON</code>) or motion sensor (prefer <code>MOTION_DETECTOR</code>).</p>
 <ul>
-<li>Additional configuration:<ul>
+<li>configuration type: <code>DIGITAL_INPUT</code></li>
+<li>additional configuration:<ul>
 <li><code>debounceMs</code> [default: 0] - number of milliseconds for debounce (helps to avoid flickering)</li>
 </ul>
 </li>
 </ul>
-<h4 id="digital-output-digital_output">Digital output (<code>DIGITAL_OUTPUT</code>)</h4>
+<h4 id="digital-output">Digital output</h4>
 <p>General purpose single digital output. Can be used for generating digital signal on single wire. Works for devices like relay (prefer <code>RELAY</code>).</p>
 <ul>
-<li>Additional configuration: NONE</li>
+<li>configuration type: <code>DIGITAL_OUTPUT</code></li>
+<li>additional configuration: NONE</li>
 </ul>
 <h3 id="analog-devices">Analog devices</h3>
-<h4 id="sct013-sct013">SCT013 (<code>SCT013</code>)</h4>
+<h4 id="sct013">SCT013</h4>
 <p>Non-invasive AC Current Sensor (SCT-013-000). It allows to measure current.</p>
 <ul>
-<li>Additional configuration: NONE</li>
+<li>configuration type: <code>SCT013</code></li>
+<li>additional configuration: NONE</li>
 </ul>
 <h3 id="pjon-devices">PJON devices</h3>
 <p>This group of devices requires PJON controller on the side of the device for communication with RoomHub. </p>
-<p>PJON devices are not yet supported in current version of RoomHub (<a href="https://github.com/aetas/RoomHub/issues/6">see issue on Github</a>).</p>
-<h4 id="bme280-bme280-github-issue-6">BME280 (<code>BME280</code>) <a href="https://github.com/aetas/RoomHub/issues/6">GitHub issue #6</a></h4>
+<h4 id="bme280">BME280</h4>
 <p>Temperature and humidity sensor. Requires PJON controller.</p>
 <ul>
-<li>Additional configuration:<ul>
+<li>configuration type: <code>BME280</code></li>
+<li>additional configuration:<ul>
 <li><code>pjonId</code> [default: 0] - PJON controller identifier on PJON bus (0 means it will be assigned automatically) [TODO: do we support automatic assignment in current version?]</li>
 </ul>
 </li>
