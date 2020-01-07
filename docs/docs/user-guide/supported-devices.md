@@ -5,65 +5,90 @@ All supported devices need to be compatible with 5V power supply.
 
 The name in the parenthesis in the header is used in configuration 
 
+[TODO: add configuration examples to each device]
+
 ### Digital devices
 
-#### Relay module (`RELAY`)
+#### Relay module
 Relay module which allows to control turning on/off electrical devices and lights. Controlled with LOW signal.
 
-- Additional configuration: NONE
+- configuration type: `RELAY`
+- additional configuration: NONE
+
+<details>
+  <summary>Example configuration</summary>
+  ```yaml
+  [...]
+  rooms:
+  - name: "workshop"
+    points:
+    - name: "point with relay"
+      portNumber: 1
+      devices:
+      - name: "relay name"
+        id: 1
+        wires: ["BLUE"]
+        type: RELAY
+  ```
+</details>
 
 
-#### Switch button (`SWITCH_BUTTON`) 
+#### Switch button
 Switch button or push button.
 
-- Additional configuration: 
+- configuration type: `SWITCH_BUTTON`
+- additional configuration: 
     - `debounceMs` [default: 0] - number of milliseconds for debounce (helps to avoid flickering)
 
 
-#### Emulated switch (`EMULATED_SWITCH`)
+#### Emulated switch
 Emulates switch button press with changing digital output from HIGH to LOW for 500ms and back to HIGH state. It is useful for controlling devices which has possibility to connect switch button (e.g. garage gate opener).
 
-- Additional configuration: NONE
+- configuration type: `EMULATED_SWITCH`
+- additional configuration: NONE
 
 
-#### Motion detector (`MOTION_DETECTOR`)
+#### Motion detector
 PIR Motion Sensor/Detector.
 
-- Additional configuration:
+- configuration type: `MOTION_DETECTOR`
+- additional configuration:
     - `debounceMs` [default: 0] - number of milliseconds for debounce (helps to avoid flickering)
 
 
-#### Digital input (`DIGITAL_INPUT`)
+#### Digital input
 General purpose single digital input. Can be used for measuring state on any digital input. Works for devices like buttons (prefer `SWITCH_BUTTON`) or motion sensor (prefer `MOTION_DETECTOR`).
 
-- Additional configuration:
+- configuration type: `DIGITAL_INPUT`
+- additional configuration:
     - `debounceMs` [default: 0] - number of milliseconds for debounce (helps to avoid flickering)
 
-#### Digital output (`DIGITAL_OUTPUT`)
+#### Digital output
 General purpose single digital output. Can be used for generating digital signal on single wire. Works for devices like relay (prefer `RELAY`).
 
-- Additional configuration: NONE
+- configuration type: `DIGITAL_OUTPUT`
+- additional configuration: NONE
 
 
 
 ### Analog devices
 
-#### SCT013 (`SCT013`)
+#### SCT013
 Non-invasive AC Current Sensor (SCT-013-000). It allows to measure current.
 
-- Additional configuration: NONE
+- configuration type: `SCT013`
+- additional configuration: NONE
 
 
 ### PJON devices
 
 This group of devices requires PJON controller on the side of the device for communication with RoomHub. 
 
-PJON devices are not yet supported in current version of RoomHub ([see issue on Github](https://github.com/aetas/RoomHub/issues/6)).
-
-#### BME280 (`BME280`) [GitHub issue #6](https://github.com/aetas/RoomHub/issues/6)
+#### BME280
 Temperature and humidity sensor. Requires PJON controller.
 
--  Additional configuration:
+- configuration type: `BME280`
+- additional configuration:
     - `pjonId` [default: 0] - PJON controller identifier on PJON bus (0 means it will be assigned automatically) [TODO: do we support automatic assignment in current version?]
 
 
