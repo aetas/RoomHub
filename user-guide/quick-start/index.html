@@ -493,13 +493,13 @@
 <p>Quick start guide shows how to connect relay module and configure RoomHub to control it. Connecting other types of devices is similar and can be done with the similar steps.  </p>
 <h2 id="what-do-you-need">What do you need</h2>
 <ul>
-<li>Assembled Aetas RoomHub 3</li>
+<li>Assembled Aetas RoomHub 3 with 5v power supply cable</li>
 <li><a href="https://platformio.org/">PlatformIO</a> installed (if your RoomHub doesn't have firmware installed)</li>
 <li>WiFi network</li>
 <li>Mobile phone (Android or iOS)</li>
 <li>Running MQTT broker (e.g. <a href="https://mosquitto.org/">Mosquitto</a>)</li>
 <li>MQTT client installed on your computer (e.g. <a href="https://github.com/mqttjs/MQTT.js#readme">MQTT.js</a>)</li>
-<li>UTP cable</li>
+<li>Ethernet cable (with connector on one side only)</li>
 <li>relay module</li>
 </ul>
 <h2 id="connect-and-configure-device">Connect and configure device</h2>
@@ -508,39 +508,55 @@
 <p>Make sure RoomHub is never connected to power supply and USB port at the same time. This will destroy the device and may damage your computer.</p>
 </div>
 <ol>
-<li>Install RoomHub firmware (see <a href="https://github.com/aetas/roomhub#installation">instruction</a>)</li>
-<li>Connect RoomHub to power supply (make sure it is not connected to USB)</li>
-<li>Keep button 1 pressed on RoomHub and restart it by pressing "EN" button on ESP32 (keep button 1 pressed until blue LED will blink 3 times - around 5 seconds) [TODO: add link to RoomHub schema with button 1 shown]</li>
+<li>Install RoomHub firmware (see <a href="https://github.com/aetas/roomhub#installation">instruction</a>).</li>
+<li>Connect RoomHub to power supply (make sure it is not connected to USB).</li>
+<li>
+<p>Keep <a href="../images/RoomHub-board-ResetButtons.jpg">button 1</a> pressed on RoomHub and restart it by pressing "EN" button on ESP32.</p>
+<p>Keep button 1 pressed until blue LED will blink 3 times (around 5 seconds).</p>
+</li>
 <li>
 <p>Use EspTouch to connect RoomHub to your WiFi network (<a href="https://play.google.com/store/apps/details?id=com.khoazero123.iot_esptouch_demo">Google Play</a> or <a href="https://apps.apple.com/us/app/espressif-esptouch/id1071176700">Apple Store</a>) - <a href="../configuration/#wifi-configuration">more</a></p>
 <ol>
 <li>Connect your phone to the WiFi network you want RoomHub to be connected to</li>
-<li>Put your WiFi password in the application </li>
+<li>Put your WiFi password in the EspTouch application </li>
 <li>Press "Confirm" in the app</li>
 <li>After around 30 seconds you should get success message with IP address of RoomHub - store this IP address for later</li>
 </ol>
 </li>
 <li>
-<p>Prepare UTP cable with plug on one side (according to standard T568B)
+<p>Prepare ethernet cable with connector on one side (according to standard T568B)
 <a href="../images/T568B.png"><img alt="cable termination" src="../images/T568B.png" style="height:150px; display: block; margin: 0 auto;transform: rotate(90deg)" /></a></p>
 </li>
 <li>
-<p>Connect module to UTP cable</p>
-<ul>
-<li>VCC (orange wire)</li>
-<li>ground (orange-white wire)</li>
-<li>control (blue wire)</li>
-<li>[TODO: photo with module connected to wires]</li>
-</ul>
+<p>Connect relay module to ethernet cable (<a href="../images/relay-connected.jpg">photo</a>)</p>
+<table>
+<thead>
+<tr>
+<th>module pin</th>
+<th>wire color</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VCC/DC+</td>
+<td>orange</td>
+</tr>
+<tr>
+<td>ground/DC-</td>
+<td>orange-white</td>
+</tr>
+<tr>
+<td>control/IN</td>
+<td>blue</td>
+</tr>
+</tbody>
+</table>
 </li>
 <li>
-<p>Connect module to RoomHub port 1</p>
-<ul>
-<li>[TODO: photo with cable plugged into port 1]</li>
-</ul>
+<p>Connect module to RoomHub port 1 (<a href="../images/roomhub-ports-numbers.jpg">ports</a>)</p>
 </li>
 <li>
-<p>Prepare configuration file in YAML - look into comments to find out which value to change<br>
+<p>Prepare configuration file <code>test.roomhub.yml</code> - look into comments to find out which value to change<br>
 <div class="codehilite"><pre><span></span><span class="nt">configVersion</span><span class="p">:</span> <span class="s">&quot;3.0&quot;</span>
 <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;TestRoomHub&quot;</span>
 <span class="nt">destinationIpAddress</span><span class="p">:</span> <span class="s">&quot;192.168.1.66&quot;</span> <span class="c1"># set IP of RoomHub (see point 4.d.)</span>
@@ -568,23 +584,47 @@ For more details on configuration files see <a href="../configuration/#roomhub-c
 <li>Download latest version of RoomHub Configurator for <a href="https://github.com/aetas/RoomHubConfigurator/releases/download/release-0.1.0-alpha.20/room-hub-configurator-0.1.0-alpha.20-linux.zip">Linux</a>, <a href="https://github.com/aetas/RoomHubConfigurator/releases/download/release-0.1.0-alpha.20/room-hub-configurator-0.1.0-alpha.20-mac.zip">MacOS</a> or <a href="https://github.com/aetas/RoomHubConfigurator/releases/download/release-0.1.0-alpha.20/room-hub-configurator-0.1.0-alpha.20-win.zip">Windows</a></li>
 <li>Extract archive</li>
 <li>
-<p>Run Configurator CLI with command </p>
+<p>Run Configurator CLI with command (make sure path to <code>test.roomhub.yml</code> is correct)</p>
 <div class="superfences-tabs">
 <input name="__tabs_1" type="radio" id="__tab_1_0" checked="checked" />
 <label for="__tab_1_0">Linux</label>
-<div class="superfences-content"><div class="codehilite"><pre><span></span>bin/room-hub-configurator your-file.roomhub.yml
+<div class="superfences-content"><div class="codehilite"><pre><span></span>bin/room-hub-configurator /home/john/test.roomhub.yml
 </pre></div></div>
 <input name="__tabs_1" type="radio" id="__tab_1_1" />
 <label for="__tab_1_1">MacOS</label>
-<div class="superfences-content"><div class="codehilite"><pre><span></span>bin/room-hub-configurator your-file.roomhub.yml
+<div class="superfences-content"><div class="codehilite"><pre><span></span>bin/room-hub-configurator /Users/john/test.roomhub.yml
 </pre></div></div>
 <input name="__tabs_1" type="radio" id="__tab_1_2" />
 <label for="__tab_1_2">Windows</label>
-<div class="superfences-content"><div class="codehilite"><pre><span></span>bin/room-hub-configurator.bat your-file.roomhub.yml
+<div class="superfences-content"><div class="codehilite"><pre><span></span>bin<span class="se">\r</span>oom-hub-configurator.bat C:/test.roomhub.yml
 </pre></div></div>
 </div>
 </li>
 </ul>
+<p><details>
+  <summary>Sample output</summary>
+  <div class="codehilite"><pre><span></span>    <span class="nt">____</span>                        <span class="nt">__</span>  <span class="nt">__</span>      <span class="nt">__</span>
+   <span class="o">/</span> <span class="nt">__</span> <span class="err">\</span><span class="nt">____</span>  <span class="nt">____</span>  <span class="nt">____</span> <span class="nt">___</span>  <span class="o">/</span> <span class="o">/</span> <span class="o">/</span> <span class="o">/</span><span class="nt">_</span>  <span class="nt">__</span><span class="o">/</span> <span class="o">/</span><span class="nt">_</span>
+  <span class="o">/</span> <span class="o">/</span><span class="nt">_</span><span class="o">/</span> <span class="o">/</span> <span class="nt">__</span> <span class="err">\</span><span class="o">/</span> <span class="nt">__</span> <span class="err">\</span><span class="o">/</span> <span class="nt">__</span> <span class="err">`</span><span class="nt">__</span> <span class="err">\</span><span class="o">/</span> <span class="o">/</span><span class="nt">_</span><span class="o">/</span> <span class="o">/</span> <span class="o">/</span> <span class="o">/</span> <span class="o">/</span> <span class="nt">__</span> <span class="err">\</span>
+ <span class="o">/</span> <span class="nt">_</span><span class="o">,</span> <span class="nt">_</span><span class="o">/</span> <span class="o">/</span><span class="nt">_</span><span class="o">/</span> <span class="o">/</span> <span class="o">/</span><span class="nt">_</span><span class="o">/</span> <span class="o">/</span> <span class="o">/</span> <span class="o">/</span> <span class="o">/</span> <span class="o">/</span> <span class="o">/</span> <span class="nt">__</span>  <span class="o">/</span> <span class="o">/</span><span class="nt">_</span><span class="o">/</span> <span class="o">/</span> <span class="o">/</span><span class="nt">_</span><span class="o">/</span> <span class="o">/</span>
+<span class="o">/</span><span class="nt">_</span><span class="o">/</span> <span class="o">|</span><span class="nt">_</span><span class="o">|</span><span class="err">\</span><span class="nt">____</span><span class="o">/</span><span class="err">\</span><span class="nt">____</span><span class="o">/</span><span class="nt">_</span><span class="o">/</span> <span class="o">/</span><span class="nt">_</span><span class="o">/</span> <span class="o">/</span><span class="nt">_</span><span class="o">/</span><span class="nt">_</span><span class="o">/</span> <span class="o">/</span><span class="nt">_</span><span class="o">/</span><span class="err">\</span><span class="nt">__</span><span class="o">,</span><span class="nt">_</span><span class="o">/</span><span class="nt">_</span><span class="p">.</span><span class="nc">___</span><span class="o">/</span>
+
+
+<span class="nt">Starting</span> <span class="nt">RoomHubConfiguratorApplicationKt</span> <span class="nt">on</span> <span class="nt">desktop</span> <span class="nt">with</span> <span class="nt">PID</span> <span class="nt">22499</span> <span class="o">(</span><span class="nt">started</span> <span class="nt">by</span> <span class="nt">user</span> <span class="nt">in</span> <span class="o">/</span><span class="nt">home</span><span class="o">/</span><span class="nt">john</span><span class="o">/</span><span class="nt">room-hub-configurator-0</span><span class="p">.</span><span class="nc">1</span><span class="p">.</span><span class="nc">0-alpha</span><span class="p">.</span><span class="nc">20-linux</span><span class="o">/</span><span class="nt">room-hub-configurator-linux</span><span class="o">)</span>
+<span class="nt">No</span> <span class="nt">active</span> <span class="nt">profile</span> <span class="nt">set</span><span class="o">,</span> <span class="nt">falling</span> <span class="nt">back</span> <span class="nt">to</span> <span class="nt">default</span> <span class="nt">profiles</span><span class="o">:</span> <span class="nt">default</span>
+<span class="nt">Devtools</span> <span class="nt">property</span> <span class="nt">defaults</span> <span class="nt">active</span><span class="o">!</span> <span class="nt">Set</span> <span class="s1">&#39;spring.devtools.add-properties&#39;</span> <span class="nt">to</span> <span class="s1">&#39;false&#39;</span> <span class="nt">to</span> <span class="nt">disable</span>
+<span class="nt">LiveReload</span> <span class="nt">server</span> <span class="nt">is</span> <span class="nt">running</span> <span class="nt">on</span> <span class="nt">port</span> <span class="nt">35729</span>
+<span class="nt">Started</span> <span class="nt">RoomHubConfiguratorApplicationKt</span> <span class="nt">in</span> <span class="nt">1</span><span class="p">.</span><span class="nc">26</span> <span class="nt">seconds</span> <span class="o">(</span><span class="nt">JVM</span> <span class="nt">running</span> <span class="nt">for</span> <span class="nt">1</span><span class="p">.</span><span class="nc">663</span><span class="o">)</span>
+<span class="nt">JSON</span> <span class="nt">schema</span> <span class="nt">validation</span> <span class="nt">succeeded</span> <span class="err">✔</span>
+<span class="nt">Application</span> <span class="nt">validation</span> <span class="nt">succeeded</span> <span class="err">✔</span>
+<span class="nt">Setting</span> <span class="nt">RoomHub</span> <span class="nt">name</span> <span class="nt">to</span> <span class="s1">&#39;TestRoomHub&#39;</span>
+<span class="nt">Sending</span> <span class="nt">network</span> <span class="nt">configuration</span> <span class="s1">&#39;6D:CB:54:AD:E9:93;0.0.0.0;;;;&#39;</span>
+<span class="nt">Setting</span> <span class="nt">MQTT</span> <span class="nt">hostname</span> <span class="nt">to</span> <span class="s1">&#39;10.0.88.100&#39;</span>
+<span class="nt">Sending</span> <span class="nt">device</span> <span class="nt">configuration</span> <span class="s1">&#39;1.0;1;test relay;2;1;4;0;0&#39;</span>
+<span class="nt">Finalizing</span> <span class="nt">RoomHub</span> <span class="nt">configuration</span>
+<span class="nt">RoomHub</span> <span class="nt">configured</span> <span class="nt">correctly</span>
+</pre></div>
+</details></p>
 </li>
 <li>
 <p>Subscribe to MQTT topic to see device has been initialized (replace IP address with your MQTT broker address)
@@ -592,7 +632,29 @@ For more details on configuration files see <a href="../configuration/#roomhub-c
 </pre></div>
   <details>
     <summary>Sample output</summary>
-    [TODO: add proper output after subscribing]
+    <div class="codehilite"><pre><span></span><span class="err">homie/TestRoomHub/$homie 3.0.1</span>
+<span class="err">homie/TestRoomHub/$name TestRoomHub</span>
+<span class="err">homie/TestRoomHub/$nodes 1</span>
+<span class="err">homie/TestRoomHub/$implementation Aetas</span>
+<span class="err">homie/TestRoomHub/$fw/name Aetas RoomHub</span>
+<span class="err">homie/TestRoomHub/$fw/version 3.1.0-dev.13-WIFI</span>
+<span class="err">homie/TestRoomHub/$localip 10.0.88.82</span>
+<span class="err">homie/TestRoomHub/$mac 3C:71:BF:59:34:34</span>
+<span class="err">homie/TestRoomHub/$stats uptime,signal,freeheap</span>
+<span class="err">homie/TestRoomHub/$stats/interval 30</span>
+<span class="err">homie/TestRoomHub/$stats/uptime 1198</span>
+<span class="err">homie/TestRoomHub/$stats/signal 88</span>
+<span class="err">homie/TestRoomHub/$stats/freeheap 248064</span>
+<span class="err">homie/TestRoomHub/$state ready</span>
+<span class="err">homie/TestRoomHub/1/$name test relay</span>
+<span class="err">homie/TestRoomHub/1/$type DigitalOutput</span>
+<span class="err">homie/TestRoomHub/1/$properties state</span>
+<span class="err">homie/TestRoomHub/1/state/$name state</span>
+<span class="err">homie/TestRoomHub/1/state/$settable true</span>
+<span class="err">homie/TestRoomHub/1/state/$retained true</span>
+<span class="err">homie/TestRoomHub/1/state/$datatype enum</span>
+<span class="err">homie/TestRoomHub/1/state/$format ON,OFF</span>
+</pre></div>
   </details></p>
 </li>
 <li>
@@ -601,13 +663,13 @@ For more details on configuration files see <a href="../configuration/#roomhub-c
 </pre></div></p>
 </li>
 </ol>
-<p>Congratulation! You have just configured your first device on RoomHub.</p>
+<p>State of the relay should change.<br>
+Congratulation! You have just configured your first device on RoomHub.</p>
 <h2 id="whats-next">What's next?</h2>
 <ul>
 <li><a href="../naming-convention">Read full user guide starting with naming conventions</a></li>
 <li><a href="../supported-devices">Find out all supported devices</a></li>
 </ul>
-<p>[TODO: go through points with device and check that everything is described - ask Piotr or Ania to do that]</p>
                 
                   
                 
