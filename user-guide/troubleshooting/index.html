@@ -317,15 +317,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#roomhub-disconnects-from-mqtt-from-time-to-time" class="md-nav__link">
-    RoomHub disconnects from MQTT from time to time
+  <a href="#roomhub-disconnects-from-mqtt-from-time-to-time-when-roomhub-is-connected-via-ethernet-cable" class="md-nav__link">
+    RoomHub disconnects from MQTT from time to time when RoomHub is connected via ethernet cable
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#switch-button-doesnt-work-properly-sometimes-it-sends-message-once-and-sometimes-multiple-times" class="md-nav__link">
-    Switch button doesn't work properly - sometimes it sends message once and sometimes multiple times
+  <a href="#switch-button-doesnt-work-properly-sometimes-it-sends-message-multiple-times-even-when-pressed-once" class="md-nav__link">
+    Switch button doesn't work properly - sometimes it sends message multiple times even when pressed once
   </a>
   
 </li>
@@ -456,15 +456,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#roomhub-disconnects-from-mqtt-from-time-to-time" class="md-nav__link">
-    RoomHub disconnects from MQTT from time to time
+  <a href="#roomhub-disconnects-from-mqtt-from-time-to-time-when-roomhub-is-connected-via-ethernet-cable" class="md-nav__link">
+    RoomHub disconnects from MQTT from time to time when RoomHub is connected via ethernet cable
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#switch-button-doesnt-work-properly-sometimes-it-sends-message-once-and-sometimes-multiple-times" class="md-nav__link">
-    Switch button doesn't work properly - sometimes it sends message once and sometimes multiple times
+  <a href="#switch-button-doesnt-work-properly-sometimes-it-sends-message-multiple-times-even-when-pressed-once" class="md-nav__link">
+    Switch button doesn't work properly - sometimes it sends message multiple times even when pressed once
   </a>
   
 </li>
@@ -489,11 +489,12 @@
                   <h1>Troubleshooting</h1>
                 
                 <h3 id="roomhub-cannot-connect-to-mqtt-even-when-configured-mqtt-hostname-is-correct">RoomHub cannot connect to MQTT, even when configured MQTT hostname is correct</h3>
-<p>Some ESP32 modules have problems with connection client, probably because of some previously stored data. See GitHub issue for more details https://github.com/espressif/arduino-esp32/issues/180 .
+<p>Some ESP32 modules have problems with connection client, probably because of some previously stored data.
 Currently the only proved workaround is to change firmware temporarily to call <code>Client.flush();</code>.</p>
-<h3 id="roomhub-disconnects-from-mqtt-from-time-to-time">RoomHub disconnects from MQTT from time to time</h3>
-<p>[TODO describe problem]</p>
-<h3 id="switch-button-doesnt-work-properly-sometimes-it-sends-message-once-and-sometimes-multiple-times">Switch button doesn't work properly - sometimes it sends message once and sometimes multiple times</h3>
+<h3 id="roomhub-disconnects-from-mqtt-from-time-to-time-when-roomhub-is-connected-via-ethernet-cable">RoomHub disconnects from MQTT from time to time when RoomHub is connected via ethernet cable</h3>
+<p>This is a known issue with W5500. Currently there is not known solutions for that. If you have encountered this problem - please use WiFi instead.
+We are tracking this problem in <a href="https://github.com/aetas/RoomHub/issues/9">GitHub issue</a>.</p>
+<h3 id="switch-button-doesnt-work-properly-sometimes-it-sends-message-multiple-times-even-when-pressed-once">Switch button doesn't work properly - sometimes it sends message multiple times even when pressed once</h3>
 <p>Debounce value is too low. See <a href="../supported-devices/">Switch button in supported devices section</a> for details. </p>
                 
                   
