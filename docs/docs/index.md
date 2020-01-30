@@ -5,7 +5,7 @@ Aetas RoomHub is gateway device for multiple wired electronic sensors and contro
 
 RoomHub has been created to support multi-device, fully wired solution. RoomHub supports MQTT Homie convention for seamless integration with home automation software like OpenHab and Home Assistant.
 
-[TODO add photo]
+![RoomHub 3](user-guide/images/box-photo1.jpg)
 
 ## What's the use case?
 
