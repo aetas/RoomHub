@@ -11,7 +11,8 @@ RoomHub has been created to support multi-device, fully wired solution. RoomHub 
 
 Typical use case for RoomHub is house with sensors and controllers distributed all around with wired connections. It is possible to plug in simple (and cheap) devices, like relay modules, PIR motion sensors or just plain wall switches into RoomHub to make fully capable home automation system.
 
-[TODO add simple diagram how it works as a MQTT gateway]
+![RoomHub as MQTT Gateway](user-guide/images/mqtt-gateway.png)
+
 
 ## What's next?
 
