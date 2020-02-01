@@ -13,8 +13,8 @@ nav:
   - 'Logging': 'user-guide/logging.md'
   - 'Troubleshooting': 'user-guide/troubleshooting.md'
 - Hardware:
-  - 'Components': 'hardware/components.md'
   - 'Board layout': 'hardware/board-layout.md'
+  - 'Components': 'hardware/components.md'
 - Advanced topics:
   - 'Raw configuration': 'advanced/configuration-raw.md'
 markdown_extensions:
