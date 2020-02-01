@@ -1,4 +1,6 @@
 site_name: RoomHub 3
+repo_name: "GitHub"
+repo_url: https://github.com/aetas/roomhub/
 theme:
   name: "material"
 nav:
