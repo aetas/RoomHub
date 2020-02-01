@@ -16,6 +16,7 @@ Typical use case for RoomHub is house with sensors and controllers distributed a
 
 ## What's next?
 
+- [Introduction](user-guide/introduction.md)
 - [Quick start](user-guide/quick-start.md)
 - [Hardware](hardware/board-layout.md)
 

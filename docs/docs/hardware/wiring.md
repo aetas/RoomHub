@@ -3,6 +3,7 @@
 ## RJ45 ports connections
 
 It assumes RJ45 connector is using T568B termination. It means wires in connector are in order:
+
 1. orange-white
 2. orange
 3. green-white
@@ -25,4 +26,3 @@ Then wires usage is following:
 | brown        | PJON           |
 | brown-white  | analog in      |
 
-[TODO: check if PJON is on brown or brown-white!]

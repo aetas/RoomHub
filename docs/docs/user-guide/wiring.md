@@ -1,1 +1,0 @@
-[TODO describes possible house wirings]

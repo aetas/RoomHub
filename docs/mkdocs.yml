@@ -3,10 +3,10 @@ theme:
   name: "material"
 nav:
 - Home: 'index.md'
-- Quick Start: 'user-guide/quick-start.md'
 - User Guide:
+  - 'Introduction': 'user-guide/introduction.md'
+  - 'Quick Start': 'user-guide/quick-start.md'
   - 'Naming convention': 'user-guide/naming-convention.md'
-  - 'Wiring': 'user-guide/wiring.md'
   - 'Supported devices': 'user-guide/supported-devices.md'
   - 'Configuration': 'user-guide/configuration.md'
   - 'Communication': 'user-guide/communication.md'
