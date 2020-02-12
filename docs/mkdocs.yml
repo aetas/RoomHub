@@ -4,10 +4,11 @@ repo_url: https://github.com/aetas/roomhub/
 theme:
   name: "material"
 nav:
-- Home: 'index.md'
+- Start: 'index.md'
 - User Guide:
   - 'Introduction': 'user-guide/introduction.md'
   - 'Quick Start': 'user-guide/quick-start.md'
+  - 'Integration': 'user-guide/integration.md'
   - 'Naming convention': 'user-guide/naming-convention.md'
   - 'Supported devices': 'user-guide/supported-devices.md'
   - 'Configuration': 'user-guide/configuration.md'
