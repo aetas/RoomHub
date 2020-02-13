@@ -36,7 +36,7 @@
     
     
       
-        <title>Raw configuration - RoomHub 3</title>
+        <title>Integration - RoomHub 3</title>
       
     
     
@@ -77,6 +77,10 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
+      <a href="#general-communication" tabindex="0" class="md-skip">
+        Skip to content
+      </a>
+    
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid">
@@ -99,7 +103,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Raw configuration
+                Integration
               
             </span>
           
@@ -220,10 +224,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
     
     <label class="md-nav__link" for="nav-2">
       User Guide
@@ -241,7 +247,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../user-guide/introduction/" title="Introduction" class="md-nav__link">
+    <a href="../introduction/" title="Introduction" class="md-nav__link">
       Introduction
     </a>
   </li>
@@ -253,7 +259,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../user-guide/quick-start/" title="Quick Start" class="md-nav__link">
+    <a href="../quick-start/" title="Quick Start" class="md-nav__link">
       Quick Start
     </a>
   </li>
@@ -263,11 +269,59 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../../user-guide/integration/" title="Integration" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Integration
+      </label>
+    
+    <a href="./" title="Integration" class="md-nav__link md-nav__link--active">
       Integration
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general-communication" class="md-nav__link">
+    General communication
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openhab" class="md-nav__link">
+    OpenHab
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#home-assistant" class="md-nav__link">
+    Home Assistant
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -277,7 +331,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../user-guide/naming-convention/" title="Naming convention" class="md-nav__link">
+    <a href="../naming-convention/" title="Naming convention" class="md-nav__link">
       Naming convention
     </a>
   </li>
@@ -289,7 +343,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../user-guide/supported-devices/" title="Supported devices" class="md-nav__link">
+    <a href="../supported-devices/" title="Supported devices" class="md-nav__link">
       Supported devices
     </a>
   </li>
@@ -301,7 +355,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../user-guide/configuration/" title="Configuration" class="md-nav__link">
+    <a href="../configuration/" title="Configuration" class="md-nav__link">
       Configuration
     </a>
   </li>
@@ -313,7 +367,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../user-guide/communication.md" title="Communication" class="md-nav__link">
+    <a href="../communication.md" title="Communication" class="md-nav__link">
       Communication
     </a>
   </li>
@@ -325,7 +379,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../user-guide/logging.md" title="Logging" class="md-nav__link">
+    <a href="../logging.md" title="Logging" class="md-nav__link">
       Logging
     </a>
   </li>
@@ -337,7 +391,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../../user-guide/troubleshooting/" title="Troubleshooting" class="md-nav__link">
+    <a href="../troubleshooting/" title="Troubleshooting" class="md-nav__link">
       Troubleshooting
     </a>
   </li>
@@ -400,12 +454,10 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
     
     <label class="md-nav__link" for="nav-4">
       Advanced topics
@@ -421,18 +473,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-    
-    <a href="./" title="Raw configuration" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../../advanced/configuration-raw/" title="Raw configuration" class="md-nav__link">
       Raw configuration
     </a>
-    
   </li>
 
         
@@ -448,22 +493,109 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#general-communication" class="md-nav__link">
+    General communication
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#openhab" class="md-nav__link">
+    OpenHab
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#home-assistant" class="md-nav__link">
+    Home Assistant
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/aetas/roomhub/edit/master/docs/advanced/configuration-raw.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/aetas/roomhub/edit/master/docs/user-guide/integration.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                  <h1>Raw configuration</h1>
+                  <h1>Integration</h1>
                 
-                <div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This section describes raw configuration format accepted by RoomHub firmware. This is usually needed only in development and for very early alpha versions of RoomHub firmware.<br/>
-You should <a href="configuration.md#configuration-with-roomhub-configurator">use RoomHub Configurator</a> for regular configuration.</p>
-</div>
-<p>[TODO write about direct configuration format]</p>
+                <p>This page describes how to configure home automation applications (like Home Assistant and OpenHab) to integrate them and control devices connected to RoomHub.</p>
+<h2 id="general-communication">General communication</h2>
+<p>RoomHub works as a MQTT gateway. This means you can integrate it to any home automation platform which supports MQTT devices. Both Home Assistant and RoomHub have solid support for MQTT.</p>
+<p>RoomHub follows <a href="https://homieiot.github.io/">Homie convention</a> 3.0.1 for MQTT communication. 
+Homies MQTT topic layout follows the pattern <strong>homie/device/node/property</strong>.</p>
+<p><strong>Device</strong> is a name of your RoomHub (see how to set name in <a href="../configuration/">configuration</a>).</p>
+<p><strong>Node</strong> is a unique number identifier of the sensor/controller connected to RoomHub (<em>id</em> in <a href="../configuration/">configuration</a>).</p>
+<p><strong>Property</strong> can be a "temperature" when reading value from BME280 module or "state" in case of PIR motion sensor.</p>
+<p>Examples:</p>
+<ul>
+<li><code>homie/MyRoomHub/2/temperature</code> for reading temperature from BME280 on id = 2</li>
+<li><code>homie/MyRoomHub/5/humidity</code> for reading humidity from BME280 on id = 5</li>
+<li><code>homie/MyRoomHub/7/state</code> for reading motion sensor state on id = 7 (<code>1</code> if motion has been captured, <code>0</code> otherwise)</li>
+</ul>
+<p>When device supports setting a value (e.g. relay), desired value should be send to <em>homie/device/node/property/set</em> topic </p>
+<p>Example:</p>
+<ul>
+<li>send <code>ON</code> to <code>homie/MyRoomHub/3/state/set</code> to switch on light connected to relay on id = 3</li>
+</ul>
+<h2 id="openhab">OpenHab</h2>
+<p>Although RoomHub follows Homie convention 3.0.1 and OpenHab claims to support auto-discovery of devices following this convention, there are some incompatibilities. As of OpenHab 2.4.0 using MQTT Homie Binding is not recommended.</p>
+<p>For now - recommended way is to use <a href="https://www.openhab.org/addons/bindings/mqtt1/">MQTT Binding 1.x</a> and configure all devices in text files.<br />
+You need to add OpenHab items in the configuration files with proper MQTT topic to send/receive messages to/from RoomHub.</p>
+<p>Example below shows configuration of relay module (with id = 1) connected to RoomHub which enables you to control the light.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">Switch light_Bedroom_Main &quot;Bedroom light&quot; &lt;light&gt; {mqtt=&quot;&gt;[mymqtt:homie/MyRoomHub/1/state/set:command:ON:ON],&gt;[mymqtt:homie/MyRoomHub/1/state/set:command:OFF:OFF]&quot;}</span>
+</code></pre></div>
+
+<p>Example below shows configuration of motion sensor (with id = 14) connected to RoomHub.</p>
+<div class="codehilite"><pre><span></span><code><span class="err">Switch motionSensor_Corridor &quot;Motion sensor in corridor&quot; {mqtt=&quot;&lt;[mymqtt:homie/MyRoomHub/14/state:command:ON:1],&lt;[mymqtt:homie/MyRoomHub/14/state:command:OFF:0&quot;}</span>
+</code></pre></div>
+
+<h2 id="home-assistant">Home Assistant</h2>
+<p>Home Assistant 0.104.3 does not support Homie convention with discovery feature. That means you need to manually configure devices connected to RoomHub. Fortunately, this is quite easy.</p>
+<p>Example below shows configuration of relay module (with id = 1) connected to RoomHub which enables you to control the light.</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">switch</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mqtt</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Bedroom</span><span class="nv"> </span><span class="s">Light&quot;</span>
+    <span class="nt">state_topic</span><span class="p">:</span> <span class="s">&quot;homie/MyRoomHub/1/state&quot;</span>
+    <span class="nt">command_topic</span><span class="p">:</span> <span class="s">&quot;homie/MyRoomHub/1/state/set&quot;</span>
+    <span class="nt">retain</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+
+<p>Example below shows configuration of motion sensor (with id = 14) connected to RoomHub.</p>
+<div class="codehilite"><pre><span></span><code><span class="nt">binary_sensor</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="nt">platform</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mqtt</span>
+    <span class="nt">name</span><span class="p">:</span> <span class="s">&quot;Motion</span><span class="nv"> </span><span class="s">sensor</span><span class="nv"> </span><span class="s">in</span><span class="nv"> </span><span class="s">corridor&quot;</span>
+    <span class="nt">state_topic</span><span class="p">:</span> <span class="s">&quot;homie/MyRoomHub/14/state&quot;</span>
+    <span class="nt">payload_on</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+    <span class="nt">payload_off</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+</code></pre></div>
                 
                   
                 
@@ -485,7 +617,7 @@ You should <a href="configuration.md#configuration-with-roomhub-configurator">us
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../../hardware/components/" title="Components" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../quick-start/" title="Quick Start" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -494,11 +626,25 @@ You should <a href="configuration.md#configuration-with-roomhub-configurator">us
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Components
+                Quick Start
               </span>
             </div>
           </a>
         
+        
+          <a href="../naming-convention/" title="Naming convention" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Naming convention
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
         
       </nav>
     </div>
