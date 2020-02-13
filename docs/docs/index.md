@@ -11,7 +11,7 @@ Both RoomHub hardware and software are freely available under Open Source Licens
 
 ## What's the use case?
 
-Typical use case for RoomHub is house with sensors and controllers distributed all around with wired connections. It is possible to plug in simple (and cheap) devices, like relay modules, PIR motion sensors or just plain wall switches into RoomHub to make fully capable home automation system.
+Typical use case for RoomHub is house with sensors and controllers distributed all around with wired connections. It is possible to plug in simple and inexpensive devices, like relay modules, PIR motion sensors or just plain wall switches into RoomHub to make fully capable home automation system.
 
 ![RoomHub as MQTT Gateway](user-guide/images/mqtt-gateway.png)
 
