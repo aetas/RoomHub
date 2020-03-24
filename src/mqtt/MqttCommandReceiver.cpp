@@ -2,12 +2,12 @@
 #include "device/DevicesRegistry.hpp"
 #include "ArduinoLog.h"
 
-MqttCommandReceiver::MqttCommandReceiver(DevicesRegistry* _devicesRegistry)
-    : devicesRegistry(_devicesRegistry) {
+MqttCommandReceiver::MqttCommandReceiver(DevicesRegistry* _devicesRegistry, MqttConnectionTester* _mqttConnectionTester)
+    : devicesRegistry(_devicesRegistry), mqttConnectionTester(_mqttConnectionTester) {
 }
 
-MqttCommandReceiver& MqttCommandReceiver::getInstance(DevicesRegistry* _devicesRegistry) {
-    static MqttCommandReceiver instance(_devicesRegistry);
+MqttCommandReceiver& MqttCommandReceiver::getInstance(DevicesRegistry* _devicesRegistry, MqttConnectionTester* _mqttConnectionTester) {
+    static MqttCommandReceiver instance(_devicesRegistry, _mqttConnectionTester);
     return instance;
 }
 
@@ -22,11 +22,18 @@ void MqttCommandReceiver::messageReceived(const char* topic, byte* payload, unsi
     memcpy(payloadCopy, payload, length);
     payloadCopy[length] = '\0';
     
-    Log.notice(F("MQTT received: %s <- %s" CR), topic, payloadCopy);
-    String topicString = String(topic);
-    String nodeId = getHomieNodeId(topicString);
-    String propertyName = getHomiePropertyName(topicString);
-    MqttCommandReceiver::getInstance(nullptr).informDevice(nodeId, propertyName, payloadCopy);
+    MqttCommandReceiver& receiver = MqttCommandReceiver::getInstance(nullptr, nullptr);
+
+    if (receiver.mqttConnectionTester->isTestTopic(topic)) {
+        // No logs in here because it is called 5 times a second
+        receiver.mqttConnectionTester->onNewConnectionTestTimeReceived(payloadCopy);
+    } else {
+        Log.notice(F("MQTT received: %s <- %s" CR), topic, payloadCopy);
+        String topicString = String(topic);
+        String nodeId = getHomieNodeId(topicString);
+        String propertyName = getHomiePropertyName(topicString);
+        receiver.informDevice(nodeId, propertyName, payloadCopy);
+    }
     free(payloadCopy);
 }
 

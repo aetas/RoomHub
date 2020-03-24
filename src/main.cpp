@@ -25,6 +25,7 @@
 #include "mqtt/MqttClient.hpp"
 #include "mqtt/MqttEventPublisher.hpp"
 #include "mqtt/MqttCommandReceiver.hpp"
+#include "mqtt/MqttConnectionTester.hpp"
 
 #if PJON_ENABLED == true
 #include "device/pjon/PjonBus.hpp"
@@ -45,6 +46,8 @@ DevicesRegistry* devicesRegistry;
 HomieDevice* homieDevice;
 
 MqttClient mqttClient;
+MqttConnectionTester* mqttConnectionTester;
+
 #if PJON_ENABLED == true
 PJON<SoftwareBitBang> pjon(PJON_DEVICE_ID);
 PjonRegistry pjonRegistry(PJON_MAX_NUMBER_OF_DEVICES);
@@ -138,6 +141,14 @@ void setup() {
   mqttLogger = new MqttLogger(mqttClient, bufferedLogger, mqttLogsTopic);
   #endif
 
+  // MQTT connection tester
+  String mqttConnectionTestTopicString = HOMIE_PREFIX "/";
+  mqttConnectionTestTopicString += config.getRoomHubName();
+  mqttConnectionTestTopicString += "/$connection";
+  char* mqttConnectionTestTopic = new char[mqttConnectionTestTopicString.length()]();
+  strcpy(mqttConnectionTestTopic, mqttConnectionTestTopicString.c_str());
+  mqttConnectionTester = new MqttConnectionTester(mqttClient, mqttConnectionTestTopic);
+
   setupComponents();
   // Log.trace(F("Components set up" CR));
   #if PJON_ENABLED == true
@@ -171,10 +182,11 @@ void setup() {
                                            config.getRoomHubName(), devicesConfig, numberOfDevices, mqttClient, statsData);
   
   homieDevice->setup();
+  mqttConnectionTester->subscribe();
 
   UpdateListener& mqttEventPublisher = MqttEventPublisher::getInstance(homieDevice);
   devicesRegistry->setUpdateListener(&mqttEventPublisher);
-  MqttCommandReceiver::getInstance(devicesRegistry);
+  MqttCommandReceiver::getInstance(devicesRegistry, mqttConnectionTester);
   mqttClient.onMessage(MqttCommandReceiver::messageReceived);
 
   delete storage;
@@ -189,6 +201,15 @@ void loop() {
   boolean workingCorrectly = homieDevice->loop(now);
   if (!workingCorrectly) {
     Log.error(F("HomieDevice is having MQTT connection problems..."));
+  }
+  
+  mqttConnectionTester->publishCurrentTime(now);
+  if (!mqttConnectionTester->checkConnection(now)) {
+    Log.error(F("MQTT Test connection: connection problems. Trying to reconnect..." CR));
+    networkConnection.connect();
+    homieDevice->setup();
+    mqttConnectionTester->subscribe();
+    // ESP.restart();
   }
 
   networkConnection.checkConnection(now);

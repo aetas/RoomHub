@@ -3,13 +3,14 @@
 #include "WString.h"
 #include "device/DevicesRegistry.hpp"
 #include "homie/HomieDevice.hpp"
+#include "mqtt/MqttConnectionTester.hpp"
 #include "Arduino.h"
 
 
 class MqttCommandReceiver {
 
 public:
-    static MqttCommandReceiver& getInstance(DevicesRegistry* devicesRegistry);
+    static MqttCommandReceiver& getInstance(DevicesRegistry* devicesRegistry, MqttConnectionTester* _mqttConnectionTester);
     
     MqttCommandReceiver(MqttCommandReceiver const&) = delete;
     void operator=(MqttCommandReceiver const&) = delete;
@@ -19,9 +20,9 @@ public:
     static void messageReceived(const char* topic, byte* payload, unsigned int length);
 
 private:
-    MqttCommandReceiver(DevicesRegistry* _devicesRegistry);
+    MqttCommandReceiver(DevicesRegistry* _devicesRegistry, MqttConnectionTester* _mqttConnectionTester);
     DevicesRegistry* devicesRegistry;
-    HomieDevice* homieDevice;
+    MqttConnectionTester* mqttConnectionTester;
 
     static bool isHomieNodePropertyValue(String& topic);
     static String getHomieNodeId(String& topic);
